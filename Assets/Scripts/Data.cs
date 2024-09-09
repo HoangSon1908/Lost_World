@@ -8,7 +8,8 @@ using UnityEngine.UI;
 public class Character
 {
     public string characterName;
-    public Sprite characterImage;
+    //public Sprite characterImage;
+    public Color characterColor;
     public List<Choice> choices;
 }
 
@@ -55,9 +56,32 @@ public class Data : MonoBehaviour
 
     public void MakeRandomDecision()
     {
+        //Check if the is any character left
+        if (characters.Length == 0)
+        {
+            Debug.Log("No more characters left");
+            return;
+        }
+
             RandomDecision();
 
             SetCardElements();
+
+            DeleteUsingChoice();
+
+    }
+
+    private void DeleteUsingChoice()
+    {
+        //Delete using decision
+        randomCharacter.choices.RemoveAt(randomChoiceIndex);
+        //If there are no more decisions for the character, remove the character from the list
+        if (randomCharacter.choices.Count == 0)
+        {
+            List<Character> tempCharacters = new List<Character>(characters);
+            tempCharacters.RemoveAt(randomCharacterIndex);
+            characters = tempCharacters.ToArray();
+        }
     }
 
     private void SetCardElements()
@@ -66,7 +90,10 @@ public class Data : MonoBehaviour
         Character_Name.text = randomCharacter.characterName;
 
         // Set the character's image
-        Character_Image.sprite = randomCharacter.characterImage;
+        //Character_Image.sprite = randomCharacter.characterImage;
+
+        // Set the character's color
+        Character_Image.color = randomCharacter.characterColor;
 
         // Set the choice's description
         Info1.text = randomChoice.description;
