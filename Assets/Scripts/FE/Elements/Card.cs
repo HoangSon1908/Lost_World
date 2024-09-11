@@ -93,6 +93,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         rect.anchoredPosition = Vector2.zero;
         FadeAnswerText(topAnswer, 0);
         FadeAnswerText(bottomAnswer, 0);
+
+        Data.instance.MakeRandomDecision();
     }
 
     //Thay doi do trong suot cua text
