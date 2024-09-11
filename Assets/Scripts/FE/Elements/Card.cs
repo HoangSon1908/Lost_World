@@ -20,6 +20,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     private float yPos;
     private RectTransform rect;
     private Vector2 offset;
+    public DecisionEffect decisionEffect;
+    public Stat stat;
 
     private void Awake()
     {
@@ -55,11 +57,15 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         {
             rect.DOAnchorPosY( 900, .5f).OnComplete(() => { ResetCard(); });
             CreateBuff();
+            decisionEffect.OnCardDecision("publicesteem", true);
+            stat.InceaseProperty(10);
         }
         else if (yPos < -150)
         {
             rect.DOAnchorPosY(-800, .5f).OnComplete(() => { ResetCard(); });
             CreateBuff();
+            decisionEffect.OnCardDecision("publicesteem", false);
+            stat.DeceaseProperty(10);
         }
         else
         {

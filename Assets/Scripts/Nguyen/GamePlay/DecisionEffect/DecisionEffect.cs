@@ -4,48 +4,51 @@ using UnityEngine;
 
 public class DecisionEffect : MonoBehaviour
 {
-    public void OnCardDecision(string stat, bool isPositive) 
+    void Update() {
+       
+    }
+    public void OnCardDecision(string element, bool isPositive) 
     {
-        ApplySingleEffect(stat, isPositive);
+        ApplySingleEffect(element, isPositive);
         AddDaysAfterDecision();
     }
 
-    public void ApplyDecisionEffect(Dictionary<string, bool> stats) 
+    public void ApplyDecisionEffect(Dictionary<string, bool> elements) 
     {
-        foreach (var statEffect in stats) 
+        foreach (var statEffect in elements) 
         {
             ApplySingleEffect(statEffect.Key, statEffect.Value);
         }
     }
-    public void ApplySingleEffect(string stat, bool isPositive) 
+    public void ApplySingleEffect(string element, bool isPositive) 
     {
-        float effect = GameManager.Instance.statsSO.decisionEffectPercentage;
+        float effect = GameManager.Instance.decisionEffectPercentage;
         if (!isPositive) effect = -effect;
 
-        switch (stat) 
+        switch (element) 
         {
             case "publicesteem":
-                GameManager.Instance.statsSO.publicEsteem += GameManager.Instance.statsSO.publicEsteem * (effect / 100);
+                GameManager.Instance.publicEsteem += effect;
                 break;
             case "militarypower":
-                GameManager.Instance.statsSO.militaryPower += GameManager.Instance.statsSO.militaryPower * (effect / 100);
+                GameManager.Instance.militaryPower += effect;
                 break;
             case "intelligence":
-                GameManager.Instance.statsSO.intelligence += GameManager.Instance.statsSO.intelligence * (effect / 100);
+                GameManager.Instance.intelligence += effect;
                 break;
             case "sprirituality":
-                GameManager.Instance.statsSO.spirituality += GameManager.Instance.statsSO.spirituality * (effect / 100);
+                GameManager.Instance.spirituality += effect;
                 break;
         }
     }
     public void AddDaysAfterDecision() 
     {
-        GameManager.Instance.timeSO.totaldays += GameManager.Instance.timeSO.daysPerDecision;
+        GameManager.Instance.totaldays += GameManager.Instance.daysPerDecision;
 
-        if (GameManager.Instance.timeSO.totaldays >= GameManager.Instance.timeSO.daysInYear) 
+        if (GameManager.Instance.totaldays >= GameManager.Instance.daysInYear) 
         {
-            GameManager.Instance.timeSO.totaldays -= GameManager.Instance.timeSO.daysInYear;
-            GameManager.Instance.timeSO.currentYear++;
+            GameManager.Instance.totaldays -= GameManager.Instance.daysInYear;
+            GameManager.Instance.currentYear++;
         }
     }
 }
