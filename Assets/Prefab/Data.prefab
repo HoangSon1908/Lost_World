@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6121841446629122671}
   - component: {fileID: 7965374183370995728}
+  - component: {fileID: 6697795856281027556}
   m_Layer: 0
   m_Name: Data
   m_TagString: Untagged
@@ -143,69 +144,6 @@ MonoBehaviour:
     - description: "Ch\xFAng ta n\xEAn m\u1EDF th\xEAm tr\u01B0\u1EDDng h\u1ECDc "
       decision1: "V\xE2ng, ta l\xE0m"
       decision2: "Qu\xE1 t\u1ED1n k\xE9m"
-  - characterName: "T\u1EC3 t\u01B0\u1EDBng"
-    characterColor: {r: 0.54509807, g: 0, b: 0, a: 1}
-    choices:
-    - description: "Xin ng\xE0i ph\xE1t bi\u1EC3u tr\u01B0\u1EDBc bu\u1ED5i duy\u1EC7t
-        binh v\xE0o th\xE1ng sau "
-      decision1: "T\u1ED1t, ta s\u1EBD \u0111i"
-      decision2: "Ta kh\xF4ng mu\u1ED1n"
-    - description: "T\xF4i ngh\u0129 n\xEAn m\u1EDDi c\xE1c chuy\xEAn gia Havaa \u0111\u1EC3
-        ch\u1EBF t\u1EA1o \u0111\u1EA1i b\xE1c c\u1EA7m tay "
-      decision1: "M\u1EDDi b\u1EA1n ta"
-      decision2: "Kh\xF4ng, ta gh\xE9t"
-    - description: "T\xF4i m\u1EDDi ng\xE0i \u0111i u\u1ED1ng r\u01B0\u1EE3u nh\xE9 "
-      decision1: "C\u1EA3m \u01A1n \xF4ng"
-      decision2: "Ta kh\xF4ng u\u1ED1ng"
-    - description: "H\xE3y t\u1ED5 ch\u1EE9c l\u1EC5 \u0111\u0103ng quang th\u1EADt
-        trang tr\u1ECDng "
-      decision1: "T\u1EA5t nhi\xEAn r\u1ED3i"
-      decision2: "H\xE3y ti\u1EBFt ki\u1EC7m"
-    - description: "H\xE3y t\u0103ng tuy\u1EC3n qu\xE2n l\xEDnh "
-      decision1: "\u0110\xFAng, h\xE3y t\u0103ng "
-      decision2: "Ph\u1EA3i ti\u1EBFt ki\u1EC7m"
-    - description: "Qu\xE2n ta \u0111ang m\u1EA1nh, h\xE3y t\u1EA5n c\xF4ng Samis "
-      decision1: "T\u1EA5n c\xF4ng ngay"
-      decision2: "Khoan \u0111\xE3"
-    - description: "C\xF3 k\u1EBB ch\u1ED1ng \u0111\u1ED1i \u1EDF v\xF9ng ven, h\xE3y
-        t\u1EA5n c\xF4ng h\u1ECD "
-      decision1: "Chinh ph\u1EA1t h\u1ECD"
-      decision2: "Th\u01B0\u01A1ng l\u01B0\u1EE3ng v\u1EDBi h\u1ECD"
-    - description: " H\xE3y theo d\xF5i anh trai c\u1EE7a ng\xE0i "
-      decision1: "\u1EEA"
-      decision2: "Kh\xF4ng, h\xE3y tin Nathan"
-    - description: "Nerope thi\u1EBFu l\u01B0\u01A1ng th\u1EF1c "
-      decision1: "H\xE3y t\u1EA5n c\xF4ng"
-      decision2: "H\xE3y giao th\u01B0\u01A1ng"
-    - description: "C\xF4ng t\u01B0\u1EDBc b\xED m\u1EADt mua v\u0169 kh\xED t\u1EEB
-        n\u01B0\u1EDBc ngo\xE0i "
-      decision1: "H\xE3y theo d\xF5i"
-      decision2: "B\u1EAFt \xF4ng ta"
-    - description: "M\u1ED1i quan h\u1EC7 gi\u1EEFa ch\xFAng ta v\xE0 c\xE1c nh\xE0
-        th\u1EDD \u0111ang x\u1EA5u \u0111i "
-      decision1: "L\u1EADp gi\xE1o \u0111o\xE0n m\u1EDBi"
-      decision2: "\u0110\xFAt l\xF3t h\u1ECD"
-    - description: "Gi\xE1o ho\xE0ng \u0111ang \u1EE7ng h\u1ED9 qu\xE2n ph\u1EA3n
-        lo\u1EA1n "
-      decision1: "H\xE3y t\u1EA5n c\xF4ng h\u1ECD"
-      decision2: "C\u1EAFt l\u01B0\u01A1ng th\u1EF1c \u0111i"
-    - description: "C\xF3 vi\u1EC7c g\xEC c\u1EA7n ph\xE2n ph\xF3?  "
-      decision1: "Mau b\u1EAFt ng\u01B0\u1EDDi l\xE0m v\u01B0\u1EDDn"
-      decision2: "T\u1EA5n c\xF4ng Havaa "
-    - description: "H\xE0ng x\xF3m n\xF3i, ng\u01B0\u1EDDi l\xE0m v\u01B0\u1EDDn
-        m\u1EA5y n\u0103m nay r\u1EA5t l\u1EA1 "
-      decision1: "G\u1EB7p ng\u01B0\u1EDDi l\xE0m v\u01B0\u1EDDn"
-      decision2: "Gi\u1EBFt ng\u01B0\u1EDDi l\xE0m v\u01B0\u1EDDn "
-    - description: "Ph\u1EA3i, t\xF4i l\xE0 ng\u01B0\u1EDDi \u0111\u1EBFn t\u1EEB
-        t\u01B0\u01A1ng lai "
-      decision1: "Ph\xF2 t\xE1 cho t\xF4i"
-      decision2: "Anh ph\u1EA3i ch\u1EBFt "
-    - description: "Ch\xFAng ta t\u1EA5n c\xF4ng Havaa ch\u1EE9?  "
-      decision1: "B\u1EAFt ng\u01B0\u1EDDi l\xE0m v\u01B0\u1EDDn tr\u01B0\u1EDBc"
-      decision2: "T\u1EA5t nhi\xEAn"
-    - description: "Qu\xE2n Havaa c\xF3 v\u0169 kh\xED gi\u1ED1ng ch\xFAng ta  "
-      decision1: "T\u1EED h\xECnh ng\u01B0\u1EDDi l\xE0m v\u01B0\u1EDDn"
-      decision2: "Kh\xF4ng sao "
   - characterName: Nathan
     characterColor: {r: 0.5019608, g: 0, b: 0.5019608, a: 1}
     choices:
@@ -401,16 +339,16 @@ MonoBehaviour:
         ng\u01B0\u01A1i \u0111\u1ED9c \xE1c "
       decision1: "Kh\xF4ng c\u1EA7n \xF4ng"
       decision2: "Ta l\xE0 th\u1EBF"
-    - description: "T\xF4i tin anh h\u01A1n Gi\xE1o ho\xE0ng, h\xE3y k\xED h\xF2a
-        \u01B0\u1EDBc n\xE0o "
-      decision1: "Th\u1ECFa thu\u1EADn nh\xE9"
-      decision2: "Kh\xF4ng \u0111\u01B0\u1EE3c r\u1ED3i"
   - characterName: "Ho\xE0ng t\u1EED Havaa"
     characterColor: {r: 1, g: 0.27058825, b: 0, a: 1}
     choices:
     - description: "Ta mu\u1ED1n \u1EDF l\u1EA1i \u0111\xE2y ch\u01A1i \xEDt h\xF4m "
       decision1: "\u0110\u01B0\u1EE3c, m\u1EDDi ng\xE0i "
       decision2: "Kh\xF4ng, ng\xE0i v\u1EC1 \u0111i"
+    - description: "T\xF4i tin anh h\u01A1n Gi\xE1o ho\xE0ng, h\xE3y k\xED h\xF2a
+        \u01B0\u1EDBc n\xE0o "
+      decision1: "Th\u1ECFa thu\u1EADn nh\xE9"
+      decision2: "Kh\xF4ng \u0111\u01B0\u1EE3c r\u1ED3i"
   - characterName: "Qu\xE2n l\xEDnh"
     characterColor: {r: 0.64705884, g: 0.16470589, b: 0.16470589, a: 1}
     choices:
@@ -427,3 +365,15 @@ MonoBehaviour:
   BottomAnswer: {fileID: 0}
   Character_Name: {fileID: 0}
   Character_Image: {fileID: 0}
+--- !u!114 &6697795856281027556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6907851632718982100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2e57c5ec854aeb4da3d1b024c46f989, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

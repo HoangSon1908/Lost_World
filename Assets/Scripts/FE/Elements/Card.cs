@@ -55,11 +55,13 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         {
             rect.DOAnchorPosY( 900, .5f).OnComplete(() => { ResetCard(); });
             CreateBuff();
+            Data.instance.MakeRandomDecision();
         }
         else if (yPos < -150)
         {
             rect.DOAnchorPosY(-800, .5f).OnComplete(() => { ResetCard(); });
             CreateBuff();
+            Data.instance.MakeRandomDecision();
         }
         else
         {
@@ -87,8 +89,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         rect.anchoredPosition = Vector2.zero;
         FadeAnswerText(topAnswer, 0);
         FadeAnswerText(bottomAnswer, 0);
-
-        Data.instance.MakeRandomDecision();
     }
 
     //Thay doi do trong suot cua text
