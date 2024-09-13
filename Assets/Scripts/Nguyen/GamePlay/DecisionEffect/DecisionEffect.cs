@@ -9,7 +9,7 @@ public class DecisionEffect : MonoBehaviour
     }
     public void OnCardDecision(string element, bool isPositive) 
     {
-        ApplySingleEffect(element, isPositive);
+        ApplySingleEffect(element, isPositive, 10);
         AddDaysAfterDecision();
     }
 
@@ -17,12 +17,12 @@ public class DecisionEffect : MonoBehaviour
     {
         foreach (var statEffect in elements) 
         {
-            ApplySingleEffect(statEffect.Key, statEffect.Value);
+            ApplySingleEffect(statEffect.Key, statEffect.Value, 10);
         }
     }
-    public void ApplySingleEffect(string element, bool isPositive) 
+    public void ApplySingleEffect(string element, bool isPositive, int statEffect) 
     {
-        float effect = GameManager.Instance.decisionEffectPercentage;
+        float effect = statEffect;
         if (!isPositive) effect = -effect;
 
         switch (element) 
@@ -33,8 +33,8 @@ public class DecisionEffect : MonoBehaviour
             case "militarypower":
                 GameManager.Instance.militaryPower += effect;
                 break;
-            case "intelligence":
-                GameManager.Instance.intelligence += effect;
+            case "economy":
+                GameManager.Instance.economy += effect;
                 break;
             case "sprirituality":
                 GameManager.Instance.spirituality += effect;

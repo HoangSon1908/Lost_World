@@ -22,7 +22,6 @@ public class GameManager : Singleton<GameManager>
     [Header("Stats")]
     public float publicEsteem = 50f;
     public float militaryPower = 50f;
-    public float intelligence = 50f;
+    public float economy = 50f;
     public float spirituality = 50f;
-    public float decisionEffectPercentage = 10f;
 }
