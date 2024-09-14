@@ -24,14 +24,16 @@ public class Choice
 
 public class Data : MonoBehaviour
 {
-    
-    
+
+
     //Data instance singleton
     public static Data instance { get; private set; }
 
     //make a list of character in editor
     [Header("Characters")]
     public Character[] characters;
+
+    [Header("Story")]
     public Character intro;
 
     [Header("Card Elements")]
@@ -41,8 +43,8 @@ public class Data : MonoBehaviour
     public TextMeshProUGUI Character_Name;
     public Image Character_Image;
 
-    private Character Character;
-    private Choice Choice;
+    private Character currentCharacter;
+    private Choice currentChoice;
     private int randomCharacterIndex;
     private int randomChoiceIndex;
 
@@ -55,19 +57,18 @@ public class Data : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
 
-        // Kiểm tra xem người chơi có phải lần đầu chơi game hay không
         isFirstTime = PlayerPrefs.GetInt(FirstTimeKey, 1) == 1;
-
 
         if (isFirstTime)
         {
-            Character = intro;
+            currentCharacter = intro;
             Intro();
         }
         else
@@ -78,7 +79,7 @@ public class Data : MonoBehaviour
 
     public void MakeDecision()
     {
-        if (Character.isIntro && Character != null)
+        if (currentCharacter.isIntro)
         {
             Intro();
         }
@@ -90,18 +91,15 @@ public class Data : MonoBehaviour
 
     public void Intro() 
     {
-            if(Character.choices.Count != 0)
-            {
-                Choice = Character.choices[0];
-                SetCardElements();
-                DeleteUsingChoice(0);
-            }
-            else
-            {
-                // Đánh dấu là người chơi đã chơi game lần đầu
-                PlayerPrefs.SetInt(FirstTimeKey, 0);
-                PlayerPrefs.Save();
-            }
+        currentChoice = currentCharacter.choices[0];
+        SetCardElements();
+        DeleteUsingChoice(0);
+        if (currentCharacter.choices.Count == 0)
+        {
+            currentCharacter.isIntro = false;
+            PlayerPrefs.SetInt(FirstTimeKey, 0);
+            PlayerPrefs.Save();
+        }
     }
 
     public void MakeRandomDecision()
@@ -124,9 +122,9 @@ public class Data : MonoBehaviour
     private void DeleteUsingChoice(int ChoiceIndex)
     {
         //Delete using decision
-        Character.choices.RemoveAt(ChoiceIndex);
+        currentCharacter.choices.RemoveAt(ChoiceIndex);
         //If there are no more decisions for the character, remove the character from the list
-        if (Character.choices.Count == 0)
+        if (currentCharacter.choices.Count == 0)
         {
             List<Character> tempCharacters = new List<Character>(characters);
             tempCharacters.RemoveAt(randomCharacterIndex);
@@ -137,30 +135,30 @@ public class Data : MonoBehaviour
     private void SetCardElements()
     {
         // Set the character's name
-        Character_Name.text = Character.characterName;
+        Character_Name.text = currentCharacter.characterName;
 
         // Set the character's image
         //Character_Image.sprite = randomCharacter.characterImage;
 
         // Set the character's color
-        Character_Image.color = Character.characterColor;
+        Character_Image.color = currentCharacter.characterColor;
 
         // Set the choice's description
-        Info1.text = Choice.description;
+        Info1.text = currentChoice.description;
 
         // Set the choice's decisions
-        TopAnswer.text = Choice.decision1;
-        BottomAnswer.text = Choice.decision2;
+        TopAnswer.text = currentChoice.decision1;
+        BottomAnswer.text = currentChoice.decision2;
     }
 
     private void RandomDecision()
     {
         // Get a random character from the topics list
         randomCharacterIndex = Random.Range(0, characters.Length);
-        Character = characters[randomCharacterIndex];
+        currentCharacter = characters[randomCharacterIndex];
 
         // Get a random choice from the character's choices list
-        randomChoiceIndex = Random.Range(0, Character.choices.Count);
-        Choice = Character.choices[randomChoiceIndex];
+        randomChoiceIndex = Random.Range(0, currentCharacter.choices.Count);
+        currentChoice = currentCharacter.choices[randomChoiceIndex];
     }
 }
