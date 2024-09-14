@@ -47,6 +47,7 @@ MonoBehaviour:
   characters:
   - characterName: "H\u1EA7u g\xE1i"
     characterColor: {r: 1, g: 0.7137255, b: 0.75686276, a: 1}
+    isIntro: 0
     choices:
     - description: "B\u1EEFa s\xE1ng c\u1EE7a ng\xE0i"
       decision1: "\u0110\u01B0\u1EE3c, ngon l\u1EAFm"
@@ -86,6 +87,7 @@ MonoBehaviour:
       decision2: "Kh\xF4ng th\u1EC3 tha th\u1EE9!! "
   - characterName: "C\xF4ng ch\xFAa"
     characterColor: {r: 1, g: 0.4117647, b: 0.7058824, a: 1}
+    isIntro: 0
     choices:
     - description: "\u0110i\u1EC3m to\xE1n c\u1EE7a anh th\u1EADt th\u1EA5p "
       decision1: "\u1EEA, anh th\xEDch"
@@ -120,6 +122,7 @@ MonoBehaviour:
       decision2: "\u0110u\u1ED5i c\u1ED5 anh ta"
   - characterName: "Th\u1EA7y"
     characterColor: {r: 0.27450982, g: 0.50980395, b: 0.7058824, a: 1}
+    isIntro: 0
     choices:
     - description: "Ho\xE0ng t\u1EED h\u1ECDc r\u1EA5t t\u1ED1t v\xF5 ngh\u1EC7,
         t\xF4i tin ch\u1EAFc ng\xE0i s\u1EBD tr\u1EDF th\xE0nh m\u1ED9t v\u1ECB vua
@@ -144,7 +147,8 @@ MonoBehaviour:
       decision1: "V\xE2ng, ta l\xE0m"
       decision2: "Qu\xE1 t\u1ED1n k\xE9m"
   - characterName: Nathan
-    characterColor: {r: 0.5019608, g: 0, b: 0.5019608, a: 1}
+    characterColor: {r: 0.5411765, g: 0.16862746, b: 0.8862745, a: 1}
+    isIntro: 0
     choices:
     - description: "\u0110\u1EC3 r\u1ED3i xem "
       decision1: "V\xE2ng, th\u01B0a anh"
@@ -163,6 +167,7 @@ MonoBehaviour:
       decision2: "V\xE2ng, c\u0169ng \u0111\xFAng"
   - characterName: Vua cha
     characterColor: {r: 1, g: 0.84313726, b: 0, a: 1}
+    isIntro: 0
     choices:
     - description: "Con trai, ta r\u1EA5t t\u1EF1 h\xE0o v\u1EC1 con "
       decision1: "V\xE2ng th\u01B0a cha"
@@ -173,6 +178,7 @@ MonoBehaviour:
       decision2: "Kh\xF4ng c\xF3 g\xEC"
   - characterName: "Ng\u01B0\u1EDDi l\xE0m v\u01B0\u1EDDn"
     characterColor: {r: 0.13333334, g: 0.54509807, b: 0.13333334, a: 1}
+    isIntro: 0
     choices:
     - description: "Ng\xE0i h\xE0i l\xF2ng v\u1EC1 m\u1EA3nh v\u01B0\u1EDDn n\xE0y
         ch\u1EE9? "
@@ -226,6 +232,7 @@ MonoBehaviour:
       decision2: "T\xF9y ng\u01B0\u01A1i"
   - characterName: "S\u1EE9 gi\u1EA3"
     characterColor: {r: 0.19607843, g: 0.8039216, b: 0.19607843, a: 1}
+    isIntro: 0
     choices:
     - description: "T\xF4i r\u1EA5t vui \u0111\u01B0\u1EE3c g\u1EB7p ng\xE0i, mu\u1ED1n
         m\u1EDDi ng\xE0i \u0111i Havaa h\u1ECDc t\u1EADp "
@@ -246,7 +253,8 @@ MonoBehaviour:
       decision1: "Ta xin l\u1ED7i"
       decision2: "Kh\xF4ng bao gi\u1EDD"
   - characterName: "C\xF4ng t\u01B0\u1EDBc"
-    characterColor: {r: 0.69803923, g: 0.13333334, b: 0.13333334, a: 1}
+    characterColor: {r: 1, g: 0.27058825, b: 0, a: 1}
+    isIntro: 0
     choices:
     - description: "T\u1ED1i nay nh\xE0 t\xF4i c\xF3 ti\u1EC7c "
       decision1: "Ta s\u1EBD \u0111\u1EBFn"
@@ -264,7 +272,8 @@ MonoBehaviour:
       decision1: "Ng\xE0i hoang t\u01B0\u1EDFng r\u1ED3i"
       decision2: "Ta ch\xFAc ph\xFAc cho h\u1ECD"
   - characterName: Vinci
-    characterColor: {r: 0, g: 0, b: 0.54509807, a: 1}
+    characterColor: {r: 0.11764706, g: 0.5647059, b: 1, a: 1}
+    isIntro: 0
     choices:
     - description: "H\xE3y ch\xFA \xFD \u0111\u1EBFn ng\xE0y mai "
       decision1: "Ta s\u1EBD nh\u1EDB"
@@ -319,7 +328,8 @@ MonoBehaviour:
       decision1: "\u0110\xF3 l\xE0 \u0111i\u1EC1u n\xEAn l\xE0m"
       decision2: "C\u1EA3m \u01A1n g\xEC "
   - characterName: "Gi\xE1o ho\xE0ng"
-    characterColor: {r: 0.85490197, g: 0.64705884, b: 0.1254902, a: 1}
+    characterColor: {r: 1, g: 0.7647059, b: 0, a: 1}
+    isIntro: 0
     choices:
     - description: "Ch\xFAa ch\xFAc ph\xFAc cho ng\xE0i "
       decision1: "Ph\u01B0\u1EDBc cho ng\xE0i"
@@ -339,7 +349,8 @@ MonoBehaviour:
       decision1: "Kh\xF4ng c\u1EA7n \xF4ng"
       decision2: "Ta l\xE0 th\u1EBF"
   - characterName: "Ho\xE0ng t\u1EED Havaa"
-    characterColor: {r: 1, g: 0.27058825, b: 0, a: 1}
+    characterColor: {r: 1, g: 0.54901963, b: 0, a: 1}
+    isIntro: 0
     choices:
     - description: "Ta mu\u1ED1n \u1EDF l\u1EA1i \u0111\xE2y ch\u01A1i \xEDt h\xF4m "
       decision1: "\u0110\u01B0\u1EE3c, m\u1EDDi ng\xE0i "
@@ -349,7 +360,8 @@ MonoBehaviour:
       decision1: "Th\u1ECFa thu\u1EADn nh\xE9"
       decision2: "Kh\xF4ng \u0111\u01B0\u1EE3c r\u1ED3i"
   - characterName: "Qu\xE2n l\xEDnh"
-    characterColor: {r: 0.64705884, g: 0.16470589, b: 0.16470589, a: 1}
+    characterColor: {r: 0.54509807, g: 0.36078432, b: 0.14901961, a: 1}
+    isIntro: 0
     choices:
     - description: "T\xF4i r\u1EA5t m\u1EC7t m\u1ECFi v\xEC nh\u1EEFng cu\u1ED9c
         chi\u1EBFn "
@@ -359,6 +371,43 @@ MonoBehaviour:
         l\xE0m v\u01B0\u1EDDn "
       decision1: "Ta s\u1EBD l\u1EA5y n\xF3"
       decision2: "Tr\u1EA3 l\u1EA1i n\xF3 \u0111i "
+  intro:
+    characterName: ????
+    characterColor: {r: 0.11764706, g: 0.5647059, b: 1, a: 1}
+    isIntro: 1
+    choices:
+    - description: '-Pipipi- '
+      decision1: "Chuy\u1EC7n g\xEC v\u1EADy?"
+      decision2: "Ch\xF3i tai qu\xE1"
+    - description: "-Xin ch\xE0o ng\u01B0\u1EDDi th\u1EEBa k\u1EBF c\u1EE7a v\u01B0\u01A1ng
+        qu\u1ED1c n\xE0y- "
+      decision1: "\u0110\u1EE3i ch\xFAt"
+      decision2: "\u0110\u1EC3 ta ng\u1EE7"
+    - description: "-T\xF4i l\xE0 ch\xE1u \u0111\u1EDDi th\u1EE9 30 c\u1EE7a b\u1EA1n- "
+      decision1: Umm
+      decision2: "Th\u1EADt kh\xF3 tin"
+    - description: "-\u0110\xE2y l\xE0 th\xF4ng \u0111i\u1EC7p \u0111\u1EBFn t\u1EEB
+        t\u01B0\u01A1ng lai- "
+      decision1: "Ng\u01B0\u01A1i n\xF3i \u0111i"
+      decision2: "Ta kh\xF4ng hi\u1EC3u"
+    - description: "-Qu\u1ED1c gia c\u1EE7a b\u1EA1n s\u1EBD b\u1ECB th\xE2u t\xF3m
+        b\u1EDFi m\u1ED9t k\u1EBB ph\u1EA3n b\u1ED9i, \u0111\u1EA7u c\u1EE7a b\u1EA1n
+        s\u1EBD b\u1ECB b\xEAu gi\u1EEFa \u0111\xE1m \u0111\xF4ng- "
+      decision1: "Th\u1EADt v\u1EADy sao?"
+      decision2: "Kh\xF4ng c\xF3 \u0111\xE2u"
+    - description: "-Tin t\xF4i \u0111i, c\u1EADu l\xE0 Edward, th\xEDch nh\u1EA5t
+        b\xE1nh n\u01B0\u1EDBng, gh\xE9t nh\u1EA5t Eliana-"
+      decision1: "Sao ng\u01B0\u01A1i bi\u1EBFt?"
+      decision2: "Th\u1EADt \u0111\xE1ng ng\u1EDD"
+    - description: "-N\u1EBFu ng\xE0i kh\xF4ng nghe t\xF4i, cu\u1ED9c s\u1ED1ng c\u1EE7a
+        t\xF4i l\xE0 m\u1ED9t m\u1EDB b\xF2ng bong-"
+      decision1: "V\u1EADy ta nghe"
+      decision2: "T\u1EF1 ch\u1ECBu \u0111i"
+    - description: "-H\xE3y ch\xFA \xFD \u0111\u1EBFn nh\u1EEFng k\u1EBB b\u1EA5t
+        th\u01B0\u1EDDng trong v\u01B0\u01A1ng qu\u1ED1c, ng\xE0i s\u1EBD l\u01B0u
+        danh l\u1ECBch s\u1EED v\xEC \u0111i\u1EC1u \u0111\xF3-"
+      decision1: "Ta s\u1EBD ch\xFA \xFD"
+      decision2: "Ta kh\xF4ng r\u1EA3nh"
   Info1: {fileID: 0}
   TopAnswer: {fileID: 0}
   BottomAnswer: {fileID: 0}

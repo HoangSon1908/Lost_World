@@ -10,6 +10,7 @@ public class Character
     public string characterName;
     //public Sprite characterImage;
     public Color characterColor;
+    public bool isIntro;
     public List<Choice> choices;
 }
 
@@ -47,7 +48,6 @@ public class Data : MonoBehaviour
 
     [Header("Intro")]
     private const string FirstTimeKey = "FirstTime";
-    private int IntroIndex = 0;
     private bool isFirstTime;
 
     private void Awake()
@@ -67,8 +67,19 @@ public class Data : MonoBehaviour
 
         if (isFirstTime)
         {
-            PlayerPrefs.SetInt(FirstTimeKey, 1);
-            IntroIndex = 0;
+            Character = intro;
+            Intro();
+        }
+        else
+        {
+            MakeRandomDecision();
+        }
+    }
+
+    public void MakeDecision()
+    {
+        if (Character.isIntro && Character != null)
+        {
             Intro();
         }
         else
@@ -79,33 +90,22 @@ public class Data : MonoBehaviour
 
     public void Intro() 
     {
-        //walk through the intro list
-        if(isFirstTime)
-        {
-            Character = intro;
-            Choice = Character.choices[IntroIndex];
-
-            SetCardElements();
-            IntroIndex++;
-        }
-        else
-        {
-            // Đánh dấu là người chơi đã chơi game lần đầu
-            PlayerPrefs.SetInt(FirstTimeKey, 0);
-            PlayerPrefs.Save();
-            isFirstTime = false;
-            MakeRandomDecision();
-        }
-
+            if(Character.choices.Count != 0)
+            {
+                Choice = Character.choices[0];
+                SetCardElements();
+                DeleteUsingChoice(0);
+            }
+            else
+            {
+                // Đánh dấu là người chơi đã chơi game lần đầu
+                PlayerPrefs.SetInt(FirstTimeKey, 0);
+                PlayerPrefs.Save();
+            }
     }
 
     public void MakeRandomDecision()
     {
-        if (isFirstTime)
-        {
-            Intro();
-        }
-        
         //Check if the is any character left
         if (characters.Length == 0)
         {
@@ -117,14 +117,14 @@ public class Data : MonoBehaviour
 
             SetCardElements();
 
-            DeleteUsingChoice();
+            DeleteUsingChoice(randomChoiceIndex);
 
     }
 
-    private void DeleteUsingChoice()
+    private void DeleteUsingChoice(int ChoiceIndex)
     {
         //Delete using decision
-        Character.choices.RemoveAt(randomChoiceIndex);
+        Character.choices.RemoveAt(ChoiceIndex);
         //If there are no more decisions for the character, remove the character from the list
         if (Character.choices.Count == 0)
         {
