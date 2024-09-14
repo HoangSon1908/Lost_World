@@ -1,4 +1,4 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -33,34 +33,44 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        RectTransformUtility.ScreenPointToWorldPointInRectangle(rect.root as RectTransform, eventData.position, eventData.pressEventCamera, out Vector3 globalMousePos);
-        offset = rect.localPosition + globalMousePos;
+        // Convert screen position to local position within the rect
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(rect.root as RectTransform, eventData.position, eventData.pressEventCamera, out Vector2 localPoint);
+
+        // Calculate offset from the local point within the rect
+        offset = rect.anchoredPosition - localPoint;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        Vector2 pointerPosition = eventData.position;
-
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(rect.root as RectTransform, pointerPosition, eventData.pressEventCamera, out Vector2 localPoint);
+        // Convert screen position to local position within the rect
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(rect.root as RectTransform, eventData.position, eventData.pressEventCamera, out Vector2 localPoint);
 
         rect.anchoredPosition = new Vector2(0, localPoint.y + offset.y);
-        yPos = localPoint.y;
+        yPos = localPoint.y + offset.y;
         CalculateFadeText();
 
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        if (yPos > 150)
+    if (yPos > 150)
+    {
+        rect.DOAnchorPosY(900, .5f).OnComplete(() => 
         {
-            rect.DOAnchorPosY( 900, .5f).OnComplete(() => { ResetCard(); });
+            ResetCard(); 
             CreateBuff();
-        }
-        else if (yPos < -150)
+            Data.instance.MakeDecision();
+        });
+    }
+    else if (yPos < -150)
+    {
+        rect.DOAnchorPosY(-800, .5f).OnComplete(() => 
         {
-            rect.DOAnchorPosY(-800, .5f).OnComplete(() => { ResetCard(); });
+            ResetCard(); 
             CreateBuff();
-        }
+            Data.instance.MakeDecision();
+        });
+    }
         else
         {
             ResetCard();
