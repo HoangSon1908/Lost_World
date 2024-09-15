@@ -1,4 +1,4 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -21,6 +21,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     private RectTransform rect;
     private Vector2 offset;
 
+    [SerializeField] private List<RectTransform> cardList = new List<RectTransform>();
+
     private void Awake()
     {
         rect = GetComponent<RectTransform>();
@@ -28,7 +30,28 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
 
     private void Start()
     {
-        ResetCard();
+        AnimationCardIn();
+        //ResetCard();
+    }
+
+    private void AnimationCardIn()
+    {
+        // Khoảng delay giữa các thẻ bài
+        float delayBetweenCards = 0.3f;
+
+        // Di chuyển từng thẻ bài vào màn hình với delay
+        for (int i = 0; i < cardList.Count; i++)
+        {
+            RectTransform card = cardList[i];
+
+            // Đặt vị trí ban đầu của thẻ bài nằm ngoài màn hình
+            card.anchoredPosition = new Vector2(-Screen.width, 0);
+
+            // Thực hiện hoạt ảnh di chuyển thẻ bài vào giữa màn hình
+            card.DOAnchorPosX(0, 1f)
+                .SetEase(Ease.OutBack)
+                .SetDelay(i * delayBetweenCards); // Mỗi thẻ bay vào chậm hơn so với thẻ trước đó
+        }
     }
 
     public void OnPointerDown(PointerEventData eventData)
