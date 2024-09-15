@@ -21,7 +21,12 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     private RectTransform rect;
     private Vector2 offset;
 
+    [Header("AnimationCardIn")]
+    // Khai báo list thẻ phụ
     [SerializeField] private List<RectTransform> cardList = new List<RectTransform>();
+    // Khoảng delay giữa các thẻ bài
+    [SerializeField] float delayBetweenCards = 0.3f;
+
 
     private void Awake()
     {
@@ -36,8 +41,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
 
     private void AnimationCardIn()
     {
-        // Khoảng delay giữa các thẻ bài
-        float delayBetweenCards = 0.3f;
+        
 
         // Di chuyển từng thẻ bài vào màn hình với delay
         for (int i = 0; i < cardList.Count; i++)
