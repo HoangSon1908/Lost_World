@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.EventSystems;
 
-public class Stat : MonoBehaviour, IPointerClickHandler
+public class Stat : MonoBehaviour
 {
     [Header("Elements")]
     [SerializeField] private TextMeshProUGUI percentText;
@@ -55,14 +55,5 @@ public class Stat : MonoBehaviour, IPointerClickHandler
             {
                 iconImage.color = normalColor;
             });
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        int random = Random.Range(0, 2);
-        if (random == 0)
-            InceaseProperty(10);
-        else
-            DeceaseProperty(10);
     }
 }
