@@ -17,11 +17,20 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     [SerializeField] private TextMeshProUGUI topAnswer;
     [SerializeField] private TextMeshProUGUI bottomAnswer;
 
+    [Header("AnimationCardIn")]
+    // Khai báo list thẻ phụ
+    [SerializeField] private List<RectTransform> cardList = new List<RectTransform>();
+    // Khoảng delay giữa các thẻ bài
+    [SerializeField] float delayBetweenCards = 0.3f;
+
+    [Header("Stats")]
+    public DecisionEffect decisionEffect;
+    public Stat stat;
+
+
     private float yPos;
     private RectTransform rect;
     private Vector2 offset;
-    public DecisionEffect decisionEffect;
-    public Stat stat;
 
     private void Awake()
     {
@@ -30,6 +39,24 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
 
     private void Start()
     {
+        AnimationCardIn();
+    }
+
+    private void AnimationCardIn()
+    {
+        // Di chuyển từng thẻ bài vào màn hình với delay
+        for (int i = 0; i < cardList.Count; i++)
+        {
+            RectTransform card = cardList[i];
+
+            // Đặt vị trí ban đầu của thẻ bài nằm ngoài màn hình
+            card.anchoredPosition = new Vector2(-Screen.width, 0);
+
+            // Thực hiện hoạt ảnh di chuyển thẻ bài vào giữa màn hình
+            card.DOAnchorPosX(0, 1f)
+                .SetEase(Ease.OutBack)
+                .SetDelay(i * delayBetweenCards); // Mỗi thẻ bay vào chậm hơn so với thẻ trước đó
+        }
         ResetCard();
     }
 
