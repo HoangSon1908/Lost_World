@@ -22,6 +22,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     [SerializeField] private List<RectTransform> cardList = new List<RectTransform>();
     // Khoảng delay giữa các thẻ bài
     [SerializeField] float delayBetweenCards = 0.3f;
+    [SerializeField] private GameObject ListCard;
 
     [Header("Stats")]
     public DecisionEffect decisionEffect;
@@ -44,6 +45,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
 
     private void AnimationCardIn()
     {
+        ResetCard();
         // Di chuyển từng thẻ bài vào màn hình với delay
         for (int i = 0; i < cardList.Count; i++)
         {
@@ -52,13 +54,31 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
             // Đặt vị trí ban đầu của thẻ bài nằm ngoài màn hình
             card.anchoredPosition = new Vector2(-Screen.width, 0);
 
-            // Thực hiện hoạt ảnh di chuyển thẻ bài vào giữa màn hình
-            card.DOAnchorPosX(0, 1f)
-                .SetEase(Ease.OutBack)
-                .SetDelay(i * delayBetweenCards); // Mỗi thẻ bay vào chậm hơn so với thẻ trước đó
+            // Tạo chuỗi hoạt ảnh
+            Sequence sequence = DOTween.Sequence();
+
+            // Di chuyển thẻ bài vượt qua vị trí giữa một chút (ví dụ 50 pixels sang phải)
+            sequence.Append(card.DOAnchorPosX(25, 0.5f).SetEase(Ease.OutSine));
+
+            // Sau đó di chuyển thẻ bài về vị trí X = 0
+            sequence.Append(card.DOAnchorPosX(0, 0.5f).SetEase(Ease.OutBack));
+
+            // Đặt delay cho mỗi thẻ bài
+            sequence.SetDelay(i * delayBetweenCards);
+
+            // Gọi ResetCard() sau khi hoạt ảnh của thẻ cuối cùng kết thúc
+            if (i == cardList.Count - 1)
+            {
+                sequence.OnComplete(() =>
+                {
+                    ListCard.SetActive(false);
+                    Data.instance.MakeDecision();
+                });
+            }
         }
-        ResetCard();
     }
+
+
 
     public void OnPointerDown(PointerEventData eventData)
     {

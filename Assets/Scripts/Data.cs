@@ -94,11 +94,10 @@ public class Data : MonoBehaviour
         if (isFirstTime)
         {
             currentCharacter = intro;
-            Intro();
         }
         else
         {
-            MakeRandomDecision();
+            currentCharacter = characters[0];
         }
     }
 
