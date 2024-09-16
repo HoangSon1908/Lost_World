@@ -97,7 +97,11 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         rect.anchoredPosition = new Vector2(0, localPoint.y + offset.y);
         yPos = localPoint.y + offset.y;
         CalculateFadeText();
-
+        
+        if (yPos > 0)
+            StatManager.instance.PreviewStatChange(1);
+        else if (yPos < 0)
+            StatManager.instance.PreviewStatChange(2);
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -109,8 +113,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
             ResetCard(); 
             CreateBuff();
             Data.instance.MakeDecision();
-            decisionEffect.OnCardDecision("publicesteem", true);
-            stat.InceaseProperty(10);
         });
     }
     else if (yPos < -150)
@@ -120,8 +122,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
             ResetCard(); 
             CreateBuff();
             Data.instance.MakeDecision();
-            decisionEffect.OnCardDecision("publicesteem", false);
-            stat.DeceaseProperty(10);
         });
     }
         else

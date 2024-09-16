@@ -4,27 +4,15 @@ using UnityEngine;
 
 public class DecisionEffect : MonoBehaviour
 {
-    void Update() {
-       
-    }
-    public void OnCardDecision(string element, bool isPositive) 
+    public void OnCardDecision(string element, int statEffect, int rulingDays) 
     {
-        ApplySingleEffect(element, isPositive, 10);
-        AddDaysAfterDecision();
+        ApplySingleEffect(element, statEffect);
+        AddDaysAfterDecision(rulingDays);
     }
 
-    public void ApplyDecisionEffect(Dictionary<string, bool> elements) 
-    {
-        foreach (var statEffect in elements) 
-        {
-            ApplySingleEffect(statEffect.Key, statEffect.Value, 10);
-        }
-    }
-    public void ApplySingleEffect(string element, bool isPositive, int statEffect) 
+    public void ApplySingleEffect(string element, int statEffect) 
     {
         float effect = statEffect;
-        if (!isPositive) effect = -effect;
-
         switch (element) 
         {
             case "publicesteem":
@@ -41,9 +29,9 @@ public class DecisionEffect : MonoBehaviour
                 break;
         }
     }
-    public void AddDaysAfterDecision() 
+    public void AddDaysAfterDecision(int rulingDays) 
     {
-        GameManager.Instance.totaldays += GameManager.Instance.daysPerDecision;
+        GameManager.Instance.totaldays += rulingDays;
 
         if (GameManager.Instance.totaldays >= GameManager.Instance.daysInYear) 
         {

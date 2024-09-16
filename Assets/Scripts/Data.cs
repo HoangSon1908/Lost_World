@@ -38,12 +38,14 @@ public class Choice
     public string element2;
     public string element3;
     public string element4;
+
+    //Ruling days
+    public int rulingDays1;
+    public int rulingDays2;
 }
 
 public class Data : MonoBehaviour
 {
-
-
     //Data instance singleton
     public static Data instance { get; private set; }
 
@@ -66,8 +68,6 @@ public class Data : MonoBehaviour
     public Image publicEsteemStatBar;
     public Image economyStatBar;
     public Image spiritualityStatBar;
-    public PreviewStatChange previewStatChange;
-
     private Character currentCharacter;
     private Choice currentChoice;
     private int randomCharacterIndex;
@@ -173,12 +173,6 @@ public class Data : MonoBehaviour
         // Set the choice's decisions
         TopAnswer.text = currentChoice.decision1;
         BottomAnswer.text = currentChoice.decision2;
-
-        //Set the game's stats
-        StartCoroutine(previewStatChange.FlickerStatChange(militaryPowerStatBar, currentChoice.militaryEffect1));
-        StartCoroutine(previewStatChange.FlickerStatChange(economyStatBar, currentChoice.economy1));
-        StartCoroutine(previewStatChange.FlickerStatChange(publicEsteemStatBar, currentChoice.publicEsteem1));
-        StartCoroutine(previewStatChange.FlickerStatChange(spiritualityStatBar, currentChoice.spiritualityEffect1));
     }
 
     private void RandomDecision()
@@ -190,5 +184,10 @@ public class Data : MonoBehaviour
         // Get a random choice from the character's choices list
         randomChoiceIndex = Random.Range(0, currentCharacter.choices.Count);
         currentChoice = currentCharacter.choices[randomChoiceIndex];
+    }
+
+    public Choice CurrentChoice 
+    {
+        get { return currentChoice; }
     }
 }
