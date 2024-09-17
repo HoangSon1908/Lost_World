@@ -32,13 +32,7 @@ public class Choice
     public int publicEsteem2;
     public int economy2;
     public int spiritualityEffect2;
-
-    // Elements' name
-    public string element1;
-    public string element2;
-    public string element3;
-    public string element4;
-
+    
     //Ruling days
     public int rulingDays1;
     public int rulingDays2;
@@ -189,5 +183,10 @@ public class Data : MonoBehaviour
     public Choice CurrentChoice 
     {
         get { return currentChoice; }
+    }
+
+    public Character CurrentCharacter 
+    {
+        get { return currentCharacter; }
     }
 }

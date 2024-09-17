@@ -8,7 +8,10 @@ public class StatManager : MonoBehaviour
     private Color defaultColor = Color.white;
     private Color positiveEffectColor = Color.green;
     private Color negativeEffectColor = Color.red;
-
+    public Stat stat1Bar;
+    public Stat stat2Bar;
+    public Stat stat3Bar;
+    public Stat stat4Bar;
     public static StatManager instance { get; private set; }
 
     void Awake() 
@@ -23,7 +26,11 @@ public class StatManager : MonoBehaviour
         }
     }
 
-    public void PreviewStatChange(int decisionType) 
+    void Start() {
+        ApplyStatChanges();
+    }
+
+    /*public void PreviewStatChange(int decisionType) 
     {
         if (decisionType == 1) 
         {
@@ -49,7 +56,7 @@ public class StatManager : MonoBehaviour
             if (choice.spiritualityEffect2 != 0) 
                 StartCoroutine(FlickerStatChange(Data.instance.militaryPowerStatBar, choice.spiritualityEffect2));
         }
-    }
+    }*/
     public IEnumerator FlickerStatChange(Image statBar, int statEffect) 
     {
         Color flickerColor = (statEffect > 0) ? positiveEffectColor : negativeEffectColor;
@@ -65,5 +72,12 @@ public class StatManager : MonoBehaviour
         }
 
         statBar.color = defaultColor;
+    }
+
+    public void ApplyStatChanges() {
+        stat1Bar.UpdateStatBar(GameManager.Instance.militaryPower, GameManager.Instance.maxStat);
+        stat2Bar.UpdateStatBar(GameManager.Instance.publicEsteem, GameManager.Instance.maxStat);
+        stat3Bar.UpdateStatBar(GameManager.Instance.economy, GameManager.Instance.maxStat);
+        stat4Bar.UpdateStatBar(GameManager.Instance.spirituality, GameManager.Instance.maxStat);
     }
 }

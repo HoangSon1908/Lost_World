@@ -25,10 +25,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     [SerializeField] private GameObject ListCard;
 
     [Header("Stats")]
-    public DecisionEffect decisionEffect;
     public Stat stat;
-
-
     private float yPos;
     private RectTransform rect;
     private Vector2 offset;
@@ -98,10 +95,10 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         yPos = localPoint.y + offset.y;
         CalculateFadeText();
         
-        if (yPos > 0)
+        /*if (yPos > 0)
             StatManager.instance.PreviewStatChange(1);
         else if (yPos < 0)
-            StatManager.instance.PreviewStatChange(2);
+            StatManager.instance.PreviewStatChange(2);*/
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -112,6 +109,18 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         {
             ResetCard(); 
             CreateBuff();
+            if (!Data.instance.CurrentCharacter.isIntro) 
+            {
+                Choice choice = Data.instance.CurrentChoice;
+                GameManager.Instance.ApplySingleEffect(
+                    choice.militaryEffect1,
+                    choice.publicEsteem1,
+                    choice.economy1,
+                    choice.spiritualityEffect1
+                );
+                StatManager.instance.ApplyStatChanges();
+                GameManager.Instance.AddDaysAfterDecision(choice.rulingDays1);
+            }
             Data.instance.MakeDecision();
         });
     }
@@ -121,6 +130,18 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         {
             ResetCard(); 
             CreateBuff();
+            if (!Data.instance.CurrentCharacter.isIntro) 
+            {
+                Choice choice = Data.instance.CurrentChoice;
+                GameManager.Instance.ApplySingleEffect(
+                    choice.militaryEffect2,
+                    choice.publicEsteem2,
+                    choice.economy2,
+                    choice.spiritualityEffect2
+                );
+                StatManager.instance.ApplyStatChanges();
+                GameManager.Instance.AddDaysAfterDecision(choice.rulingDays2);
+            }
             Data.instance.MakeDecision();
         });
     }

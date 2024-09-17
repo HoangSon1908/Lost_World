@@ -955,15 +955,14 @@ GameObject:
   m_Component:
   - component: {fileID: 97085943}
   - component: {fileID: 97085942}
-  - component: {fileID: 97085941}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: StatManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &97085941
+--- !u!114 &97085942
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -975,18 +974,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c399067659cab0749b7a5bc918c19d77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &97085942
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 97085940}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d51a8a17b11713b418f527c2a679a994, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  stat1Bar: {fileID: 1618674672}
+  stat2Bar: {fileID: 1525360158}
+  stat3Bar: {fileID: 1222312253}
+  stat4Bar: {fileID: 2061131490}
 --- !u!4 &97085943
 Transform:
   m_ObjectHideFlags: 0
@@ -8829,7 +8820,6 @@ MonoBehaviour:
   - {fileID: 1439704859}
   delayBetweenCards: 0.3
   ListCard: {fileID: 504773460}
-  decisionEffect: {fileID: 97085942}
   stat: {fileID: 1618674672}
 --- !u!114 &1015864716
 MonoBehaviour:
@@ -17229,11 +17219,11 @@ MonoBehaviour:
   currentYear: 0
   daysInYear: 365
   initialDay: 1
-  daysPerDecision: 3
   publicEsteem: 50
   militaryPower: 50
   economy: 50
   spirituality: 50
+  maxStat: 100
 --- !u!4 &1950156166
 Transform:
   m_ObjectHideFlags: 0
