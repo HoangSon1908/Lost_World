@@ -57,11 +57,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
             // Tạo chuỗi hoạt ảnh
             Sequence sequence = DOTween.Sequence();
 
-            // Di chuyển thẻ bài vượt qua vị trí giữa một chút (ví dụ 50 pixels sang phải)
-            sequence.Append(card.DOAnchorPosX(25, 0.5f).SetEase(Ease.OutSine));
-
             // Sau đó di chuyển thẻ bài về vị trí X = 0
-            sequence.Append(card.DOAnchorPosX(0, 0.5f).SetEase(Ease.OutBack));
+            sequence.Append(card.DOAnchorPosX(0, 0.5f).SetEase(Ease.OutBack,0.6f));
 
             // Đặt delay cho mỗi thẻ bài
             sequence.SetDelay(i * delayBetweenCards);
@@ -106,6 +103,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     {
         rect.DOAnchorPosY(900, .5f).OnComplete(() => 
         {
+            rect.anchoredPosition = new Vector2(0, -Screen.height);
+
             ResetCard(); 
             CreateBuff();
             Data.instance.MakeDecision();
@@ -117,6 +116,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     {
         rect.DOAnchorPosY(-800, .5f).OnComplete(() => 
         {
+            rect.anchoredPosition = new Vector2(0, Screen.height);
+
             ResetCard(); 
             CreateBuff();
             Data.instance.MakeDecision();
@@ -147,10 +148,18 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     //Dua card ve cac gia gia tri ban dau
     private void ResetCard()
     {
-        rect.anchoredPosition = Vector2.zero;
+
+        // Tạo chuỗi hoạt ảnh
+        Sequence resetSequence = DOTween.Sequence();
+
+        // Sau đó, đưa thẻ về vị trí Y = 0
+        resetSequence.Append(rect.DOAnchorPosY(0, 0.5f).SetEase(Ease.OutBack,0.9f));
+
+        // Khi thẻ trượt về vị trí 0, fade độ trong suốt của text đồng thời
         FadeAnswerText(topAnswer, 0);
         FadeAnswerText(bottomAnswer, 0);
     }
+
 
     //Thay doi do trong suot cua text
     private void FadeAnswerText(TextMeshProUGUI text, float alpha)
