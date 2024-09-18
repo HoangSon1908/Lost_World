@@ -27,10 +27,17 @@ public class GameManager : Singleton<GameManager>
 
     public void ApplySingleEffect(int change1, int change2, int change3, int change4) 
     {
-        militaryPower = Mathf.Clamp(militaryPower + change1, 0, maxStat);
-        publicEsteem = Mathf.Clamp(militaryPower + change2, 0, maxStat);
-        economy = Mathf.Clamp(militaryPower + change3, 0, maxStat);
-        spirituality = Mathf.Clamp(militaryPower + change4, 0, maxStat);
+        if(change1 !=0)
+            militaryPower = Mathf.Clamp(militaryPower + change1, 0, maxStat);
+        
+        if(change2 != 0)
+            publicEsteem = Mathf.Clamp(militaryPower + change2, 0, maxStat);
+
+        if (change3 != 0)
+            economy = Mathf.Clamp(militaryPower + change3, 0, maxStat);
+
+        if (change4 != 0)
+            spirituality = Mathf.Clamp(militaryPower + change4, 0, maxStat);
     }
     public void AddDaysAfterDecision(int rulingDays) 
     {

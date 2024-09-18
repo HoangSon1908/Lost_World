@@ -21,12 +21,14 @@ public class Choice
     public string decision1;
     public string decision2;
     
+    [Header("Stat for agree")]    
     // Stat effects for decision 1 (agree)
     public int militaryEffect1;
     public int publicEsteem1;
     public int economy1;
     public int spiritualityEffect1;
 
+    [Header("Stat for disagree")]
     // Stat effects for decision 2 (disagree)
     public int militaryEffect2;
     public int publicEsteem2;
