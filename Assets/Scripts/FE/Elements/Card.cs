@@ -25,10 +25,13 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     [SerializeField] private GameObject ListCard;
 
     [Header("Stats")]
-    public Stat stat;
+    public RulingDays rulingDays;
     private float yPos;
     private RectTransform rect;
     private Vector2 offset;
+    private bool isDraggingUp = false;
+    private bool isDraggingDown = false;
+
 
     private void Awake()
     {
@@ -95,10 +98,39 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         yPos = localPoint.y + offset.y;
         CalculateFadeText();
         
-        /*if (yPos > 0)
-            StatManager.instance.PreviewStatChange(1);
-        else if (yPos < 0)
-            StatManager.instance.PreviewStatChange(2);*/
+        if (yPos > 0) 
+        {
+            if (!isDraggingUp) 
+            {
+                isDraggingUp = true;
+                isDraggingDown = false;
+
+                Choice choice = Data.instance.CurrentChoice;
+                StatManager.instance.PreviewStatChange(
+                    choice.militaryEffect1,
+                    choice.publicEsteem1,
+                    choice.economy1,
+                    choice.spiritualityEffect1
+                );
+            }
+        }
+        else if (yPos < 0) 
+        {
+            if (!isDraggingDown)
+            {
+                isDraggingUp = false;
+                isDraggingDown = true;
+
+                Choice choice = Data.instance.CurrentChoice;
+                StatManager.instance.PreviewStatChange(
+                    choice.militaryEffect2,
+                    choice.publicEsteem2,
+                    choice.economy2,
+                    choice.spiritualityEffect2
+                );
+            }
+        }
+            
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -120,6 +152,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                 );
                 StatManager.instance.ApplyStatChanges();
                 GameManager.Instance.AddDaysAfterDecision(choice.rulingDays1);
+                rulingDays.UpdateDaysUI();
             }
             Data.instance.MakeDecision();
         });
@@ -141,6 +174,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                 );
                 StatManager.instance.ApplyStatChanges();
                 GameManager.Instance.AddDaysAfterDecision(choice.rulingDays2);
+                rulingDays.UpdateDaysUI();
             }
             Data.instance.MakeDecision();
         });
@@ -149,6 +183,10 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         {
             ResetCard();
         }
+
+        StatManager.instance.HideAllDots();
+        isDraggingUp = false;
+        isDraggingDown = false;
     }
 
     //Tinh toan va ap dung do trong suot cua text
