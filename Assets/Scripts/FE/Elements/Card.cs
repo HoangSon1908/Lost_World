@@ -155,6 +155,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                 rulingDays.UpdateDaysUI();
             }
             Data.instance.MakeDecision();
+            StatManager.instance.HideAllDots();
         });
     }
     else if (yPos < -150)
@@ -177,14 +178,14 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                 rulingDays.UpdateDaysUI();
             }
             Data.instance.MakeDecision();
+            StatManager.instance.HideAllDots();
         });
     }
         else
         {
             ResetCard();
+            StatManager.instance.HideAllDots();
         }
-
-        StatManager.instance.HideAllDots();
         isDraggingUp = false;
         isDraggingDown = false;
     }
