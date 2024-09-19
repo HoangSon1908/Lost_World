@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,10 @@ public class StatManager : MonoBehaviour
     public Stat stat2Bar;
     public Stat stat3Bar;
     public Stat stat4Bar;
+    public Image dot1;
+    public Image dot2;
+    public Image dot3;
+    public Image dot4;
     public static StatManager instance { get; private set; }
 
     void Awake() 
@@ -30,54 +35,30 @@ public class StatManager : MonoBehaviour
         ApplyStatChanges();
     }
 
-    /*public void PreviewStatChange(int decisionType) 
+    public void PreviewStatChange(int change1, int change2, int change3, int change4) 
     {
-        if (decisionType == 1) 
-        {
-            Choice choice = Data.instance.CurrentChoice;
-            if (choice.militaryEffect1 != 0) 
-                StartCoroutine(FlickerStatChange(Data.instance.militaryPowerStatBar, choice.militaryEffect1));
-            if (choice.publicEsteem1 != 0) 
-                StartCoroutine(FlickerStatChange(Data.instance.militaryPowerStatBar, choice.publicEsteem1));
-            if (choice.economy1 != 0) 
-                StartCoroutine(FlickerStatChange(Data.instance.militaryPowerStatBar, choice.economy1));
-            if (choice.spiritualityEffect1 != 0) 
-                StartCoroutine(FlickerStatChange(Data.instance.militaryPowerStatBar, choice.spiritualityEffect1));
-        }
-        else 
-        {
-            Choice choice = Data.instance.CurrentChoice;
-            if (choice.militaryEffect2 != 0) 
-                StartCoroutine(FlickerStatChange(Data.instance.militaryPowerStatBar, choice.militaryEffect2));
-            if (choice.publicEsteem2 != 0) 
-                StartCoroutine(FlickerStatChange(Data.instance.militaryPowerStatBar, choice.publicEsteem2));
-            if (choice.economy2 != 0) 
-                StartCoroutine(FlickerStatChange(Data.instance.militaryPowerStatBar, choice.economy2));
-            if (choice.spiritualityEffect2 != 0) 
-                StartCoroutine(FlickerStatChange(Data.instance.militaryPowerStatBar, choice.spiritualityEffect2));
-        }
-    }*/
-    public IEnumerator FlickerStatChange(Image statBar, int statEffect) 
-    {
-        Color flickerColor = (statEffect > 0) ? positiveEffectColor : negativeEffectColor;
-        float flickDuration = 0.5f;
-        int flickCount = 3;
-
-        for (int i = 0; i < flickCount; i++) 
-        {
-            statBar.color = flickerColor;
-            yield return new WaitForSeconds(flickDuration / 2);
-            statBar.color = defaultColor;
-            yield return new WaitForSeconds(flickDuration / 2);
-        }
-
-        statBar.color = defaultColor;
+        ShowDotPreview(dot1, change1);
+        ShowDotPreview(dot2, change2);
+        ShowDotPreview(dot3, change3);
+        ShowDotPreview(dot4, change4);
     }
-
     public void ApplyStatChanges() {
         stat1Bar.UpdateStatBar(GameManager.Instance.militaryPower, GameManager.Instance.maxStat);
         stat2Bar.UpdateStatBar(GameManager.Instance.publicEsteem, GameManager.Instance.maxStat);
         stat3Bar.UpdateStatBar(GameManager.Instance.economy, GameManager.Instance.maxStat);
         stat4Bar.UpdateStatBar(GameManager.Instance.spirituality, GameManager.Instance.maxStat);
+    }
+
+    private void ShowDotPreview(Image dot, int statEffect) 
+    {
+        if (statEffect != 0)
+            dot.DOFade(1f, 0.5f);
+    }
+
+    public void HideAllDots() {
+        dot1.DOFade(0f, 0.3f);
+        dot2.DOFade(0f, 0.3f);
+        dot3.DOFade(0f, 0.3f);
+        dot4.DOFade(0f, 0.3f);
     }
 }
