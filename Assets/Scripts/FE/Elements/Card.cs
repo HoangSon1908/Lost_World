@@ -25,10 +25,13 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     [SerializeField] private GameObject ListCard;
 
     [Header("Stats")]
-    public Stat stat;
+    public RulingDays rulingDays;
     private float yPos;
     private RectTransform rect;
     private Vector2 offset;
+    private bool isDraggingUp = false;
+    private bool isDraggingDown = false;
+
 
     private void Awake()
     {
@@ -54,8 +57,11 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
             // Tạo chuỗi hoạt ảnh
             Sequence sequence = DOTween.Sequence();
 
+            // Di chuyển thẻ bài vượt qua vị trí giữa một chút (ví dụ 50 pixels sang phải)
+            sequence.Append(card.DOAnchorPosX(25, 0.5f).SetEase(Ease.OutSine));
+
             // Sau đó di chuyển thẻ bài về vị trí X = 0
-            sequence.Append(card.DOAnchorPosX(0, 0.5f).SetEase(Ease.OutBack,0.6f));
+            sequence.Append(card.DOAnchorPosX(0, 0.5f).SetEase(Ease.OutBack));
 
             // Đặt delay cho mỗi thẻ bài
             sequence.SetDelay(i * delayBetweenCards);
@@ -92,10 +98,39 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         yPos = localPoint.y + offset.y;
         CalculateFadeText();
         
-        /*if (yPos > 0)
-            StatManager.instance.PreviewStatChange(1);
-        else if (yPos < 0)
-            StatManager.instance.PreviewStatChange(2);*/
+        if (yPos > 0) 
+        {
+            if (!isDraggingUp) 
+            {
+                isDraggingUp = true;
+                isDraggingDown = false;
+
+                Choice choice = Data.instance.CurrentChoice;
+                StatManager.instance.PreviewStatChange(
+                    choice.militaryEffect1,
+                    choice.publicEsteem1,
+                    choice.economy1,
+                    choice.spiritualityEffect1
+                );
+            }
+        }
+        else if (yPos < 0) 
+        {
+            if (!isDraggingDown)
+            {
+                isDraggingUp = false;
+                isDraggingDown = true;
+
+                Choice choice = Data.instance.CurrentChoice;
+                StatManager.instance.PreviewStatChange(
+                    choice.militaryEffect2,
+                    choice.publicEsteem2,
+                    choice.economy2,
+                    choice.spiritualityEffect2
+                );
+            }
+        }
+            
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -104,46 +139,55 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     {
         rect.DOAnchorPosY(900, .5f).OnComplete(() => 
         {
-            rect.anchoredPosition = new Vector2(0, -Screen.height);
-
             ResetCard(); 
             CreateBuff();
-            Choice choice = Data.instance.CurrentChoice;
-            GameManager.Instance.ApplySingleEffect(
-                   choice.militaryEffect1,
+            if (!Data.instance.CurrentCharacter.isIntro) 
+            {
+                Choice choice = Data.instance.CurrentChoice;
+                GameManager.Instance.ApplySingleEffect(
+                    choice.militaryEffect1,
                     choice.publicEsteem1,
                     choice.economy1,
                     choice.spiritualityEffect1
-            );
-            //StatManager.instance.ApplyStatChanges();
-            GameManager.Instance.AddDaysAfterDecision(choice.rulingDays1);
+                );
+                StatManager.instance.ApplyStatChanges();
+                GameManager.Instance.AddDaysAfterDecision(choice.rulingDays1);
+                rulingDays.UpdateDaysUI();
+            }
             Data.instance.MakeDecision();
+            StatManager.instance.HideAllDots();
         });
     }
     else if (yPos < -150)
     {
         rect.DOAnchorPosY(-800, .5f).OnComplete(() => 
         {
-            rect.anchoredPosition = new Vector2(0, Screen.height);
-
             ResetCard(); 
             CreateBuff();
-            Choice choice = Data.instance.CurrentChoice;
-            GameManager.Instance.ApplySingleEffect(
+            if (!Data.instance.CurrentCharacter.isIntro) 
+            {
+                Choice choice = Data.instance.CurrentChoice;
+                GameManager.Instance.ApplySingleEffect(
                     choice.militaryEffect2,
                     choice.publicEsteem2,
                     choice.economy2,
                     choice.spiritualityEffect2
-            );
-            //StatManager.instance.ApplyStatChanges();
-            GameManager.Instance.AddDaysAfterDecision(choice.rulingDays2);
+                );
+                StatManager.instance.ApplyStatChanges();
+                GameManager.Instance.AddDaysAfterDecision(choice.rulingDays2);
+                rulingDays.UpdateDaysUI();
+            }
             Data.instance.MakeDecision();
+            StatManager.instance.HideAllDots();
         });
     }
         else
         {
             ResetCard();
+            StatManager.instance.HideAllDots();
         }
+        isDraggingUp = false;
+        isDraggingDown = false;
     }
 
     //Tinh toan va ap dung do trong suot cua text
@@ -163,18 +207,10 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     //Dua card ve cac gia gia tri ban dau
     private void ResetCard()
     {
-
-        // Tạo chuỗi hoạt ảnh
-        Sequence resetSequence = DOTween.Sequence();
-
-        // Sau đó, đưa thẻ về vị trí Y = 0
-        resetSequence.Append(rect.DOAnchorPosY(0, 0.5f).SetEase(Ease.OutBack,0.9f));
-
-        // Khi thẻ trượt về vị trí 0, fade độ trong suốt của text đồng thời
+        rect.anchoredPosition = Vector2.zero;
         FadeAnswerText(topAnswer, 0);
         FadeAnswerText(bottomAnswer, 0);
     }
-
 
     //Thay doi do trong suot cua text
     private void FadeAnswerText(TextMeshProUGUI text, float alpha)

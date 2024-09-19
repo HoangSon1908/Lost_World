@@ -13,9 +13,8 @@ public class GameManager : Singleton<GameManager>
     public void RemoveBuff() => amountOfBuff--;
     
     [Header("Time")]
-    public int totaldays = 0;
+    public int totalDays = 0;
     public int currentYear = 0;
-    public int daysInYear = 365;
     public int initialDay = 1;
 
     [Header("Stats")]
@@ -27,26 +26,13 @@ public class GameManager : Singleton<GameManager>
 
     public void ApplySingleEffect(int change1, int change2, int change3, int change4) 
     {
-        if(change1 !=0)
-            militaryPower = Mathf.Clamp(militaryPower + change1, 0, maxStat);
-        
-        if(change2 != 0)
-            publicEsteem = Mathf.Clamp(militaryPower + change2, 0, maxStat);
-
-        if (change3 != 0)
-            economy = Mathf.Clamp(militaryPower + change3, 0, maxStat);
-
-        if (change4 != 0)
-            spirituality = Mathf.Clamp(militaryPower + change4, 0, maxStat);
+        militaryPower = Mathf.Clamp(militaryPower + change1, 0, maxStat);
+        publicEsteem = Mathf.Clamp(publicEsteem + change2, 0, maxStat);
+        economy = Mathf.Clamp(economy + change3, 0, maxStat);
+        spirituality = Mathf.Clamp(spirituality + change4, 0, maxStat);
     }
     public void AddDaysAfterDecision(int rulingDays) 
     {
-        totaldays += rulingDays;
-
-        if (totaldays >= daysInYear) 
-        {
-            totaldays -= daysInYear;
-            currentYear++;
-        }
+        totalDays += rulingDays;
     }
 }
