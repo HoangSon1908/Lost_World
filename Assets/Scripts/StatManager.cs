@@ -42,6 +42,14 @@ public class StatManager : MonoBehaviour
         ShowDotPreview(dot3, change3);
         ShowDotPreview(dot4, change4);
     }
+
+    public void ClearPreviewStatChange(int change1, int change2, int change3, int change4)  
+    {
+        HideDotPreview(dot1, change1);
+        HideDotPreview(dot2, change2);
+        HideDotPreview(dot3, change3);
+        HideDotPreview(dot4, change4);
+    }
     public void ApplyStatChanges() {
         stat1Bar.UpdateStatBar(GameManager.Instance.militaryPower, GameManager.Instance.maxStat);
         stat2Bar.UpdateStatBar(GameManager.Instance.publicEsteem, GameManager.Instance.maxStat);
@@ -53,6 +61,11 @@ public class StatManager : MonoBehaviour
     {
         if (statEffect != 0)
             dot.DOFade(1f, 0.5f);
+    }
+
+    private void HideDotPreview(Image dot, int statEffect) {
+        if (statEffect != 0)
+            dot.DOFade(0f, 0.3f);
     }
 
     public void HideAllDots() {

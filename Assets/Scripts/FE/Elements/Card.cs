@@ -106,6 +106,12 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                 isDraggingDown = false;
 
                 Choice choice = Data.instance.CurrentChoice;
+                StatManager.instance.ClearPreviewStatChange(
+                    choice.militaryEffect2,
+                    choice.publicEsteem2,
+                    choice.economy2,
+                    choice.spiritualityEffect2
+                );
                 StatManager.instance.PreviewStatChange(
                     choice.militaryEffect1,
                     choice.publicEsteem1,
@@ -122,6 +128,12 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                 isDraggingDown = true;
 
                 Choice choice = Data.instance.CurrentChoice;
+                StatManager.instance.ClearPreviewStatChange(
+                    choice.militaryEffect1,
+                    choice.publicEsteem1,
+                    choice.economy1,
+                    choice.spiritualityEffect1
+                );
                 StatManager.instance.PreviewStatChange(
                     choice.militaryEffect2,
                     choice.publicEsteem2,

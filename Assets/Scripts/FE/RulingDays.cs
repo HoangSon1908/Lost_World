@@ -14,9 +14,12 @@ public class RulingDays : MonoBehaviour
 
     public void UpdateDaysUI()
     {
-        int years = GameManager.Instance.totalDays / 365;
-        int days = GameManager.Instance.totalDays % 365;
+        int years = GameManager.Instance.rulingDays / 365;
+        int days = GameManager.Instance.rulingDays % 365;
 
-        rulingDayText.text = $"{years} years and {days} days";
+        if (years != 0)
+            rulingDayText.text = $"{years} years and {days} days";
+        else
+            rulingDayText.text = $"{days} days";
     }
 }

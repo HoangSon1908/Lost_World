@@ -13,17 +13,23 @@ public class GameManager : Singleton<GameManager>
     public void RemoveBuff() => amountOfBuff--;
     
     [Header("Time")]
-    public int totalDays = 0;
-    public int currentYear = 0;
-    public int initialDay = 1;
+    public int rulingDays;
+    public int currentYear;
+    public int rulingYears;
 
     [Header("Stats")]
-    public int publicEsteem = 50;
-    public int militaryPower = 50;
-    public int economy = 50;
-    public int spirituality = 50;
-    public int maxStat = 100;
+    public int publicEsteem;
+    public int militaryPower;
+    public int economy;
+    public int spirituality;
+    public int maxStat;
 
+    void Update() {
+        CheckGameOver(militaryPower);
+        CheckGameOver(economy);
+        CheckGameOver(publicEsteem);
+        CheckGameOver(spirituality);
+    }
     public void ApplySingleEffect(int change1, int change2, int change3, int change4) 
     {
         militaryPower = Mathf.Clamp(militaryPower + change1, 0, maxStat);
@@ -31,8 +37,30 @@ public class GameManager : Singleton<GameManager>
         economy = Mathf.Clamp(economy + change3, 0, maxStat);
         spirituality = Mathf.Clamp(spirituality + change4, 0, maxStat);
     }
-    public void AddDaysAfterDecision(int rulingDays) 
+    public void AddDaysAfterDecision(int day) 
     {
-        totalDays += rulingDays;
+        rulingDays += day;
+    }
+
+    private void CheckGameOver(int statValue) {
+        if (statValue == maxStat || statValue == 0) {
+            ResetDayAfterResetGame();
+            ResetElementStats();
+            //ResetCard();
+            StatManager.instance.ApplyStatChanges();
+            Debug.Log("Game Over!!");
+        }
+    }
+
+    public void ResetDayAfterResetGame() {
+        rulingDays = Random.Range(1, 51);
+        currentYear = 1;
+    }
+
+    public void ResetElementStats() {
+        publicEsteem = 50;
+        militaryPower = 50;
+        economy = 50;
+        spirituality = 50;
     }
 }
