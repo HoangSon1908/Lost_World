@@ -16,6 +16,7 @@ public class GameManager : Singleton<GameManager>
     public int rulingDays;
     public int currentYear;
     public int rulingYears;
+    public int newDayValue;
 
     [Header("Stats")]
     public int publicEsteem;
@@ -40,6 +41,7 @@ public class GameManager : Singleton<GameManager>
     public void AddDaysAfterDecision(int day) 
     {
         rulingDays += day;
+        newDayValue = rulingDays;
     }
 
     private void CheckGameOver(int statValue) {
