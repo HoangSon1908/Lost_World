@@ -60,12 +60,19 @@ public class StatManager : MonoBehaviour
     private void ShowDotPreview(Image dot, int statEffect) 
     {
         if (statEffect != 0)
+        {
+            if (statEffect == 15)
+            {
+                dot.GetComponent<RectTransform>().DOScale(1.5f, 0.5f);
+            }
             dot.DOFade(1f, 0.5f);
+        }
     }
 
     private void HideDotPreview(Image dot, int statEffect) {
         if (statEffect != 0)
             dot.DOFade(0f, 0.3f);
+        dot.GetComponent<RectTransform>().DOScale(1f, 0.5f);
     }
 
     public void HideAllDots() {
