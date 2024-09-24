@@ -20,12 +20,28 @@ public class Choice
     public string description;
     public string decision1;
     public string decision2;
+    
+    [Header("Stat for agree")]    
+    // Stat effects for decision 1 (agree)
+    public int militaryEffect1;
+    public int publicEsteem1;
+    public int economy1;
+    public int spiritualityEffect1;
+
+    [Header("Stat for disagree")]
+    // Stat effects for decision 2 (disagree)
+    public int militaryEffect2;
+    public int publicEsteem2;
+    public int economy2;
+    public int spiritualityEffect2;
+    
+    //Ruling days
+    public int rulingDays1;
+    public int rulingDays2;
 }
 
 public class Data : MonoBehaviour
 {
-
-
     //Data instance singleton
     public static Data instance { get; private set; }
 
@@ -42,7 +58,12 @@ public class Data : MonoBehaviour
     public TextMeshProUGUI BottomAnswer;
     public TextMeshProUGUI Character_Name;
     public Image Character_Image;
-
+        
+    [Header("Stat UI Elements")]
+    public Image militaryPowerStatBar;
+    public Image publicEsteemStatBar;
+    public Image economyStatBar;
+    public Image spiritualityStatBar;
     private Character currentCharacter;
     private Choice currentChoice;
     private int randomCharacterIndex;
@@ -69,11 +90,10 @@ public class Data : MonoBehaviour
         if (isFirstTime)
         {
             currentCharacter = intro;
-            Intro();
         }
         else
         {
-            MakeRandomDecision();
+            currentCharacter = characters[0];
         }
     }
 
@@ -160,5 +180,15 @@ public class Data : MonoBehaviour
         // Get a random choice from the character's choices list
         randomChoiceIndex = Random.Range(0, currentCharacter.choices.Count);
         currentChoice = currentCharacter.choices[randomChoiceIndex];
+    }
+
+    public Choice CurrentChoice 
+    {
+        get { return currentChoice; }
+    }
+
+    public Character CurrentCharacter 
+    {
+        get { return currentCharacter; }
     }
 }

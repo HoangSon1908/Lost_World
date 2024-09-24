@@ -17,10 +17,21 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     [SerializeField] private TextMeshProUGUI topAnswer;
     [SerializeField] private TextMeshProUGUI bottomAnswer;
 
+    [Header("AnimationCardIn")]
+    // Khai báo list thẻ phụ
+    [SerializeField] private List<RectTransform> cardList = new List<RectTransform>();
+    // Khoảng delay giữa các thẻ bài
+    [SerializeField] float delayBetweenCards = 0.3f;
+    [SerializeField] private GameObject ListCard;
+
+    [Header("Stats")]
+    public RulingDays rulingDays;
     private float yPos;
     private RectTransform rect;
     private Vector2 offset;
-
+    private bool isDraggingUp = false;
+    private bool isDraggingDown = false;
+    private bool isLocked = false;
     private void Awake()
     {
         rect = GetComponent<RectTransform>();
@@ -28,8 +39,42 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
 
     private void Start()
     {
-        ResetCard();
+        AnimationCardIn();
     }
+
+    private void AnimationCardIn()
+    {
+        ResetCard();
+        // Di chuyển từng thẻ bài vào màn hình với delay
+        for (int i = 0; i < cardList.Count; i++)
+        {
+            RectTransform card = cardList[i];
+
+            // Đặt vị trí ban đầu của thẻ bài nằm ngoài màn hình
+            card.anchoredPosition = new Vector2(-Screen.width, 0);
+
+            // Tạo chuỗi hoạt ảnh
+            Sequence sequence = DOTween.Sequence();
+
+            // Sau đó di chuyển thẻ bài về vị trí X = 0
+            sequence.Append(card.DOAnchorPosX(0, 0.5f).SetEase(Ease.OutBack,0.8f));
+
+            // Đặt delay cho mỗi thẻ bài
+            sequence.SetDelay(i * delayBetweenCards);
+
+            // Gọi ResetCard() sau khi hoạt ảnh của thẻ cuối cùng kết thúc
+            if (i == cardList.Count - 1)
+            {
+                sequence.OnComplete(() =>
+                {
+                    ListCard.SetActive(false);
+                    Data.instance.MakeDecision();
+                });
+            }
+        }
+    }
+
+
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -49,32 +94,113 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         yPos = localPoint.y + offset.y;
         CalculateFadeText();
 
+        if (isLocked) return;
+
+        
+        
+        if (yPos > 0 && !isDraggingUp) 
+        {
+                isDraggingUp = true;
+                isDraggingDown = false;
+                isLocked = true;
+                Invoke(nameof(UnlockPreview), 0.5f);
+
+                Choice choice = Data.instance.CurrentChoice;
+                StatManager.instance.ClearPreviewStatChange(
+                    choice.militaryEffect2,
+                    choice.publicEsteem2,
+                    choice.economy2,
+                    choice.spiritualityEffect2
+                );
+                StatManager.instance.PreviewStatChange(
+                    choice.militaryEffect1,
+                    choice.publicEsteem1,
+                    choice.economy1,
+                    choice.spiritualityEffect1
+                );
+            
+        }
+        else if (yPos < 0 && !isDraggingDown) 
+        {
+            
+                isDraggingUp = false;
+                isDraggingDown = true;
+                isLocked = true;
+                Invoke(nameof(UnlockPreview), 0.5f);
+
+                Choice choice = Data.instance.CurrentChoice;
+                StatManager.instance.ClearPreviewStatChange(
+                    choice.militaryEffect1,
+                    choice.publicEsteem1,
+                    choice.economy1,
+                    choice.spiritualityEffect1
+                );
+                StatManager.instance.PreviewStatChange(
+                    choice.militaryEffect2,
+                    choice.publicEsteem2,
+                    choice.economy2,
+                    choice.spiritualityEffect2
+                );
+            
+        }
+            
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-    if (yPos > 150)
-    {
+        if (yPos > 150)
+        {
         rect.DOAnchorPosY(900, .5f).OnComplete(() => 
         {
-            ResetCard(); 
-            CreateBuff();
+            if (!Data.instance.CurrentCharacter.isIntro) 
+            {
+                Choice choice = Data.instance.CurrentChoice;
+                GameManager.Instance.ApplySingleEffect(
+                    choice.militaryEffect1,
+                    choice.publicEsteem1,
+                    choice.economy1,
+                    choice.spiritualityEffect1
+                );
+                StatManager.instance.ApplyStatChanges();
+                GameManager.Instance.AddDaysAfterDecision(choice.rulingDays1);
+                rulingDays.UpdateDaysUI();
+            }
+            //Set rect to the bottom of the screen
+            rect.anchoredPosition = new Vector2(0, -Screen.height);
+
+            ResetCard();
             Data.instance.MakeDecision();
         });
-    }
-    else if (yPos < -150)
-    {
-        rect.DOAnchorPosY(-800, .5f).OnComplete(() => 
+        }
+        else if (yPos < -150)
         {
-            ResetCard(); 
-            CreateBuff();
-            Data.instance.MakeDecision();
-        });
-    }
+            rect.DOAnchorPosY(-800, .5f).OnComplete(() => 
+            {
+                if (!Data.instance.CurrentCharacter.isIntro) 
+                {
+                    Choice choice = Data.instance.CurrentChoice;
+                    GameManager.Instance.ApplySingleEffect(
+                        choice.militaryEffect2,
+                        choice.publicEsteem2,
+                        choice.economy2,
+                        choice.spiritualityEffect2
+                    );
+                    StatManager.instance.ApplyStatChanges();
+                    GameManager.Instance.AddDaysAfterDecision(choice.rulingDays2);
+                    rulingDays.UpdateDaysUI();
+                }
+                rect.anchoredPosition = new Vector2(0, Screen.height);
+
+                ResetCard();
+                Data.instance.MakeDecision();
+            });
+        }
         else
         {
             ResetCard();
         }
+        isDraggingUp = false;
+        isDraggingDown = false;
     }
 
     //Tinh toan va ap dung do trong suot cua text
@@ -94,7 +220,13 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     //Dua card ve cac gia gia tri ban dau
     private void ResetCard()
     {
-        rect.anchoredPosition = Vector2.zero;
+        // Tạo chuỗi hoạt ảnh
+        Sequence sequence = DOTween.Sequence();
+
+        // Sau đó di chuyển thẻ bài về vị trí X = 0
+        sequence.Append(rect.DOAnchorPosY(0, 0.5f).SetEase(Ease.OutBack, 1.2f)).OnComplete(() => StatManager.instance.HideAllDots());
+
+        GameManager.Instance.CheckisGameOver();
         FadeAnswerText(topAnswer, 0);
         FadeAnswerText(bottomAnswer, 0);
     }
@@ -120,4 +252,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         newBuff.GetComponentInChildren<Image>().color = randomColor;
     }
     #endregion
+
+    private void UnlockPreview() {
+        isLocked = false;
+    }
 }

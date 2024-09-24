@@ -4,15 +4,9 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    private DecisionEffect decisionEffect;
     private ResetGame resetGame;
 
     void Awake() {
-        if (decisionEffect == null) 
-        {
-            decisionEffect = GetComponent<DecisionEffect>();
-        }
-
         if (resetGame == null) 
         {
             resetGame = GetComponent<ResetGame>();
