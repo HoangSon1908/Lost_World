@@ -24,7 +24,8 @@ public class GameManager : Singleton<GameManager>
     public int spirituality;
     public int maxStat;
 
-    void Update() {
+    public void CheckisGameOver()
+    {
         CheckGameOver(militaryPower);
         CheckGameOver(economy);
         CheckGameOver(publicEsteem);
