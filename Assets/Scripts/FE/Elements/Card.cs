@@ -31,8 +31,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     private Vector2 offset;
     private bool isDraggingUp = false;
     private bool isDraggingDown = false;
-
-
+    private bool isLocked = false;
     private void Awake()
     {
         rect = GetComponent<RectTransform>();
@@ -97,13 +96,17 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         rect.anchoredPosition = new Vector2(0, localPoint.y + offset.y);
         yPos = localPoint.y + offset.y;
         CalculateFadeText();
+
+        if (isLocked) return;
+
         
-        if (yPos > 0) 
+        
+        if (yPos > 0 && !isDraggingUp) 
         {
-            if (!isDraggingUp) 
-            {
                 isDraggingUp = true;
                 isDraggingDown = false;
+                isLocked = true;
+                Invoke(nameof(UnlockPreview), 0.5f);
 
                 Choice choice = Data.instance.CurrentChoice;
                 StatManager.instance.ClearPreviewStatChange(
@@ -118,14 +121,15 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                     choice.economy1,
                     choice.spiritualityEffect1
                 );
-            }
+            
         }
-        else if (yPos < 0) 
+        else if (yPos < 0 && !isDraggingDown) 
         {
-            if (!isDraggingDown)
-            {
+            
                 isDraggingUp = false;
                 isDraggingDown = true;
+                isLocked = true;
+                Invoke(nameof(UnlockPreview), 0.5f);
 
                 Choice choice = Data.instance.CurrentChoice;
                 StatManager.instance.ClearPreviewStatChange(
@@ -140,7 +144,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                     choice.economy2,
                     choice.spiritualityEffect2
                 );
-            }
+            
         }
             
     }
@@ -245,4 +249,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         newBuff.GetComponentInChildren<Image>().color = randomColor;
     }
     #endregion
+
+    private void UnlockPreview() {
+        isLocked = false;
+    }
 }

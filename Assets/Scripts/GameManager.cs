@@ -54,7 +54,7 @@ public class GameManager : Singleton<GameManager>
 
     public void ResetDayAfterResetGame() {
         rulingDays = Random.Range(1, 51);
-        currentYear = 1;
+        rulingYears = 1;
     }
 
     public void ResetElementStats() {
