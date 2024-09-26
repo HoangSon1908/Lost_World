@@ -56,11 +56,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
             // Tạo chuỗi hoạt ảnh
             Sequence sequence = DOTween.Sequence();
 
-            // Di chuyển thẻ bài vượt qua vị trí giữa một chút (ví dụ 50 pixels sang phải)
-            sequence.Append(card.DOAnchorPosX(25, 0.5f).SetEase(Ease.OutSine));
-
             // Sau đó di chuyển thẻ bài về vị trí X = 0
-            sequence.Append(card.DOAnchorPosX(0, 0.5f).SetEase(Ease.OutBack));
+            sequence.Append(card.DOAnchorPosX(0, 0.5f).SetEase(Ease.OutBack,0.8f));
 
             // Đặt delay cho mỗi thẻ bài
             sequence.SetDelay(i * delayBetweenCards);
@@ -151,12 +148,10 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
 
     public void OnEndDrag(PointerEventData eventData)
     {
-    if (yPos > 150)
-    {
+        if (yPos > 150)
+        {
         rect.DOAnchorPosY(900, .5f).OnComplete(() => 
         {
-            ResetCard(); 
-            CreateBuff();
             if (!Data.instance.CurrentCharacter.isIntro) 
             {
                 Choice choice = Data.instance.CurrentChoice;
@@ -170,37 +165,39 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                 GameManager.Instance.AddDaysAfterDecision(choice.rulingDays1);
                 rulingDays.UpdateDaysUI();
             }
+            //Set rect to the bottom of the screen
+            rect.anchoredPosition = new Vector2(0, -Screen.height);
+
+            ResetCard();
             Data.instance.MakeDecision();
-            StatManager.instance.HideAllDots();
         });
-    }
-    else if (yPos < -150)
-    {
-        rect.DOAnchorPosY(-800, .5f).OnComplete(() => 
+        }
+        else if (yPos < -150)
         {
-            ResetCard(); 
-            CreateBuff();
-            if (!Data.instance.CurrentCharacter.isIntro) 
+            rect.DOAnchorPosY(-800, .5f).OnComplete(() => 
             {
-                Choice choice = Data.instance.CurrentChoice;
-                GameManager.Instance.ApplySingleEffect(
-                    choice.militaryEffect2,
-                    choice.publicEsteem2,
-                    choice.economy2,
-                    choice.spiritualityEffect2
-                );
-                StatManager.instance.ApplyStatChanges();
-                GameManager.Instance.AddDaysAfterDecision(choice.rulingDays2);
-                rulingDays.UpdateDaysUI();
-            }
-            Data.instance.MakeDecision();
-            StatManager.instance.HideAllDots();
-        });
-    }
+                if (!Data.instance.CurrentCharacter.isIntro) 
+                {
+                    Choice choice = Data.instance.CurrentChoice;
+                    GameManager.Instance.ApplySingleEffect(
+                        choice.militaryEffect2,
+                        choice.publicEsteem2,
+                        choice.economy2,
+                        choice.spiritualityEffect2
+                    );
+                    StatManager.instance.ApplyStatChanges();
+                    GameManager.Instance.AddDaysAfterDecision(choice.rulingDays2);
+                    rulingDays.UpdateDaysUI();
+                }
+                rect.anchoredPosition = new Vector2(0, Screen.height);
+
+                ResetCard();
+                Data.instance.MakeDecision();
+            });
+        }
         else
         {
             ResetCard();
-            StatManager.instance.HideAllDots();
         }
         isDraggingUp = false;
         isDraggingDown = false;
@@ -223,7 +220,13 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     //Dua card ve cac gia gia tri ban dau
     private void ResetCard()
     {
-        rect.anchoredPosition = Vector2.zero;
+        // Tạo chuỗi hoạt ảnh
+        Sequence sequence = DOTween.Sequence();
+
+        // Sau đó di chuyển thẻ bài về vị trí X = 0
+        sequence.Append(rect.DOAnchorPosY(0, 0.5f).SetEase(Ease.OutBack, 1.2f)).OnComplete(() => StatManager.instance.HideAllDots());
+
+        GameManager.Instance.CheckisGameOver();
         FadeAnswerText(topAnswer, 0);
         FadeAnswerText(bottomAnswer, 0);
     }
