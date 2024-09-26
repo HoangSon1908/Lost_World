@@ -17,6 +17,10 @@ public class StatManager : MonoBehaviour
     public Image dot2;
     public Image dot3;
     public Image dot4;
+    public Image rec1;
+    public Image rec2;
+    public Image rec3;
+    public Image rec4;
     public static StatManager instance { get; private set; }
 
     void Awake() 
@@ -33,6 +37,21 @@ public class StatManager : MonoBehaviour
 
     void Start() {
         ApplyStatChanges();
+    }
+
+    public void ApplyBuffSeeTheFuture(int change1, int change2, int change3, int change4) {
+        ShowRectanglePreview(rec1, change1);
+        ShowRectanglePreview(rec2, change2);
+        ShowRectanglePreview(rec3, change3);
+        ShowRectanglePreview(rec4, change4);
+    }
+
+    public void ClearBuffSeeTheFuture() 
+    {
+        HideRectanlePreview(rec1);
+        HideRectanlePreview(rec2);
+        HideRectanlePreview(rec3);
+        HideRectanlePreview(rec4);
     }
 
     public void PreviewStatChange(int change1, int change2, int change3, int change4) 
@@ -55,6 +74,31 @@ public class StatManager : MonoBehaviour
         stat2Bar.UpdateStatBar(GameManager.Instance.publicEsteem, GameManager.Instance.maxStat);
         stat3Bar.UpdateStatBar(GameManager.Instance.economy, GameManager.Instance.maxStat);
         stat4Bar.UpdateStatBar(GameManager.Instance.spirituality, GameManager.Instance.maxStat);
+    }
+
+    private void ShowRectanglePreview(Image rectangle, int statEffect) {
+        if (statEffect > 0) 
+        {
+            if (statEffect == 15) 
+            {
+                rectangle.GetComponent<RectTransform>().DOScale(1.5f, 0.5f);
+            }
+        }
+        else if (statEffect < 0)
+        {
+            rectangle.GetComponent<RectTransform>().DORotate(new Vector3(0, 0, 180), 0.5f);
+            if (statEffect == -15) 
+            {
+                rectangle.GetComponent<RectTransform>().DOScale(1.5f, 0.5f);
+            }
+        }
+        rectangle.DOFade(1f, 0.5f);
+    }
+
+    private void HideRectanlePreview(Image rectangle) 
+    {
+        rectangle.DOFade(0f, 0.3f);
+        rectangle.GetComponent<RectTransform>().DORotate(new Vector3(0, 0, 0), 0.5f);
     }
 
     private void ShowDotPreview(Image dot, int statEffect) 

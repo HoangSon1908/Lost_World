@@ -7,7 +7,7 @@ public class GameManager : Singleton<GameManager>
     [Header("Buff")]
 
     public int amountOfBuff;
-    
+    public bool seeTheFuture;
     public void AddBuff() => amountOfBuff++;
     
     public void RemoveBuff() => amountOfBuff--;
