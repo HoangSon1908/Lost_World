@@ -4,13 +4,8 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    private ResetGame resetGame;
-
     void Awake() {
-        if (resetGame == null) 
-        {
-            resetGame = GetComponent<ResetGame>();
-        }
+        
     }
 
     void Update() {

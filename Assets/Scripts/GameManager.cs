@@ -13,6 +13,8 @@ public class GameManager : Singleton<GameManager>
     public void RemoveBuff() => amountOfBuff--;
     
     [Header("Time")]
+
+    public int lastCurrentDay;
     public int rulingDays;
     public int currentYear;
     public int rulingYears;
@@ -45,10 +47,12 @@ public class GameManager : Singleton<GameManager>
 
     private void CheckGameOver(int statValue) {
         if (statValue == maxStat || statValue == 0) {
+            lastCurrentDay = rulingDays;
             ResetDayAfterResetGame();
             ResetElementStats();
             //ResetCard();
             StatManager.instance.ApplyStatChanges();
+            SaveSystem.Instance.SavePreGameOverState();
             Debug.Log("Game Over!!");
         }
     }
