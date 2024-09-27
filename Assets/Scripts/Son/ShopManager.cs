@@ -4,15 +4,31 @@ using TMPro;
 
 public class ShopSystem : MonoBehaviour
 {
+    public static ShopSystem instance { get; private set; }
+
     // Array of buttons for each item in the shop
     public Button[] itemButtons;
 
     // Unique keys for each item in PlayerPrefs
-    public string[] itemKeys;
+    private string[] itemKeys;
+
+    public string reviveEffect;
+    public string prophecyEffect;
+    public string NoAdsEffect;
 
     void Start()
     {
+        itemKeys = new string[] { reviveEffect, prophecyEffect, NoAdsEffect };
         LoadPurchaseState();
+
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
     }
 
     // Function to load purchase state from PlayerPrefs
@@ -28,13 +44,14 @@ public class ShopSystem : MonoBehaviour
             else
             {
                 // Add a listener to the button to handle the purchase when clicked
-                int index = i;
+                int index = i;//save the i value from current loop
                 itemButtons[i].onClick.AddListener(() => PurchaseItem(index));
                 SetButtonName(itemButtons[i], itemKeys[i]);
             }
         }
     }
 
+    //function to set the button name
     void SetButtonName(Button button, string buttonName)
     {
         TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>();
@@ -51,7 +68,6 @@ public class ShopSystem : MonoBehaviour
         // Mark the item as purchased in PlayerPrefs
         PlayerPrefs.SetInt(itemKeys[itemIndex], 1);
         PlayerPrefs.Save();
-        Debug.Log("Item purchased: " + itemKeys[itemIndex]);
 
         DisableButton(itemButtons[itemIndex]);
     }
