@@ -103,8 +103,7 @@ public class Data : MonoBehaviour
         }
         else if(currentCharacter.isRevive)
         {
-            GameManager.Instance.ResetElementStats();
-            MakeDecision();
+            Revive();
         }
         else
         {
@@ -172,7 +171,7 @@ public class Data : MonoBehaviour
         currentChoice = currentCharacter.choices[randomChoiceIndex];
     }
 
-    public void Intro()
+    private void Intro()
     {
         currentChoice = currentCharacter.choices[0];
         SetCardElements();
@@ -185,10 +184,21 @@ public class Data : MonoBehaviour
         }
     }
 
+    private void Revive()
+    {
+        currentChoice=currentCharacter.choices[0];
+        SetCardElements();
+        DeleteUsingChoice(0);
+        if(currentCharacter.choices.Count == 0)
+        {
+            GameManager.Instance.ResetElementStats();
+            currentCharacter.isRevive = false;
+        }
+    }
+
     public void RevivePlayer()
     {
         currentCharacter = ReviveCard;
-        currentChoice = currentCharacter.choices[0];
     }
 
 

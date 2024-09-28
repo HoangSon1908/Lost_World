@@ -27,10 +27,13 @@ public class GameManager : Singleton<GameManager>
     public int spirituality;
     public int maxStat;
 
+    private bool isChecked;
+
     public void Start()
     {
         seeTheFuture=PlayerPrefs.GetInt(ShopSystem.instance.prophecyEffect, 0) == 1;
         canRevive = PlayerPrefs.GetInt(ShopSystem.instance.reviveEffect, 0) == 1;
+        isChecked = false;
     }
 
     public void CheckisGameOver()
@@ -53,20 +56,29 @@ public class GameManager : Singleton<GameManager>
     }
 
     private void CheckGameOver(int statValue) {
+        if(isChecked)
+        {
+            return;
+        }
+
         if (statValue == maxStat || statValue == 0) {
-            if(canRevive)
+            isChecked = true;
+            if (canRevive)
             {
                 canRevive = false;
                 Data.instance.RevivePlayer();
-                return;
+                Debug.Log("Revive Player");
             }
-            lastCurrentDay = rulingDays;
-            ResetDayAfterResetGame();
-            ResetElementStats();
-            //ResetCard();
-            StatManager.instance.ApplyStatChanges();
-            SaveSystem.Instance.SavePreGameOverState();
-            Debug.Log("Game Over!!");
+            else
+            {
+                lastCurrentDay = rulingDays;
+                ResetDayAfterResetGame();
+                ResetElementStats();
+                //ResetCard();
+                StatManager.instance.ApplyStatChanges();
+                //SaveSystem.Instance.SavePreGameOverState();
+                Debug.Log("Game Over!!");
+            }
         }
     }
 

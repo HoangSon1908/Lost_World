@@ -102,7 +102,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
             isDraggingUp = true;
             isDraggingDown = false;
             isLocked = true;
-            Invoke(nameof(UnlockPreview), 0.5f);
+            Invoke(nameof(UnlockPreview), 0.25f);
             
             Choice choice = Data.instance.CurrentChoice;
 
@@ -142,7 +142,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
             isDraggingUp = false;
             isDraggingDown = true;
             isLocked = true;
-            Invoke(nameof(UnlockPreview), 0.5f);
+            Invoke(nameof(UnlockPreview), 0.25f);
 
             Choice choice = Data.instance.CurrentChoice;
 
@@ -186,8 +186,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         {
         rect.DOAnchorPosY(900, .5f).OnComplete(() => 
         {
-            if (!Data.instance.CurrentCharacter.isIntro) 
-            {
                 Choice choice = Data.instance.CurrentChoice;
                 GameManager.Instance.ApplySingleEffect(
                     choice.militaryEffect1,
@@ -198,11 +196,11 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                 StatManager.instance.ApplyStatChanges();
                 GameManager.Instance.AddDaysAfterDecision(choice.rulingDays1);
                 rulingDays.UpdateDaysUI();
-            }
             //Set rect to the bottom of the screen
             rect.anchoredPosition = new Vector2(0, -Screen.height);
 
             ResetCard();
+            GameManager.Instance.CheckisGameOver();
             Data.instance.MakeDecision();
         });
         }
@@ -210,8 +208,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         {
             rect.DOAnchorPosY(-800, .5f).OnComplete(() => 
             {
-                if (!Data.instance.CurrentCharacter.isIntro) 
-                {
                     Choice choice = Data.instance.CurrentChoice;
                     GameManager.Instance.ApplySingleEffect(
                         choice.militaryEffect2,
@@ -222,20 +218,16 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                     StatManager.instance.ApplyStatChanges();
                     GameManager.Instance.AddDaysAfterDecision(choice.rulingDays2);
                     rulingDays.UpdateDaysUI();
-                }
                 rect.anchoredPosition = new Vector2(0, Screen.height);
 
                 ResetCard();
+                GameManager.Instance.CheckisGameOver();
                 Data.instance.MakeDecision();
             });
         }
         else
         {
-            //Reset card to the center of the screen
-
-            Sequence sequence = DOTween.Sequence();
-
-            sequence.Append(rect.DOAnchorPosY(0, 0.5f).SetEase(Ease.OutBack, 1.5f));
+            ResetCard();
         }
         isDraggingUp = false;
         isDraggingDown = false;
@@ -267,8 +259,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                 StatManager.instance.HideAllTriangle();
 
             StatManager.instance.HideAllDots();
-            GameManager.Instance.CheckisGameOver();
-            Data.instance.MakeDecision();
         });
         FadeAnswerText(topAnswer, 0);
         FadeAnswerText(bottomAnswer, 0);
