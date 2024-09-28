@@ -8,6 +8,7 @@ public class GameManager : Singleton<GameManager>
 
     public int amountOfBuff;
     public bool seeTheFuture;
+    public bool canRevive;
     public void AddBuff() => amountOfBuff++;
     
     public void RemoveBuff() => amountOfBuff--;
@@ -25,6 +26,12 @@ public class GameManager : Singleton<GameManager>
     public int economy;
     public int spirituality;
     public int maxStat;
+
+    public void Start()
+    {
+        seeTheFuture=PlayerPrefs.GetInt(ShopSystem.instance.prophecyEffect, 0) == 1;
+        canRevive = PlayerPrefs.GetInt(ShopSystem.instance.reviveEffect, 0) == 1;
+    }
 
     public void CheckisGameOver()
     {
@@ -47,6 +54,12 @@ public class GameManager : Singleton<GameManager>
 
     private void CheckGameOver(int statValue) {
         if (statValue == maxStat || statValue == 0) {
+            if(canRevive)
+            {
+                canRevive = false;
+                Data.instance.RevivePlayer();
+                return;
+            }
             lastCurrentDay = rulingDays;
             ResetDayAfterResetGame();
             ResetElementStats();

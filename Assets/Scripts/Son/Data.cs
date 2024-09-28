@@ -11,6 +11,7 @@ public class Character
     //public Sprite characterImage;
     public Color characterColor;
     public bool isIntro;
+    public bool isRevive;
     public List<Choice> choices;
 }
 
@@ -51,6 +52,7 @@ public class Data : MonoBehaviour
 
     [Header("Story")]
     public Character intro;
+    public Character ReviveCard;
 
     [Header("Card Elements")]
     public TextMeshProUGUI Info1;
@@ -99,22 +101,14 @@ public class Data : MonoBehaviour
         {
             Intro();
         }
+        else if(currentCharacter.isRevive)
+        {
+            GameManager.Instance.ResetElementStats();
+            MakeDecision();
+        }
         else
         {
             MakeRandomDecision();
-        }
-    }
-
-    public void Intro() 
-    {
-        currentChoice = currentCharacter.choices[0];
-        SetCardElements();
-        DeleteUsingChoice(0);
-        if (currentCharacter.choices.Count == 0)
-        {
-            currentCharacter.isIntro = false;
-            PlayerPrefs.SetInt(FirstTimeKey, 0);
-            PlayerPrefs.Save();
         }
     }
 
@@ -177,6 +171,26 @@ public class Data : MonoBehaviour
         randomChoiceIndex = Random.Range(0, currentCharacter.choices.Count);
         currentChoice = currentCharacter.choices[randomChoiceIndex];
     }
+
+    public void Intro()
+    {
+        currentChoice = currentCharacter.choices[0];
+        SetCardElements();
+        DeleteUsingChoice(0);
+        if (currentCharacter.choices.Count == 0)
+        {
+            currentCharacter.isIntro = false;
+            PlayerPrefs.SetInt(FirstTimeKey, 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public void RevivePlayer()
+    {
+        currentCharacter = ReviveCard;
+        currentChoice = currentCharacter.choices[0];
+    }
+
 
     public Choice CurrentChoice 
     {

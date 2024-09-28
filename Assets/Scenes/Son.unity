@@ -3352,7 +3352,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 356320342}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3361,8 +3361,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -50}
-  m_SizeDelta: {x: 20, y: 20}
+  m_AnchoredPosition: {x: 0, y: 40}
+  m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &356320344
 CanvasRenderer:
@@ -3886,9 +3886,9 @@ MonoBehaviour:
   - {fileID: 1891437289}
   - {fileID: 966942609}
   - {fileID: 1868799692}
-  reviveEffect: "Huy\u1EBFt D\u1ECBch Ph\u1EE5c Sinh"
-  prophecyEffect: "Nh\xE3n Gi\u1EDBi Ti\xEAn Tri"
-  NoAdsEffect: "Quy\u1EC1n n\u0103ng th\u1EDDi kh\xF4ng"
+  reviveEffect: "Ch\xFAc Ph\xFAc Th\u1EA7n Linh"
+  prophecyEffect: "Nh\xE3n Gi\u1EDBi Th\u1EA5u Th\u1ECB"
+  NoAdsEffect: "Huy\u1EBFt D\u1ECBch Th\u1EDDi Kh\xF4ng"
 --- !u!4 &441717498
 Transform:
   m_ObjectHideFlags: 0
@@ -8212,7 +8212,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 813050519}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -8221,8 +8221,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -50}
-  m_SizeDelta: {x: 20, y: 20}
+  m_AnchoredPosition: {x: 0, y: 40}
+  m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &813050521
 CanvasRenderer:
@@ -11228,9 +11228,6 @@ RectTransform:
   - {fileID: 1656652669}
   m_Father: {fileID: 1801298018}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 324.75952, y: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 294.1742, y: -50}
@@ -17580,7 +17577,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1914732333}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -17589,8 +17586,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -50}
-  m_SizeDelta: {x: 20, y: 20}
+  m_AnchoredPosition: {x: 0, y: 40}
+  m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1914732335
 MonoBehaviour:
@@ -17934,6 +17931,7 @@ MonoBehaviour:
   _dontDestroyOnLoad: 1
   amountOfBuff: 0
   seeTheFuture: 0
+  canRevive: 0
   lastCurrentDay: 0
   rulingDays: 0
   currentYear: 1000
@@ -18421,8 +18419,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -50}
-  m_SizeDelta: {x: 20, y: 20}
+  m_AnchoredPosition: {x: 0, y: 40}
+  m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1972395002
 CanvasRenderer:
@@ -19487,7 +19485,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 454.66333, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 50.21, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2061131488
@@ -20691,6 +20689,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 97085941}
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
+      propertyPath: ReviveCard.isRevive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: publicEsteemStatBar
       value: 
       objectReference: {fileID: 1366560362}
@@ -20702,6 +20704,40 @@ PrefabInstance:
       propertyPath: militaryPowerStatBar
       value: 
       objectReference: {fileID: 557163158}
+    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
+      propertyPath: ReviveCard.characterName
+      value: Unknown God
+      objectReference: {fileID: 0}
+    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
+      propertyPath: ReviveCard.characterColor.b
+      value: 0.98039216
+      objectReference: {fileID: 0}
+    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
+      propertyPath: ReviveCard.characterColor.g
+      value: 0.49019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
+      propertyPath: ReviveCard.characterColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
+      propertyPath: ReviveCard.choices.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
+      propertyPath: ReviveCard.choices.Array.data[0].decision1
+      value: "C\u1EA3m \u01A1n"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
+      propertyPath: ReviveCard.choices.Array.data[0].decision2
+      value: "H\u1EA3"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
+      propertyPath: ReviveCard.choices.Array.data[0].description
+      value: "\u0110\u1ECBnh m\u1EC7nh c\u1EE7a ng\u01B0\u01A1i ch\u01B0a k\u1EBFt
+        th\xFAc, b\u1EB1ng quy\u1EC1n n\u0103ng c\u1EE7a ta, ta s\u1EBD d\u1EABn
+        l\u1ED1i ng\u01B0\u01A1i tr\u1EDF l\u1EA1i c\xF5i s\u1ED1ng"
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

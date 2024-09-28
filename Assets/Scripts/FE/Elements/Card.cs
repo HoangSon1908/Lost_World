@@ -44,7 +44,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
 
     private void AnimationCardIn()
     {
-        ResetCard();
         // Di chuyển từng thẻ bài vào màn hình với delay
         for (int i = 0; i < cardList.Count; i++)
         {
@@ -100,12 +99,29 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         
         if (yPos > 0 && !isDraggingUp) 
         {
-                isDraggingUp = true;
-                isDraggingDown = false;
-                isLocked = true;
-                Invoke(nameof(UnlockPreview), 0.5f);
+            isDraggingUp = true;
+            isDraggingDown = false;
+            isLocked = true;
+            Invoke(nameof(UnlockPreview), 0.5f);
+            
+            Choice choice = Data.instance.CurrentChoice;
 
-                Choice choice = Data.instance.CurrentChoice;
+            if (GameManager.Instance.seeTheFuture) {
+                StatManager.instance.ClearBuffSeeTheFuture(
+                    choice.militaryEffect2,
+                    choice.publicEsteem2,
+                    choice.economy2,
+                    choice.spiritualityEffect2
+                );
+                StatManager.instance.ApplyBuffSeeTheFuture(
+                    choice.militaryEffect1,
+                    choice.publicEsteem1,
+                    choice.economy1,
+                    choice.spiritualityEffect1
+                );
+            }
+            else
+            {
                 StatManager.instance.ClearPreviewStatChange(
                     choice.militaryEffect2,
                     choice.publicEsteem2,
@@ -118,31 +134,35 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                     choice.economy1,
                     choice.spiritualityEffect1
                 );
-
-                if (GameManager.Instance.seeTheFuture) {
-                    StatManager.instance.ClearBuffSeeTheFuture(
-                        choice.militaryEffect2,
-                        choice.publicEsteem2,
-                        choice.economy2,
-                        choice.spiritualityEffect2
-                    );
-                    StatManager.instance.ApplyBuffSeeTheFuture(
-                        choice.militaryEffect1,
-                        choice.publicEsteem1,
-                        choice.economy1,
-                        choice.spiritualityEffect1
-                    );
-                }
+            }
         }
         else if (yPos < 0 && !isDraggingDown) 
         {
-            
-                isDraggingUp = false;
-                isDraggingDown = true;
-                isLocked = true;
-                Invoke(nameof(UnlockPreview), 0.5f);
 
-                Choice choice = Data.instance.CurrentChoice;
+            isDraggingUp = false;
+            isDraggingDown = true;
+            isLocked = true;
+            Invoke(nameof(UnlockPreview), 0.5f);
+
+            Choice choice = Data.instance.CurrentChoice;
+
+            if (GameManager.Instance.seeTheFuture)
+            {
+                StatManager.instance.ClearBuffSeeTheFuture(
+                    choice.militaryEffect1,
+                    choice.publicEsteem1,
+                    choice.economy1,
+                    choice.spiritualityEffect1
+                );
+                StatManager.instance.ApplyBuffSeeTheFuture(
+                    choice.militaryEffect2,
+                    choice.publicEsteem2,
+                    choice.economy2,
+                    choice.spiritualityEffect2
+                );
+            }
+            else
+                {
                 StatManager.instance.ClearPreviewStatChange(
                     choice.militaryEffect1,
                     choice.publicEsteem1,
@@ -155,21 +175,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                     choice.economy2,
                     choice.spiritualityEffect2
                 );
-
-                if (GameManager.Instance.seeTheFuture) {
-                    StatManager.instance.ClearBuffSeeTheFuture(
-                        choice.militaryEffect1,
-                        choice.publicEsteem1,
-                        choice.economy1,
-                        choice.spiritualityEffect1
-                    );
-                    StatManager.instance.ApplyBuffSeeTheFuture(
-                        choice.militaryEffect2,
-                        choice.publicEsteem2,
-                        choice.economy2,
-                        choice.spiritualityEffect2
-                    );
-                }
+            }
         }
             
     }
@@ -196,8 +202,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
             //Set rect to the bottom of the screen
             rect.anchoredPosition = new Vector2(0, -Screen.height);
 
-            if (GameManager.Instance.seeTheFuture)
-                StatManager.instance.HideAllTriangle();
             ResetCard();
             Data.instance.MakeDecision();
         });
@@ -221,17 +225,17 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                 }
                 rect.anchoredPosition = new Vector2(0, Screen.height);
 
-                if (GameManager.Instance.seeTheFuture)
-                    StatManager.instance.HideAllTriangle();
                 ResetCard();
                 Data.instance.MakeDecision();
             });
         }
         else
         {
-            if (GameManager.Instance.seeTheFuture)
-                StatManager.instance.HideAllTriangle();
-            ResetCard();
+            //Reset card to the center of the screen
+
+            Sequence sequence = DOTween.Sequence();
+
+            sequence.Append(rect.DOAnchorPosY(0, 0.5f).SetEase(Ease.OutBack, 1.5f));
         }
         isDraggingUp = false;
         isDraggingDown = false;
@@ -257,10 +261,15 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         // Tạo chuỗi hoạt ảnh
         Sequence sequence = DOTween.Sequence();
 
-        // Sau đó di chuyển thẻ bài về vị trí X = 0
-        sequence.Append(rect.DOAnchorPosY(0, 0.5f).SetEase(Ease.OutBack, 1.2f)).OnComplete(() => StatManager.instance.HideAllDots());
+        sequence.Append(rect.DOAnchorPosY(0, 0.5f).SetEase(Ease.OutBack, 1f)).OnComplete(() =>
+        {
+            if (GameManager.Instance.seeTheFuture)
+                StatManager.instance.HideAllTriangle();
 
-        GameManager.Instance.CheckisGameOver();
+            StatManager.instance.HideAllDots();
+            GameManager.Instance.CheckisGameOver();
+            Data.instance.MakeDecision();
+        });
         FadeAnswerText(topAnswer, 0);
         FadeAnswerText(bottomAnswer, 0);
     }
