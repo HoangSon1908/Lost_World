@@ -60,10 +60,6 @@ public class Data : MonoBehaviour
     public Image Character_Image;
         
     [Header("Stat UI Elements")]
-    public Image militaryPowerStatBar;
-    public Image publicEsteemStatBar;
-    public Image economyStatBar;
-    public Image spiritualityStatBar;
     private Character currentCharacter;
     private Choice currentChoice;
     private int randomCharacterIndex;
