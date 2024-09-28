@@ -26,7 +26,9 @@ public class RulingDays : MonoBehaviour
                 int years = previousRulingDays / 365;
                 int days = previousRulingDays % 365;
 
-                currentYearText.text = $"Year of {currentYear}";
+                int playedYear = GameManager.Instance.lastCurrentDay / 365;
+
+                currentYearText.text = $"Year of {currentYear + playedYear}";
 
                 if (years != 0)
                     rulingDayText.text = $"{years} years and {days} days";

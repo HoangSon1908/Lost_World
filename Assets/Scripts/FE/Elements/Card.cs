@@ -118,7 +118,21 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                     choice.economy1,
                     choice.spiritualityEffect1
                 );
-            
+
+                if (GameManager.Instance.seeTheFuture) {
+                    StatManager.instance.ClearBuffSeeTheFuture(
+                        choice.militaryEffect2,
+                        choice.publicEsteem2,
+                        choice.economy2,
+                        choice.spiritualityEffect2
+                    );
+                    StatManager.instance.ApplyBuffSeeTheFuture(
+                        choice.militaryEffect1,
+                        choice.publicEsteem1,
+                        choice.economy1,
+                        choice.spiritualityEffect1
+                    );
+                }
         }
         else if (yPos < 0 && !isDraggingDown) 
         {
@@ -141,7 +155,21 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                     choice.economy2,
                     choice.spiritualityEffect2
                 );
-            
+
+                if (GameManager.Instance.seeTheFuture) {
+                    StatManager.instance.ClearBuffSeeTheFuture(
+                        choice.militaryEffect1,
+                        choice.publicEsteem1,
+                        choice.economy1,
+                        choice.spiritualityEffect1
+                    );
+                    StatManager.instance.ApplyBuffSeeTheFuture(
+                        choice.militaryEffect2,
+                        choice.publicEsteem2,
+                        choice.economy2,
+                        choice.spiritualityEffect2
+                    );
+                }
         }
             
     }
@@ -168,6 +196,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
             //Set rect to the bottom of the screen
             rect.anchoredPosition = new Vector2(0, -Screen.height);
 
+            if (GameManager.Instance.seeTheFuture)
+                StatManager.instance.HideAllTriangle();
             ResetCard();
             Data.instance.MakeDecision();
         });
@@ -191,12 +221,16 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                 }
                 rect.anchoredPosition = new Vector2(0, Screen.height);
 
+                if (GameManager.Instance.seeTheFuture)
+                    StatManager.instance.HideAllTriangle();
                 ResetCard();
                 Data.instance.MakeDecision();
             });
         }
         else
         {
+            if (GameManager.Instance.seeTheFuture)
+                StatManager.instance.HideAllTriangle();
             ResetCard();
         }
         isDraggingUp = false;
