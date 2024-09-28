@@ -68,4 +68,5 @@ public class GameManager : Singleton<GameManager>
         economy = 50;
         spirituality = 50;
     }
+
 }
