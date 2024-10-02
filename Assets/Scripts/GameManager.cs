@@ -7,12 +7,15 @@ public class GameManager : Singleton<GameManager>
     [Header("Buff")]
 
     public int amountOfBuff;
-    
+    public bool seeTheFuture;
+    public bool canRevive;
     public void AddBuff() => amountOfBuff++;
     
     public void RemoveBuff() => amountOfBuff--;
     
     [Header("Time")]
+
+    public int lastCurrentDay;
     public int rulingDays;
     public int currentYear;
     public int rulingYears;
@@ -23,6 +26,15 @@ public class GameManager : Singleton<GameManager>
     public int economy;
     public int spirituality;
     public int maxStat;
+
+    private bool isChecked;
+
+    public void Start()
+    {
+        seeTheFuture=PlayerPrefs.GetInt(ShopSystem.instance.prophecyEffect, 0) == 1;
+        canRevive = PlayerPrefs.GetInt(ShopSystem.instance.reviveEffect, 0) == 1;
+        isChecked = false;
+    }
 
     public void CheckisGameOver()
     {
@@ -44,12 +56,29 @@ public class GameManager : Singleton<GameManager>
     }
 
     private void CheckGameOver(int statValue) {
+        if(isChecked)
+        {
+            return;
+        }
+
         if (statValue == maxStat || statValue == 0) {
-            ResetDayAfterResetGame();
-            ResetElementStats();
-            //ResetCard();
-            StatManager.instance.ApplyStatChanges();
-            Debug.Log("Game Over!!");
+            isChecked = true;
+            if (canRevive)
+            {
+                canRevive = false;
+                Data.instance.RevivePlayer();
+                Debug.Log("Revive Player");
+            }
+            else
+            {
+                lastCurrentDay = rulingDays;
+                ResetDayAfterResetGame();
+                ResetElementStats();
+                //ResetCard();
+                StatManager.instance.ApplyStatChanges();
+                //SaveSystem.Instance.SavePreGameOverState();
+                Debug.Log("Game Over!!");
+            }
         }
     }
 
@@ -64,4 +93,5 @@ public class GameManager : Singleton<GameManager>
         economy = 50;
         spirituality = 50;
     }
+
 }

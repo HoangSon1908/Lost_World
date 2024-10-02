@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -26,12 +26,14 @@ public class RulingDays : MonoBehaviour
                 int years = previousRulingDays / 365;
                 int days = previousRulingDays % 365;
 
-                currentYearText.text = $"Year of {currentYear}";
+                int playedYear = GameManager.Instance.lastCurrentDay / 365;
+
+                currentYearText.text = $"Năm {currentYear + playedYear}";
 
                 if (years != 0)
-                    rulingDayText.text = $"{years} years and {days} days";
+                    rulingDayText.text = $"{years} năm và {days} ngày";
                 else
-                    rulingDayText.text = $"{days} days";
+                    rulingDayText.text = $"{days} ngày";
             })
             .OnComplete(() =>
             {

@@ -11,6 +11,7 @@ public class Character
     //public Sprite characterImage;
     public Color characterColor;
     public bool isIntro;
+    public bool isRevive;
     public List<Choice> choices;
 }
 
@@ -51,6 +52,7 @@ public class Data : MonoBehaviour
 
     [Header("Story")]
     public Character intro;
+    public Character ReviveCard;
 
     [Header("Card Elements")]
     public TextMeshProUGUI Info1;
@@ -60,10 +62,6 @@ public class Data : MonoBehaviour
     public Image Character_Image;
         
     [Header("Stat UI Elements")]
-    public Image militaryPowerStatBar;
-    public Image publicEsteemStatBar;
-    public Image economyStatBar;
-    public Image spiritualityStatBar;
     private Character currentCharacter;
     private Choice currentChoice;
     private int randomCharacterIndex;
@@ -103,22 +101,13 @@ public class Data : MonoBehaviour
         {
             Intro();
         }
+        else if(currentCharacter.isRevive)
+        {
+            Revive();
+        }
         else
         {
             MakeRandomDecision();
-        }
-    }
-
-    public void Intro() 
-    {
-        currentChoice = currentCharacter.choices[0];
-        SetCardElements();
-        DeleteUsingChoice(0);
-        if (currentCharacter.choices.Count == 0)
-        {
-            currentCharacter.isIntro = false;
-            PlayerPrefs.SetInt(FirstTimeKey, 0);
-            PlayerPrefs.Save();
         }
     }
 
@@ -181,6 +170,37 @@ public class Data : MonoBehaviour
         randomChoiceIndex = Random.Range(0, currentCharacter.choices.Count);
         currentChoice = currentCharacter.choices[randomChoiceIndex];
     }
+
+    private void Intro()
+    {
+        currentChoice = currentCharacter.choices[0];
+        SetCardElements();
+        DeleteUsingChoice(0);
+        if (currentCharacter.choices.Count == 0)
+        {
+            currentCharacter.isIntro = false;
+            PlayerPrefs.SetInt(FirstTimeKey, 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    private void Revive()
+    {
+        currentChoice=currentCharacter.choices[0];
+        SetCardElements();
+        DeleteUsingChoice(0);
+        if(currentCharacter.choices.Count == 0)
+        {
+            GameManager.Instance.ResetElementStats();
+            currentCharacter.isRevive = false;
+        }
+    }
+
+    public void RevivePlayer()
+    {
+        currentCharacter = ReviveCard;
+    }
+
 
     public Choice CurrentChoice 
     {

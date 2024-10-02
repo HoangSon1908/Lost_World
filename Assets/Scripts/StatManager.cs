@@ -17,6 +17,10 @@ public class StatManager : MonoBehaviour
     public Image dot2;
     public Image dot3;
     public Image dot4;
+    public Image tri1;
+    public Image tri2;
+    public Image tri3;
+    public Image tri4;
     public static StatManager instance { get; private set; }
 
     void Awake() 
@@ -33,6 +37,21 @@ public class StatManager : MonoBehaviour
 
     void Start() {
         ApplyStatChanges();
+    }
+
+    public void ApplyBuffSeeTheFuture(int change1, int change2, int change3, int change4) {
+        ShowTrianglePreview(tri1, change1);
+        ShowTrianglePreview(tri2, change2);
+        ShowTrianglePreview(tri3, change3);
+        ShowTrianglePreview(tri4, change4);
+    }
+
+    public void ClearBuffSeeTheFuture(int change1, int change2, int change3, int change4) 
+    {
+        HideTrianglePreview(tri1, change1);
+        HideTrianglePreview(tri2, change2);
+        HideTrianglePreview(tri3, change3);
+        HideTrianglePreview(tri4, change4);
     }
 
     public void PreviewStatChange(int change1, int change2, int change3, int change4) 
@@ -57,11 +76,39 @@ public class StatManager : MonoBehaviour
         stat4Bar.UpdateStatBar(GameManager.Instance.spirituality, GameManager.Instance.maxStat);
     }
 
+    private void ShowTrianglePreview(Image triangle, int statEffect) {
+        if (statEffect > 0) 
+        {
+            triangle.DOFade(1f, 0.5f);
+            if (statEffect == 15) 
+            {
+                triangle.GetComponent<RectTransform>().DOScale(1.5f, 0.5f);
+            }
+        }
+        else if (statEffect < 0)
+        {
+            triangle.DOFade(1f, 0.5f);
+            triangle.GetComponent<RectTransform>().DORotate(new Vector3(0, 0, 180), 0.5f);
+            if (statEffect == -15) 
+            {
+                triangle.GetComponent<RectTransform>().DOScale(1.5f, 0.5f);
+            }
+        }
+    }
+
+    private void HideTrianglePreview(Image triangle, int statEffect) 
+    {
+        if (statEffect!= 0 )
+            triangle.DOFade(0f, 0.3f);
+        triangle.GetComponent<RectTransform>().DORotate(new Vector3(0, 0, 0), 0.5f);
+        triangle.GetComponent<RectTransform>().DOScale(1, 0.3f);
+    }
+
     private void ShowDotPreview(Image dot, int statEffect) 
     {
         if (statEffect != 0)
         {
-            if (statEffect == 15)
+            if (statEffect == 15 || statEffect == -15)
             {
                 dot.GetComponent<RectTransform>().DOScale(1.5f, 0.5f);
             }
@@ -69,16 +116,26 @@ public class StatManager : MonoBehaviour
         }
     }
 
-    private void HideDotPreview(Image dot, int statEffect) {
+    private void HideDotPreview(Image dot, int statEffect) 
+    {
         if (statEffect != 0)
             dot.DOFade(0f, 0.3f);
         dot.GetComponent<RectTransform>().DOScale(1f, 0.5f);
     }
 
-    public void HideAllDots() {
+    public void HideAllDots() 
+    {
         dot1.DOFade(0f, 0.3f);
         dot2.DOFade(0f, 0.3f);
         dot3.DOFade(0f, 0.3f);
         dot4.DOFade(0f, 0.3f);
+    }
+
+    public void HideAllTriangle() 
+    {
+        tri1.DOFade(0f, 0.3f);
+        tri2.DOFade(0f, 0.3f);
+        tri3.DOFade(0f, 0.3f);
+        tri4.DOFade(0f, 0.3f);
     }
 }
