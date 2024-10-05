@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public class Character
@@ -12,6 +13,7 @@ public class Character
     public Color characterColor;
     public bool isIntro;
     public bool isRevive;
+    public bool isDie;
     public List<Choice> choices;
 }
 
@@ -53,6 +55,8 @@ public class Data : MonoBehaviour
     [Header("Story")]
     public Character intro;
     public Character ReviveCard;
+    public Character DieCard;
+
 
     [Header("Card Elements")]
     public TextMeshProUGUI Info1;
@@ -70,13 +74,13 @@ public class Data : MonoBehaviour
     [Header("Intro")]
     private const string FirstTimeKey = "FirstTime";
     private bool isFirstTime;
+    public bool Gameover=false;
 
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -100,15 +104,20 @@ public class Data : MonoBehaviour
         if (currentCharacter.isIntro)
         {
             Intro();
+            return;
         }
-        else if(currentCharacter.isRevive)
+        if(currentCharacter.isRevive)
         {
             Revive();
+            return;
         }
-        else
+        if(currentCharacter.isDie)
         {
-            MakeRandomDecision();
+            Kill();
+            return;
         }
+        
+        MakeRandomDecision();
     }
 
     public void MakeRandomDecision()
@@ -189,16 +198,26 @@ public class Data : MonoBehaviour
         currentChoice=currentCharacter.choices[0];
         SetCardElements();
         DeleteUsingChoice(0);
-        if(currentCharacter.choices.Count == 0)
-        {
-            GameManager.Instance.ResetElementStats();
-            currentCharacter.isRevive = false;
-        }
+        GameManager.Instance.ResetElementStats();
+        currentCharacter.isRevive = false;
     }
 
-    public void RevivePlayer()
+    private void Kill()
     {
-        currentCharacter = ReviveCard;
+        SetCardElements();
+        DeleteUsingChoice(0);
+        Gameover = true;
+    }
+
+        public void RevivePlayer()
+        {
+            currentCharacter = ReviveCard;
+        }
+
+    public void KillPlayer(Choice choice)
+    {
+        currentCharacter = DieCard;
+        currentChoice = choice;
     }
 
 
@@ -210,5 +229,17 @@ public class Data : MonoBehaviour
     public Character CurrentCharacter 
     {
         get { return currentCharacter; }
+    }
+
+    public Choice FindChoiceInDieCard(int DieCardIndex)
+    {
+        foreach (Choice choice in DieCard.choices)
+        {
+            if(choice == DieCard.choices[DieCardIndex])
+            {
+                return choice ;
+            }
+        }
+        return null;
     }
 }
