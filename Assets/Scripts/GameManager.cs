@@ -35,16 +35,8 @@ public class GameManager : Singleton<GameManager>
 
     public void Start()
     {
-        if(PlayerPrefs.HasKey(PlayerPrefsDayKey) && PlayerPrefs.HasKey(PlayerPrefsYearKey))
-        {
-            currentYears = PlayerPrefs.GetInt(PlayerPrefsYearKey);
-            currentDays = PlayerPrefs.GetInt(PlayerPrefsDayKey);
-        }
-        else
-        {
-            currentYears = 1000;
-            currentDays = 0;
-        }
+        currentYears = PlayerPrefs.GetInt(PlayerPrefsYearKey);
+        currentDays = PlayerPrefs.GetInt(PlayerPrefsDayKey);
 
         // Khôi phục thông tin buff từ PlayerPrefs
         seeTheFuture = PlayerPrefs.GetInt(ShopSystem.instance.prophecyEffect, 0) == 1;
@@ -95,7 +87,7 @@ public class GameManager : Singleton<GameManager>
             }
             else
             {
-                currentDays += rulingDays;
+                currentDays = currentDays + rulingDays - (rulingYears * 365);
                 currentYears += rulingYears;
                 // Lưu ngày và năm trước khi reset
                 PlayerPrefs.SetInt(PlayerPrefsDayKey, currentDays);
@@ -103,7 +95,7 @@ public class GameManager : Singleton<GameManager>
                 PlayerPrefs.Save();
 
                 Debug.Log("Game Over!!");
-                
+
                 Choice dieCharacter = Data.instance.FindChoiceInDieCard(DieCardIndex);
                 Data.instance.KillPlayer(dieCharacter);
             }
@@ -121,14 +113,12 @@ public class GameManager : Singleton<GameManager>
     public void AddDaysAfterDecision(int day)
     {
         rulingDays += day;
-        int days = currentDays + rulingDays;
+        int Days=currentDays + rulingDays;
 
-        // Nếu rulingDays vượt quá 365, tăng năm lên và điều chỉnh lại số ngày
-        if (days > 365)
+        // Nếu rulingDays vượt quá 365
+        if (Days >= 365)
         {
-            rulingYears++;
-            currentDays = 0;
-            rulingDays = days-365;
+            rulingYears = Days / 365;
         }
 
         RulingDays.instance.UpdateYearsAndDaysUI(rulingDays);

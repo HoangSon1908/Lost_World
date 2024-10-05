@@ -24,17 +24,18 @@ public class RulingDays : MonoBehaviour
 
     public void UpdateYearsAndDaysUI(int targetDays)
     {
-        int rulingYear = GameManager.Instance.rulingYears;
+        int currentYears =GameManager.Instance.currentYears;
+        int rulingYears = GameManager.Instance.rulingYears;
 
         DOTween.To(() => previousRulingDays, x => previousRulingDays = x, targetDays, 1f)
             .OnUpdate(() =>
             {
                 // Update year text
-                currentYearText.text = $"Năm {GameManager.Instance.currentYears+rulingYear}";
+                currentYearText.text = $"Năm {currentYears+rulingYears}";
 
                 // Calculate the ruling years and display ruling days incrementally
-                if (rulingYear > 0)
-                    rulingDayText.text = $"{rulingYear} năm và {previousRulingDays} ngày";
+                if (previousRulingDays > 365)
+                    rulingDayText.text = $"{previousRulingDays / 365} năm và {previousRulingDays%365} ngày";
                 else
                     rulingDayText.text = $"{previousRulingDays} ngày";
             })
