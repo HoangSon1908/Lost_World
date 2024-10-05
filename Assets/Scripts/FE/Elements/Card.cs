@@ -259,7 +259,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         
     }
 
-    //Dua card ve cac gia gia tri ban dau
+    //Dua card ve cac gia tri ban dau
     private void ResetCard()
     {
         // Tạo chuỗi hoạt ảnh

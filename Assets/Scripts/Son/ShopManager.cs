@@ -16,7 +16,7 @@ public class ShopSystem : MonoBehaviour
     public string prophecyEffect;
     public string NoAdsEffect;
 
-    void Start()
+    void Awake()
     {
         itemKeys = new string[] { reviveEffect, prophecyEffect, NoAdsEffect };
         LoadPurchaseState();

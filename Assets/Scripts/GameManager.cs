@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -9,7 +10,6 @@ public class GameManager : Singleton<GameManager>
 
     public int amountOfBuff;
     public bool seeTheFuture;
-    public bool canRevive;
     public void AddBuff() => amountOfBuff++;
 
     public void RemoveBuff() => amountOfBuff--;
@@ -40,7 +40,6 @@ public class GameManager : Singleton<GameManager>
 
         // Khôi phục thông tin buff từ PlayerPrefs
         seeTheFuture = PlayerPrefs.GetInt(ShopSystem.instance.prophecyEffect, 0) == 1;
-        canRevive = PlayerPrefs.GetInt(ShopSystem.instance.reviveEffect, 0) == 1;
 
         rulingDays = Random.Range(1, 51);
         RulingDays.instance.UpdateYearsAndDaysUI(rulingDays);
@@ -79,14 +78,6 @@ public class GameManager : Singleton<GameManager>
             {
                 DieCardIndex += 4;
             }
-            if (canRevive)
-            {
-                canRevive = false;
-                Data.instance.RevivePlayer();
-                Debug.Log("Revive Player");
-            }
-            else
-            {
                 currentDays = currentDays + rulingDays - (rulingYears * 365);
                 currentYears += rulingYears;
                 // Lưu ngày và năm trước khi reset
@@ -98,7 +89,6 @@ public class GameManager : Singleton<GameManager>
 
                 Choice dieCharacter = Data.instance.FindChoiceInDieCard(DieCardIndex);
                 Data.instance.KillPlayer(dieCharacter);
-            }
         }
     }
 
