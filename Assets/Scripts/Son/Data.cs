@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 [System.Serializable]
 public class Character
@@ -76,7 +77,14 @@ public class Data : MonoBehaviour
     private bool isFirstTime;
     public bool Gameover=false;
 
-    private void Awake()
+    [Header("UIColor")]
+    public Image MiddleUI;
+    public Image TopAndBottomUI;
+    public Color DefaultColor;
+
+    public bool canRevive;
+
+    private void Start()
     {
         if (instance == null)
         {
@@ -88,6 +96,7 @@ public class Data : MonoBehaviour
         }
 
         isFirstTime = PlayerPrefs.GetInt(FirstTimeKey, 1) == 1;
+        canRevive = PlayerPrefs.GetInt(ShopSystem.instance.reviveEffect, 0) == 1;
 
         if (isFirstTime)
         {
@@ -97,6 +106,8 @@ public class Data : MonoBehaviour
         {
             currentCharacter = characters[0];
         }
+
+        DefaultColor=MiddleUI.color;
     }
 
     public void MakeDecision()
@@ -197,27 +208,35 @@ public class Data : MonoBehaviour
     {
         currentChoice=currentCharacter.choices[0];
         SetCardElements();
-        DeleteUsingChoice(0);
         GameManager.Instance.ResetElementStats();
         currentCharacter.isRevive = false;
     }
 
     private void Kill()
     {
-        SetCardElements();
-        DeleteUsingChoice(0);
-        Gameover = true;
+        if (canRevive)
+        {
+            SetCardElements();
+            RevivePlayer();
+        }
+        else
+        {
+            SetCardElements();
+            Gameover = true;
+        }
     }
 
         public void RevivePlayer()
         {
             currentCharacter = ReviveCard;
+            MiddleUI.DOColor(DefaultColor, 1f);
         }
 
     public void KillPlayer(Choice choice)
     {
         currentCharacter = DieCard;
         currentChoice = choice;
+        MiddleUI.DOColor(TopAndBottomUI.color, 1f);
     }
 
 
