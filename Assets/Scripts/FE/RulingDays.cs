@@ -10,34 +10,37 @@ public class RulingDays : MonoBehaviour
     [SerializeField] private TextMeshProUGUI rulingDayText;
     [SerializeField] private TextMeshProUGUI currentYearText;
 
-    private int previousRulingDays = 0; 
-    void Start() {
-        UpdateDaysUI(); 
+    public static RulingDays instance;
+
+    private int previousRulingDays = 0;
+
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(gameObject);
     }
 
-    public void UpdateDaysUI()
+    public void UpdateYearsAndDaysUI(int targetDays)
     {
-        int currentYear = GameManager.Instance.currentYear;
-        int rulingDays = GameManager.Instance.rulingDays;
+        int rulingYear = GameManager.Instance.rulingYears;
 
-        DOTween.To(() => previousRulingDays, x => previousRulingDays = x, rulingDays, 1f) 
+        DOTween.To(() => previousRulingDays, x => previousRulingDays = x, targetDays, 1f)
             .OnUpdate(() =>
             {
-                int years = previousRulingDays / 365;
-                int days = previousRulingDays % 365;
+                // Update year text
+                currentYearText.text = $"Năm {GameManager.Instance.currentYears+rulingYear}";
 
-                int playedYear = GameManager.Instance.lastCurrentDay / 365;
-
-                currentYearText.text = $"Năm {currentYear + playedYear}";
-
-                if (years != 0)
-                    rulingDayText.text = $"{years} năm và {days} ngày";
+                // Calculate the ruling years and display ruling days incrementally
+                if (rulingYear > 0)
+                    rulingDayText.text = $"{rulingYear} năm và {previousRulingDays} ngày";
                 else
-                    rulingDayText.text = $"{days} ngày";
+                    rulingDayText.text = $"{previousRulingDays} ngày";
             })
             .OnComplete(() =>
             {
-                previousRulingDays = rulingDays;
+                previousRulingDays = targetDays; // Finalize the value
             });
     }
 }

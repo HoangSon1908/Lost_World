@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHandler
@@ -32,6 +33,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     private bool isDraggingUp = false;
     private bool isDraggingDown = false;
     private bool isLocked = false;
+
     private void Awake()
     {
         rect = GetComponent<RectTransform>();
@@ -184,9 +186,15 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     {
         if (yPos > 150)
         {
+            if (Data.instance.Gameover)
+            {
+                rect.DOAnchorPosY(900, .5f);
+                SceneTransition.instance.FadeOutAndLoadScene(SceneManager.GetActiveScene().name);
+                return;
+            }
         rect.DOAnchorPosY(900, .5f).OnComplete(() => 
         {
-                Choice choice = Data.instance.CurrentChoice;
+            Choice choice = Data.instance.CurrentChoice;
                 GameManager.Instance.ApplySingleEffect(
                     choice.militaryEffect1,
                     choice.publicEsteem1,
@@ -195,7 +203,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                 );
                 StatManager.instance.ApplyStatChanges();
                 GameManager.Instance.AddDaysAfterDecision(choice.rulingDays1);
-                rulingDays.UpdateDaysUI();
             //Set rect to the bottom of the screen
             rect.anchoredPosition = new Vector2(0, -Screen.height);
 
@@ -206,6 +213,12 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         }
         else if (yPos < -150)
         {
+            if (Data.instance.Gameover)
+            {
+                rect.DOAnchorPosY(-800, .5f);
+                SceneTransition.instance.FadeOutAndLoadScene(SceneManager.GetActiveScene().name);
+                return;
+            }
             rect.DOAnchorPosY(-800, .5f).OnComplete(() => 
             {
                     Choice choice = Data.instance.CurrentChoice;
@@ -217,7 +230,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                     );
                     StatManager.instance.ApplyStatChanges();
                     GameManager.Instance.AddDaysAfterDecision(choice.rulingDays2);
-                    rulingDays.UpdateDaysUI();
                 rect.anchoredPosition = new Vector2(0, Screen.height);
 
                 ResetCard();
