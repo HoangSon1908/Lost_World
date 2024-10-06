@@ -209,6 +209,8 @@ public class Data : MonoBehaviour
         currentChoice=currentCharacter.choices[0];
         SetCardElements();
         GameManager.Instance.ResetElementStats();
+        MiddleUI.DOColor(DefaultColor, 1f);
+        GameManager.Instance.isChecked = false;
         currentCharacter.isRevive = false;
     }
 
@@ -218,6 +220,7 @@ public class Data : MonoBehaviour
         {
             SetCardElements();
             RevivePlayer();
+            canRevive = false;
         }
         else
         {
@@ -229,7 +232,6 @@ public class Data : MonoBehaviour
         public void RevivePlayer()
         {
             currentCharacter = ReviveCard;
-            MiddleUI.DOColor(DefaultColor, 1f);
         }
 
     public void KillPlayer(Choice choice)

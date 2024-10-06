@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -27,14 +28,17 @@ public class GameManager : Singleton<GameManager>
     public int economy;
     public int spirituality;
     public int maxStat;
+    private int[] Stat;
 
-    private bool isChecked;
+    public bool isChecked;
+
 
     private const string PlayerPrefsDayKey = "CurrentDays";
     private const string PlayerPrefsYearKey = "CurrentYear";
 
     public void Start()
     {
+        isChecked = false;
         currentYears = PlayerPrefs.GetInt(PlayerPrefsYearKey);
         currentDays = PlayerPrefs.GetInt(PlayerPrefsDayKey);
 
@@ -42,18 +46,8 @@ public class GameManager : Singleton<GameManager>
         seeTheFuture = PlayerPrefs.GetInt(ShopSystem.instance.prophecyEffect, 0) == 1;
 
         rulingDays = Random.Range(1, 51);
-        RulingDays.instance.UpdateYearsAndDaysUI(rulingDays);
         rulingYears = 0;
-
-        isChecked = false;
-    }
-
-    public void CheckisGameOver()
-    {
-        CheckGameOver(militaryPower,0);
-        CheckGameOver(economy,1);
-        CheckGameOver(publicEsteem, 2);
-        CheckGameOver(spirituality, 3);
+        RulingDays.instance.UpdateYearsAndDaysUI(rulingDays);
     }
 
     public void ApplySingleEffect(int change1, int change2, int change3, int change4)
@@ -64,22 +58,34 @@ public class GameManager : Singleton<GameManager>
         spirituality = Mathf.Clamp(spirituality + change4, 0, maxStat);
     }
 
-    private void CheckGameOver(int statValue,int DieCardIndex)
+    public void CheckisGameOver()
     {
-        if (isChecked)
+        Stat = new int[] { publicEsteem, militaryPower, economy, spirituality };
+        CheckGameOver();
+    }
+
+    private void CheckGameOver()
+    {
+        if(isChecked)
         {
             return;
         }
 
-        if (statValue == maxStat || statValue == 0)
+        int DieCardIndex = 0;
+        // Lặp qua từng giá trị trong mảng Stat
+        foreach (int statValue in Stat)
         {
-            isChecked = true;
-            if (statValue == maxStat)
+            if (statValue == maxStat || statValue == 0)
             {
-                DieCardIndex += 4;
-            }
+
+                if (statValue == maxStat)
+                {
+                    DieCardIndex += 4;
+                }
+
                 currentDays = currentDays + rulingDays - (rulingYears * 365);
                 currentYears += rulingYears;
+
                 // Lưu ngày và năm trước khi reset
                 PlayerPrefs.SetInt(PlayerPrefsDayKey, currentDays);
                 PlayerPrefs.SetInt(PlayerPrefsYearKey, currentYears);
@@ -87,8 +93,16 @@ public class GameManager : Singleton<GameManager>
 
                 Debug.Log("Game Over!!");
 
+                // Tìm và giết nhân vật dựa trên DieCardIndex
                 Choice dieCharacter = Data.instance.FindChoiceInDieCard(DieCardIndex);
                 Data.instance.KillPlayer(dieCharacter);
+
+                isChecked = true;
+
+                // Thoát khỏi vòng lặp khi phát hiện giá trị game over
+                break;
+            }
+            DieCardIndex++;
         }
     }
 
