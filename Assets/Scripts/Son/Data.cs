@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
+using System.Linq;
 
 [System.Serializable]
 public class Character
@@ -24,8 +25,8 @@ public class Choice
     public string description;
     public string decision1;
     public string decision2;
-    
-    [Header("Stat for agree")]    
+
+    [Header("Stat for agree")]
     // Stat effects for decision 1 (agree)
     public int militaryEffect1;
     public int publicEsteem1;
@@ -38,7 +39,7 @@ public class Choice
     public int publicEsteem2;
     public int economy2;
     public int spiritualityEffect2;
-    
+
     //Ruling days
     public int rulingDays1;
     public int rulingDays2;
@@ -53,10 +54,14 @@ public class Data : MonoBehaviour
     [Header("Characters")]
     public Character[] characters;
 
+
     [Header("Story")]
     public Character intro;
     public Character ReviveCard;
     public Character DieCard;
+
+    [Header("Unlocked Choices List")]
+    public Character[] TestLockedChoice;
 
 
     [Header("Card Elements")]
@@ -65,24 +70,33 @@ public class Data : MonoBehaviour
     public TextMeshProUGUI BottomAnswer;
     public TextMeshProUGUI Character_Name;
     public Image Character_Image;
-        
+
     [Header("Stat UI Elements")]
     private Character currentCharacter;
     private Choice currentChoice;
     private int randomCharacterIndex;
     private int randomChoiceIndex;
 
-    [Header("Intro")]
-    private const string FirstTimeKey = "FirstTime";
-    private bool isFirstTime;
-    public bool Gameover=false;
-
     [Header("UIColor")]
     public Image MiddleUI;
     public Image TopAndBottomUI;
     public Color DefaultColor;
 
+    [Header("Buff")]
+    public Transform buffParent;
+    public GameObject buffObject;
+
+    [Header("Keys")]
+    public string UnlockedTestChoiceKey = "UnlockedChoice";
+
+    private const string FirstTimeKey = "FirstTime";
+    private bool isFirstTime;
+    
+    [HideInInspector]    
+    public bool Gameover = false;
+    [HideInInspector]
     public bool canRevive;
+    private bool UnlockedTestChoice;
 
     private void Start()
     {
@@ -98,6 +112,9 @@ public class Data : MonoBehaviour
         isFirstTime = PlayerPrefs.GetInt(FirstTimeKey, 1) == 1;
         canRevive = PlayerPrefs.GetInt(ShopSystem.instance.reviveEffect, 0) == 1;
 
+        PlayerPrefs.SetInt(UnlockedTestChoiceKey, 1);
+        UnlockedTestChoice = PlayerPrefs.GetInt(UnlockedTestChoiceKey, 0) == 1;
+
         if (isFirstTime)
         {
             currentCharacter = intro;
@@ -107,27 +124,51 @@ public class Data : MonoBehaviour
             currentCharacter = characters[0];
         }
 
-        DefaultColor=MiddleUI.color;
+        if (UnlockedTestChoice)
+        {
+            UnlockChoiceList(TestLockedChoice);
+        }
+
+        DefaultColor = MiddleUI.color;
     }
 
+    private void UnlockChoiceList(Character[] choicesToUnlock)
+    {
+        // Tạo một dictionary để tra cứu nhanh nhân vật theo tên
+        Dictionary<string, Character> characterDictionary = characters.ToDictionary(c => c.characterName);
+
+        foreach (Character characterToUnlock in choicesToUnlock)
+        {
+            // Kiểm tra xem nhân vật cần mở khóa có tồn tại trong danh sách chính hay không
+            if (characterDictionary.TryGetValue(characterToUnlock.characterName, out Character matchingCharacter))
+            {
+                // Duyệt qua các lựa chọn của nhân vật cần mở khóa và thêm vào nhân vật trong danh sách chính
+                foreach (Choice choiceToUnlock in characterToUnlock.choices)
+                {
+                    matchingCharacter.choices.Add(choiceToUnlock);
+                }
+            }
+        }
+    }
     public void MakeDecision()
     {
-        if (currentCharacter.isIntro)
-        {
-            Intro();
-            return;
-        }
-        if(currentCharacter.isRevive)
+        if (currentCharacter.isRevive)
         {
             Revive();
             return;
         }
-        if(currentCharacter.isDie)
+        if (currentCharacter.isDie)
         {
             Kill();
             return;
         }
-        
+        if (currentCharacter.isIntro)
+        {
+            Intro();
+            CreateBuff();
+            return;
+        }
+
         MakeRandomDecision();
     }
 
@@ -140,11 +181,11 @@ public class Data : MonoBehaviour
             return;
         }
 
-            RandomDecision();
+        RandomDecision();
 
-            SetCardElements();
+        SetCardElements();
 
-            DeleteUsingChoice(randomChoiceIndex);
+        DeleteUsingChoice(randomChoiceIndex);
 
     }
 
@@ -206,7 +247,7 @@ public class Data : MonoBehaviour
 
     private void Revive()
     {
-        currentChoice=currentCharacter.choices[0];
+        currentChoice = currentCharacter.choices[0];
         SetCardElements();
         GameManager.Instance.ResetElementStats();
         MiddleUI.DOColor(DefaultColor, 1f);
@@ -229,10 +270,10 @@ public class Data : MonoBehaviour
         }
     }
 
-        public void RevivePlayer()
-        {
-            currentCharacter = ReviveCard;
-        }
+    public void RevivePlayer()
+    {
+        currentCharacter = ReviveCard;
+    }
 
     public void KillPlayer(Choice choice)
     {
@@ -240,27 +281,35 @@ public class Data : MonoBehaviour
         currentChoice = choice;
         MiddleUI.DOColor(TopAndBottomUI.color, 1f);
     }
-
-
-    public Choice CurrentChoice 
-    {
-        get { return currentChoice; }
-    }
-
-    public Character CurrentCharacter 
-    {
-        get { return currentCharacter; }
-    }
-
     public Choice FindChoiceInDieCard(int DieCardIndex)
     {
         foreach (Choice choice in DieCard.choices)
         {
-            if(choice == DieCard.choices[DieCardIndex])
+            if (choice == DieCard.choices[DieCardIndex])
             {
-                return choice ;
+                return choice;
             }
         }
         return null;
+    }
+
+    private void CreateBuff()
+    {
+        if (GameManager.Instance.amountOfBuff >= 5) return;
+
+        GameManager.Instance.AddBuff();
+
+        GameObject newBuff = Instantiate(buffObject, buffParent);
+    }
+
+
+    public Choice CurrentChoice
+    {
+        get { return currentChoice; }
+    }
+
+    public Character CurrentCharacter
+    {
+        get { return currentCharacter; }
     }
 }
