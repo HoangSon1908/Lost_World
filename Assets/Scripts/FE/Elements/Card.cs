@@ -9,10 +9,6 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHandler
 {
-    #region Test
-    [Header("Test")]
-    [SerializeField] private Transform buffParent;
-    #endregion
 
     [Header("Elements")]
     [SerializeField] private TextMeshProUGUI topAnswer;
@@ -282,21 +278,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         Color currentColor = topAnswer.color;
         text.color = new Color(currentColor.r, currentColor.g, currentColor.b, alpha);
     }
-
-    #region Test
-    private void CreateBuff()
-    {
-        if (GameManager.Instance.amountOfBuff >= 5) return;
-
-        GameManager.Instance.AddBuff();
-
-        GameObject buffSpawn = Resources.Load<GameObject>($"Prefabs/Buff/Buff");
-        GameObject newBuff = Instantiate(buffSpawn, buffParent);
-
-        Color randomColor = Random.ColorHSV();
-        newBuff.GetComponentInChildren<Image>().color = randomColor;
-    }
-    #endregion
 
     private void UnlockPreview() {
         isLocked = false;
