@@ -15,6 +15,7 @@ public class Character
     public Color characterColor;
     public bool isIntro;
     public bool isRevive;
+    public bool isReviveWithBuff;
     public bool isDie;
     public List<Choice> choices;
 }
@@ -43,22 +44,38 @@ public class Choice
     //Ruling days
     public int rulingDays1;
     public int rulingDays2;
+
+    [Header("Buff")]
+    public BuffType buffType;
+    public bool isDescriptionBuff;
+}
+
+public enum BuffType
+{
+    None,
+    military,
+    economy,
+    publicEsteem,
+    spirituality
 }
 
 public class Data : MonoBehaviour
 {
-    //Data instance singleton
     public static Data instance { get; private set; }
 
-    //make a list of character in editor
     [Header("Characters")]
     public Character[] characters;
-
 
     [Header("Story")]
     public Character intro;
     public Character ReviveCard;
     public Character DieCard;
+    
+    [Header("ReviveWithBuffList")]      
+    public Character ReviveWithBuffCard;
+
+    [Header("Description for buff")]
+    public Character BuffDescription;
 
     [Header("Unlocked Choices List")]
     public Character[] TestLockedChoice;
@@ -85,6 +102,29 @@ public class Data : MonoBehaviour
     [Header("Buff")]
     public Transform buffParent;
     public GameObject buffObject;
+    private int buffIndex;
+    private BuffType buffType;
+    private bool canReviveWithBuff;
+    public BuffType[] BuffTypes;
+
+    [Header("Buff Sprites")]
+    public Sprite militaryBuffSprite;
+    public Sprite economyBuffSprite;
+    public Sprite publicEsteemBuffSprite;
+    public Sprite spiritualityBuffSprite;
+    private Choice BuffChoice;
+
+    [Header("BuffKey")]
+    public string hasMilitaryBuffKey = "HasMilitaryBuff";
+    public string hasEconomyBuffKey = "HasEconomyBuff";
+    public string hasPublicEsteemBuffKey = "HasPublicEsteemBuff";
+    public string hasSpiritualityBuffKey = "HasSpiritualityBuff";
+
+    public bool hasMilitaryBuff;
+    public bool hasEconomyBuff;
+    public bool hasPublicEsteemBuff;
+    public bool hasSpiritualityBuff;
+
 
     [Header("Keys")]
     public string UnlockedTestChoiceKey = "UnlockedChoice";
@@ -112,8 +152,29 @@ public class Data : MonoBehaviour
         isFirstTime = PlayerPrefs.GetInt(FirstTimeKey, 1) == 1;
         canRevive = PlayerPrefs.GetInt(ShopSystem.instance.reviveEffect, 0) == 1;
 
-        PlayerPrefs.SetInt(UnlockedTestChoiceKey, 1);
         UnlockedTestChoice = PlayerPrefs.GetInt(UnlockedTestChoiceKey, 0) == 1;
+
+        hasMilitaryBuff = PlayerPrefs.GetInt(hasMilitaryBuffKey, 0) == 1;
+        hasEconomyBuff = PlayerPrefs.GetInt(hasEconomyBuffKey, 0) == 1;
+        hasPublicEsteemBuff = PlayerPrefs.GetInt(hasPublicEsteemBuffKey, 0) == 1;
+        hasSpiritualityBuff = PlayerPrefs.GetInt(hasSpiritualityBuffKey, 0) == 1;
+
+        if (hasMilitaryBuff)
+        {
+            CreateBuff(new Choice { buffType = BuffType.military });
+        }
+        if (hasEconomyBuff)
+        {
+            CreateBuff(new Choice { buffType = BuffType.economy });
+        }
+        if (hasPublicEsteemBuff)
+        {
+            CreateBuff(new Choice { buffType = BuffType.publicEsteem });
+        }
+        if (hasSpiritualityBuff)
+        {
+            CreateBuff(new Choice { buffType = BuffType.spirituality });
+        }
 
         if (isFirstTime)
         {
@@ -123,6 +184,7 @@ public class Data : MonoBehaviour
         {
             currentCharacter = characters[0];
         }
+        currentChoice=currentCharacter.choices[0];
 
         if (UnlockedTestChoice)
         {
@@ -152,6 +214,16 @@ public class Data : MonoBehaviour
     }
     public void MakeDecision()
     {
+        if (currentChoice.isDescriptionBuff)
+        {
+            ShowBuffDescription();
+            return;
+        }
+        if (currentCharacter.isReviveWithBuff)
+        {
+            ReviveWithBuff();
+            return;
+        }
         if (currentCharacter.isRevive)
         {
             Revive();
@@ -165,7 +237,6 @@ public class Data : MonoBehaviour
         if (currentCharacter.isIntro)
         {
             Intro();
-            CreateBuff();
             return;
         }
 
@@ -183,10 +254,50 @@ public class Data : MonoBehaviour
 
         RandomDecision();
 
+        if (currentChoice.buffType != BuffType.None)
+        {
+            if (!CheckBuffType(currentChoice.buffType))
+            {
+                BuffChoice = currentChoice;
+            }
+            else
+            {
+                DeleteUsingChoice(randomChoiceIndex);
+                MakeRandomDecision();
+                Debug.Log("Buff already have");
+            }
+        }
+
         SetCardElements();
 
         DeleteUsingChoice(randomChoiceIndex);
 
+    }
+
+    private bool CheckBuffType(BuffType buffType)
+    {
+        foreach (BuffType existingBuff in BuffTypes)
+        {
+            if (existingBuff == buffType)
+            {
+                Debug.Log("Buff already have");
+                return true; // BuffType already exists
+            }
+        }
+        return false; // BuffType does not exist
+    }
+
+    private void Intro()
+    {
+        currentChoice = currentCharacter.choices[0];
+        SetCardElements();
+        DeleteUsingChoice(0);
+        if (currentCharacter.choices.Count == 0)
+        {
+            currentCharacter.isIntro = false;
+            PlayerPrefs.SetInt(FirstTimeKey, 0);
+            PlayerPrefs.Save();
+        }
     }
 
     private void DeleteUsingChoice(int ChoiceIndex)
@@ -194,7 +305,7 @@ public class Data : MonoBehaviour
         //Delete using decision
         currentCharacter.choices.RemoveAt(ChoiceIndex);
         //If there are no more decisions for the character, remove the character from the list
-        if (currentCharacter.choices.Count == 0)
+        if (currentCharacter.choices.Count == 0 && !currentCharacter.isIntro )
         {
             List<Character> tempCharacters = new List<Character>(characters);
             tempCharacters.RemoveAt(randomCharacterIndex);
@@ -232,19 +343,6 @@ public class Data : MonoBehaviour
         currentChoice = currentCharacter.choices[randomChoiceIndex];
     }
 
-    private void Intro()
-    {
-        currentChoice = currentCharacter.choices[0];
-        SetCardElements();
-        DeleteUsingChoice(0);
-        if (currentCharacter.choices.Count == 0)
-        {
-            currentCharacter.isIntro = false;
-            PlayerPrefs.SetInt(FirstTimeKey, 0);
-            PlayerPrefs.Save();
-        }
-    }
-
     private void Revive()
     {
         currentChoice = currentCharacter.choices[0];
@@ -257,17 +355,22 @@ public class Data : MonoBehaviour
 
     private void Kill()
     {
+        if (canReviveWithBuff)
+        {
+            SetCardElements();
+            ReviveWithBuffPlayer(buffIndex);
+            canReviveWithBuff = false;
+            return;
+        }
         if (canRevive)
         {
             SetCardElements();
             RevivePlayer();
             canRevive = false;
+            return;
         }
-        else
-        {
             SetCardElements();
             Gameover = true;
-        }
     }
 
     public void RevivePlayer()
@@ -293,15 +396,176 @@ public class Data : MonoBehaviour
         return null;
     }
 
-    private void CreateBuff()
+    private void CreateBuff(Choice Buff)
     {
         if (GameManager.Instance.amountOfBuff >= 5) return;
 
         GameManager.Instance.AddBuff();
 
         GameObject newBuff = Instantiate(buffObject, buffParent);
+        //SetBuffSprite(Buff.buffType,newBuff);
+        SetBuffColor(Buff.buffType, newBuff);
     }
 
+    private void SetBuffSprite(BuffType buffType,GameObject Buff)
+    {
+        switch (buffType)
+        {
+            case BuffType.military:
+                Buff.GetComponentInChildren<Image>().sprite = militaryBuffSprite;
+                hasMilitaryBuff = true;
+                PlayerPrefs.SetInt(hasMilitaryBuffKey, 1);
+                LoadBuffDescription(0);
+                BuffTypes[0] = BuffType.military;
+                break;
+            case BuffType.economy:
+                Buff.GetComponentInChildren<Image>().sprite = economyBuffSprite;
+                hasEconomyBuff = true;
+                PlayerPrefs.SetInt(hasEconomyBuffKey, 1);
+                LoadBuffDescription(1);
+                BuffTypes[1] = BuffType.economy;
+                break;
+            case BuffType.publicEsteem:
+                Buff.GetComponentInChildren<Image>().sprite = publicEsteemBuffSprite;
+                hasPublicEsteemBuff = true;
+                PlayerPrefs.SetInt(hasPublicEsteemBuffKey, 1);
+                LoadBuffDescription(2);
+                BuffTypes[2] = BuffType.publicEsteem;
+                break;
+            case BuffType.spirituality:
+                Buff.GetComponentInChildren<Image>().sprite = spiritualityBuffSprite;
+                hasSpiritualityBuff = true;
+                PlayerPrefs.SetInt(hasSpiritualityBuffKey, 1);
+                LoadBuffDescription(3);
+                BuffTypes[3] = BuffType.spirituality;
+                break;
+        }
+    }
+
+    private void SetBuffColor(BuffType buffType, GameObject Buff)
+    {
+        switch (buffType)
+        {
+            case BuffType.military:
+                Buff.GetComponentInChildren<Image>().color = Color.red;
+                hasMilitaryBuff = true;
+                PlayerPrefs.SetInt(hasMilitaryBuffKey, 1);
+                LoadBuffDescription(0);
+                BuffTypes[0] = BuffType.military;
+                break;
+            case BuffType.economy:
+                Buff.GetComponentInChildren<Image>().color = Color.green;
+                hasEconomyBuff = true;
+                PlayerPrefs.SetInt(hasEconomyBuffKey, 1);
+                LoadBuffDescription(1);
+                BuffTypes[1] = BuffType.economy;
+                break;
+            case BuffType.publicEsteem:
+                Buff.GetComponentInChildren<Image>().color = Color.blue;
+                hasPublicEsteemBuff = true;
+                PlayerPrefs.SetInt(hasPublicEsteemBuffKey, 1);
+                LoadBuffDescription(2);
+                BuffTypes[2] = BuffType.publicEsteem;
+                break;
+            case BuffType.spirituality:
+                Buff.GetComponentInChildren<Image>().color = Color.yellow;
+                hasSpiritualityBuff = true;
+                PlayerPrefs.SetInt(hasSpiritualityBuffKey, 1);
+                LoadBuffDescription(3);
+                BuffTypes[3] = BuffType.spirituality;
+                break;
+
+        }
+    }
+
+    private void ShowBuffDescription()
+    {
+        SetCardElements();
+        currentChoice.isDescriptionBuff = false;
+    }
+
+    private void LoadBuffDescription(int i)
+    {
+        currentCharacter = BuffDescription;
+        currentChoice = currentCharacter.choices[i];
+    }
+
+    public void CheckAndCreateBuff()
+    {
+        if (BuffChoice != null)
+        {
+            CreateBuff(BuffChoice);
+            BuffChoice = null;
+        }
+    }
+
+    public void SetUpBuff(int Buff,BuffType buffTypeData)
+    {
+        buffIndex = Buff;
+        buffType = buffTypeData;
+        canReviveWithBuff = true;
+    }
+
+    public void ReviveWithBuffPlayer(int buffIndex)
+    {
+        currentCharacter = ReviveWithBuffCard;
+        currentChoice = currentCharacter.choices[buffIndex];
+    }
+
+    private void ReviveWithBuff()
+    {
+        SetCardElements();
+        MiddleUI.DOColor(DefaultColor, 1f);
+        RemoveBuffObject(buffType);
+        GameManager.Instance.isChecked = false;
+        currentCharacter.isReviveWithBuff = false;
+    }
+
+    private void RemoveBuffObject(BuffType buffType)
+    {
+        Debug.Log("Remove buff object");
+        // Duyệt qua tất cả các buffObject con trong buffParent
+        foreach (Transform child in buffParent)
+        {
+            Image buffImage = child.GetComponentInChildren<Image>();
+
+            if (buffImage != null)
+            {
+                // Kiểm tra loại buff và xóa nếu khớp
+                switch (buffType)
+                {
+                    case BuffType.military:
+                        if (buffImage.color == Color.red)
+                        {
+                            Destroy(child.gameObject);
+                            return;
+                        }
+                        break;
+                    case BuffType.economy:
+                        if (buffImage.color == Color.green)
+                        {
+                            Destroy(child.gameObject);
+                            return;
+                        }
+                        break;
+                    case BuffType.publicEsteem:
+                        if (buffImage.color == Color.blue)
+                        {
+                            Destroy(child.gameObject);
+                            return;
+                        }
+                        break;
+                    case BuffType.spirituality:
+                        if (buffImage.color == Color.yellow)
+                        {
+                            Destroy(child.gameObject);
+                            return;
+                        }
+                        break;
+                }
+            }
+        }
+    }
 
     public Choice CurrentChoice
     {
