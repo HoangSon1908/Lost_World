@@ -203,7 +203,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
             rect.anchoredPosition = new Vector2(0, -Screen.height);
 
             ResetCard();
-            GameManager.Instance.CheckisGameOver();
+            GameManager.Instance.CheckGameOver();
+            Data.instance.CheckAndCreateBuff();
             Data.instance.MakeDecision();
         });
         }
@@ -229,7 +230,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                 rect.anchoredPosition = new Vector2(0, Screen.height);
 
                 ResetCard();
-                GameManager.Instance.CheckisGameOver();
+                GameManager.Instance.CheckGameOver();
                 Data.instance.MakeDecision();
             });
         }

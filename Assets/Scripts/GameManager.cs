@@ -58,53 +58,108 @@ public class GameManager : Singleton<GameManager>
         spirituality = Mathf.Clamp(spirituality + change4, 0, maxStat);
     }
 
-    public void CheckisGameOver()
+    public void CheckGameOver()
     {
-        Stat = new int[] { publicEsteem, militaryPower, economy, spirituality };
-        CheckGameOver();
-    }
-
-    private void CheckGameOver()
-    {
-        if(isChecked)
+        if (isChecked)
         {
             return;
         }
 
-        int DieCardIndex = 0;
-        // Lặp qua từng giá trị trong mảng Stat
-        foreach (int statValue in Stat)
+        // Mảng chứa các chỉ số
+        Stat = new int[] { militaryPower, publicEsteem, economy, spirituality };
+
+        // Mảng chứa trạng thái buff tương ứng
+        bool[] buffs = new bool[]
         {
+        Data.instance.hasMilitaryBuff,
+        Data.instance.hasPublicEsteemBuff,
+        Data.instance.hasEconomyBuff,
+        Data.instance.hasSpiritualityBuff
+        };
+
+        // Mảng chứa key của các buff để xoá buff khi cần
+        string[] buffKeys = new string[]
+        {
+        Data.instance.hasMilitaryBuffKey,
+        Data.instance.hasPublicEsteemBuffKey,
+        Data.instance.hasEconomyBuffKey,
+        Data.instance.hasSpiritualityBuffKey
+        };
+
+        // Mảng chứa loại buff tương ứng với chỉ số
+        BuffType[] buffTypes = new BuffType[]
+        {
+        BuffType.military,
+        BuffType.publicEsteem,
+        BuffType.economy,
+        BuffType.spirituality
+        };
+
+        int DieCardIndex = 0;
+
+        for (int i = 0; i < Stat.Length; i++)
+        {
+            int statValue = Stat[i];
+
             if (statValue == maxStat || statValue == 0)
             {
-
-                if (statValue == maxStat)
+                if (buffs[i])
                 {
-                    DieCardIndex += 4;
+                    // Xoá buff tương ứng
+                    buffs[i] = false;
+                    PlayerPrefs.SetInt(buffKeys[i], 0); // Xóa buff
+                    PlayerPrefs.Save();
+
+                    switch (i)
+                    {
+                        case 0:
+                            militaryPower = 50;
+                            Data.instance.SetUpBuff(i,BuffType.military);
+                            break;
+                        case 1:
+                            publicEsteem = 50;
+                            Data.instance.SetUpBuff(i, BuffType.publicEsteem);
+                            break;
+                        case 2:
+                            economy = 50;
+                            Data.instance.SetUpBuff(i, BuffType.economy);
+                            break;
+                        case 3:
+                            spirituality = 50;
+                            Data.instance.SetUpBuff(i, BuffType.spirituality);
+                            break;
+                    }
                 }
+                    if (statValue == maxStat)
+                    {
+                        DieCardIndex += 4;
+                    }
 
-                currentDays = currentDays + rulingDays - (rulingYears * 365);
-                currentYears += rulingYears;
+                    currentDays = currentDays + rulingDays - (rulingYears * 365);
+                    currentYears += rulingYears;
 
-                // Lưu ngày và năm trước khi reset
-                PlayerPrefs.SetInt(PlayerPrefsDayKey, currentDays);
-                PlayerPrefs.SetInt(PlayerPrefsYearKey, currentYears);
-                PlayerPrefs.Save();
+                    // Lưu ngày và năm trước khi reset
+                    PlayerPrefs.SetInt(PlayerPrefsDayKey, currentDays);
+                    PlayerPrefs.SetInt(PlayerPrefsYearKey, currentYears);
+                    PlayerPrefs.Save();
 
-                Debug.Log("Game Over!!");
+                    Debug.Log("Game Over!!");
 
-                // Tìm và giết nhân vật dựa trên DieCardIndex
-                Choice dieCharacter = Data.instance.FindChoiceInDieCard(DieCardIndex);
-                Data.instance.KillPlayer(dieCharacter);
+                    // Tìm và giết nhân vật dựa trên DieCardIndex
+                    Choice dieCharacter = Data.instance.FindChoiceInDieCard(DieCardIndex);
+                    Data.instance.KillPlayer(dieCharacter);
 
-                isChecked = true;
+                    isChecked = true;
 
-                // Thoát khỏi vòng lặp khi phát hiện giá trị game over
-                break;
+                    // Thoát khỏi vòng lặp khi phát hiện giá trị game over
+                    break;
+                
             }
             DieCardIndex++;
         }
     }
+
+
 
     public void ResetElementStats()
     {
