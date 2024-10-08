@@ -10,37 +10,44 @@ using System.Linq;
 [System.Serializable]
 public class Character
 {
+    [Header("Character Info")]
     public string characterName;
     //public Sprite characterImage;
     public Color characterColor;
+
+    [Header("Character Type")]
     public bool isIntro;
     public bool isRevive;
     public bool isReviveWithBuff;
     public bool isDie;
+
+    [Header("List Choice For Character")]
     public List<Choice> choices;
 }
 
 [System.Serializable]
 public class Choice
 {
+    [Header("Description For Card")]
     public string description;
     public string decision1;
     public string decision2;
 
-    [Header("Stat for agree")]
+    [Header("Stat For Agree")]
     // Stat effects for decision 1 (agree)
     public int militaryEffect1;
     public int publicEsteem1;
     public int economy1;
     public int spiritualityEffect1;
 
-    [Header("Stat for disagree")]
+    [Header("Stat For Disagree")]
     // Stat effects for decision 2 (disagree)
     public int militaryEffect2;
     public int publicEsteem2;
     public int economy2;
     public int spiritualityEffect2;
 
+    [Header("Ruling Day For Each Decision")]
     //Ruling days
     public int rulingDays1;
     public int rulingDays2;
@@ -50,7 +57,7 @@ public class Choice
     public bool isDescriptionBuff;
 }
 
-public enum BuffType
+public enum BuffType//enum to set buff type
 {
     None,
     military,
@@ -71,13 +78,13 @@ public class Data : MonoBehaviour
     public Character ReviveCard;
     public Character DieCard;
     
-    [Header("ReviveWithBuffList")]      
+    [Header("Revive With Buff List")]      
     public Character ReviveWithBuffCard;
 
-    [Header("Description for buff")]
+    [Header("Description For Buff List")]
     public Character BuffDescription;
 
-    [Header("Unlocked Choices List")]
+    [Header("Choices List To Unlock")]
     public Character[] TestLockedChoice;
 
 
@@ -88,12 +95,6 @@ public class Data : MonoBehaviour
     public TextMeshProUGUI Character_Name;
     public Image Character_Image;
 
-    [Header("Stat UI Elements")]
-    private Character currentCharacter;
-    private Choice currentChoice;
-    private int randomCharacterIndex;
-    private int randomChoiceIndex;
-
     [Header("UIColor")]
     public Image MiddleUI;
     public Image TopAndBottomUI;
@@ -102,9 +103,6 @@ public class Data : MonoBehaviour
     [Header("Buff")]
     public Transform buffParent;
     public GameObject buffObject;
-    private int buffIndex;
-    private BuffType buffType;
-    private bool canReviveWithBuff;
     public BuffType[] BuffTypes;
 
     [Header("Buff Sprites")]
@@ -112,7 +110,6 @@ public class Data : MonoBehaviour
     public Sprite economyBuffSprite;
     public Sprite publicEsteemBuffSprite;
     public Sprite spiritualityBuffSprite;
-    private Choice BuffChoice;
 
     [Header("BuffKey")]
     public string hasMilitaryBuffKey = "HasMilitaryBuff";
@@ -120,26 +117,49 @@ public class Data : MonoBehaviour
     public string hasPublicEsteemBuffKey = "HasPublicEsteemBuff";
     public string hasSpiritualityBuffKey = "HasSpiritualityBuff";
 
+    [Header("AmountBuff")]
+    public int amountOfBuff;
+    public void AddBuff() => amountOfBuff++;
+    public void RemoveBuff() => amountOfBuff--;
+
+
+    [Header("Keys To Unlock Choice List")]
+    public string UnlockedTestChoiceKey = "UnlockedChoice";
+
+    //Key and bool for first time playing
+    private const string FirstTimeKey = "FirstTime";
+    private bool isFirstTime;
+
+    //Reference for current character and choice
+    private Character currentCharacter;
+    private Choice currentChoice;
+
+    //Random index for character and choice
+    private int randomCharacterIndex;
+    private int randomChoiceIndex;
+
+    //bool for buff
     public bool hasMilitaryBuff;
     public bool hasEconomyBuff;
     public bool hasPublicEsteemBuff;
     public bool hasSpiritualityBuff;
 
+    private int buffIndex;//number in buff list
+    private BuffType buffType;//type of buff
+    private Choice BuffChoice;//choice to create buff
+    private bool canReviveWithBuff;//bool for revive with buff
 
-    [Header("Keys")]
-    public string UnlockedTestChoiceKey = "UnlockedChoice";
-
-    private const string FirstTimeKey = "FirstTime";
-    private bool isFirstTime;
-    
+    //bool for Gameover
     [HideInInspector]    
     public bool Gameover = false;
-    [HideInInspector]
-    public bool canRevive;
+
+    //bool for Unlock Test choices
     private bool UnlockedTestChoice;
 
     private void Start()
     {
+        
+        //singleton pattern
         if (instance == null)
         {
             instance = this;
@@ -149,16 +169,19 @@ public class Data : MonoBehaviour
             Destroy(gameObject);
         }
 
+        //Check if this is the first time the player has played the game
         isFirstTime = PlayerPrefs.GetInt(FirstTimeKey, 1) == 1;
-        canRevive = PlayerPrefs.GetInt(ShopSystem.instance.reviveEffect, 0) == 1;
 
+        //Check if the player has unlocked the Test choices
         UnlockedTestChoice = PlayerPrefs.GetInt(UnlockedTestChoiceKey, 0) == 1;
 
+        //Load Buffs state
         hasMilitaryBuff = PlayerPrefs.GetInt(hasMilitaryBuffKey, 0) == 1;
         hasEconomyBuff = PlayerPrefs.GetInt(hasEconomyBuffKey, 0) == 1;
         hasPublicEsteemBuff = PlayerPrefs.GetInt(hasPublicEsteemBuffKey, 0) == 1;
         hasSpiritualityBuff = PlayerPrefs.GetInt(hasSpiritualityBuffKey, 0) == 1;
 
+        //Create Buffs if they exist
         if (hasMilitaryBuff)
         {
             CreateBuff(new Choice { buffType = BuffType.military });
@@ -176,6 +199,7 @@ public class Data : MonoBehaviour
             CreateBuff(new Choice { buffType = BuffType.spirituality });
         }
 
+        //Check to start Intro or not
         if (isFirstTime)
         {
             currentCharacter = intro;
@@ -184,34 +208,20 @@ public class Data : MonoBehaviour
         {
             currentCharacter = characters[0];
         }
-        currentChoice=currentCharacter.choices[0];
 
+        //Set the first choice for start game, prevent null reference
+        currentChoice = currentCharacter.choices[0];
+
+        //Unlock Test choices if the player has unlocked them
         if (UnlockedTestChoice)
         {
             UnlockChoiceList(TestLockedChoice);
         }
 
+        //Set the current color for MiddleUI for logic purpose
         DefaultColor = MiddleUI.color;
     }
 
-    private void UnlockChoiceList(Character[] choicesToUnlock)
-    {
-        // Tạo một dictionary để tra cứu nhanh nhân vật theo tên
-        Dictionary<string, Character> characterDictionary = characters.ToDictionary(c => c.characterName);
-
-        foreach (Character characterToUnlock in choicesToUnlock)
-        {
-            // Kiểm tra xem nhân vật cần mở khóa có tồn tại trong danh sách chính hay không
-            if (characterDictionary.TryGetValue(characterToUnlock.characterName, out Character matchingCharacter))
-            {
-                // Duyệt qua các lựa chọn của nhân vật cần mở khóa và thêm vào nhân vật trong danh sách chính
-                foreach (Choice choiceToUnlock in characterToUnlock.choices)
-                {
-                    matchingCharacter.choices.Add(choiceToUnlock);
-                }
-            }
-        }
-    }
     public void MakeDecision()
     {
         if (currentChoice.isDescriptionBuff)
@@ -243,6 +253,39 @@ public class Data : MonoBehaviour
         MakeRandomDecision();
     }
 
+    private void SetCardElements()
+    {
+        // Set the character's name
+        Character_Name.text = currentCharacter.characterName;
+
+        // Set the character's image
+        //Character_Image.sprite = randomCharacter.characterImage;
+
+        // Set the character's color
+        Character_Image.color = currentCharacter.characterColor;
+
+        // Set the choice's description
+        Info1.text = currentChoice.description;
+
+        // Set the choice's decisions
+        TopAnswer.text = currentChoice.decision1;
+        BottomAnswer.text = currentChoice.decision2;
+    }
+
+    private void DeleteUsingChoice(int ChoiceIndex)
+    {
+        //Delete using decision
+        currentCharacter.choices.RemoveAt(ChoiceIndex);
+        //If there are no more decisions for the character, remove the character from the list
+        if (currentCharacter.choices.Count == 0 && !currentCharacter.isIntro )
+        {
+            List<Character> tempCharacters = new List<Character>(characters);
+            tempCharacters.RemoveAt(randomCharacterIndex);
+            characters = tempCharacters.ToArray();
+        }
+    }
+
+    #region Random Decision Logic
     public void MakeRandomDecision()
     {
         //Check if the is any character left
@@ -274,19 +317,40 @@ public class Data : MonoBehaviour
 
     }
 
-    private bool CheckBuffType(BuffType buffType)
+    private void RandomDecision()
     {
-        foreach (BuffType existingBuff in BuffTypes)
+        // Get a random character from the topics list
+        randomCharacterIndex = Random.Range(0, characters.Length);
+        currentCharacter = characters[randomCharacterIndex];
+
+        // Get a random choice from the character's choices list
+        randomChoiceIndex = Random.Range(0, currentCharacter.choices.Count);
+        currentChoice = currentCharacter.choices[randomChoiceIndex];
+    }
+    #endregion
+
+    #region Unlock Choices Logic
+    private void UnlockChoiceList(Character[] choicesToUnlock)
+    {
+        // Tạo một dictionary để tra cứu nhanh nhân vật theo tên
+        Dictionary<string, Character> characterDictionary = characters.ToDictionary(c => c.characterName);
+
+        foreach (Character characterToUnlock in choicesToUnlock)
         {
-            if (existingBuff == buffType)
+            // Kiểm tra xem nhân vật cần mở khóa có tồn tại trong danh sách chính hay không
+            if (characterDictionary.TryGetValue(characterToUnlock.characterName, out Character matchingCharacter))
             {
-                Debug.Log("Buff already have");
-                return true; // BuffType already exists
+                // Duyệt qua các lựa chọn của nhân vật cần mở khóa và thêm vào nhân vật trong danh sách chính
+                foreach (Choice choiceToUnlock in characterToUnlock.choices)
+                {
+                    matchingCharacter.choices.Add(choiceToUnlock);
+                }
             }
         }
-        return false; // BuffType does not exist
     }
+    #endregion
 
+    #region Intro Logic
     private void Intro()
     {
         currentChoice = currentCharacter.choices[0];
@@ -299,51 +363,10 @@ public class Data : MonoBehaviour
             PlayerPrefs.Save();
         }
     }
+    #endregion
 
-    private void DeleteUsingChoice(int ChoiceIndex)
-    {
-        //Delete using decision
-        currentCharacter.choices.RemoveAt(ChoiceIndex);
-        //If there are no more decisions for the character, remove the character from the list
-        if (currentCharacter.choices.Count == 0 && !currentCharacter.isIntro )
-        {
-            List<Character> tempCharacters = new List<Character>(characters);
-            tempCharacters.RemoveAt(randomCharacterIndex);
-            characters = tempCharacters.ToArray();
-        }
-    }
-
-    private void SetCardElements()
-    {
-        // Set the character's name
-        Character_Name.text = currentCharacter.characterName;
-
-        // Set the character's image
-        //Character_Image.sprite = randomCharacter.characterImage;
-
-        // Set the character's color
-        Character_Image.color = currentCharacter.characterColor;
-
-        // Set the choice's description
-        Info1.text = currentChoice.description;
-
-        // Set the choice's decisions
-        TopAnswer.text = currentChoice.decision1;
-        BottomAnswer.text = currentChoice.decision2;
-    }
-
-    private void RandomDecision()
-    {
-        // Get a random character from the topics list
-        randomCharacterIndex = Random.Range(0, characters.Length);
-        currentCharacter = characters[randomCharacterIndex];
-
-        // Get a random choice from the character's choices list
-        randomChoiceIndex = Random.Range(0, currentCharacter.choices.Count);
-        currentChoice = currentCharacter.choices[randomChoiceIndex];
-    }
-
-    private void Revive()
+    #region Revive Logic
+    private void Revive()//Logic for revive card
     {
         currentChoice = currentCharacter.choices[0];
         SetCardElements();
@@ -352,8 +375,15 @@ public class Data : MonoBehaviour
         GameManager.Instance.isChecked = false;
         currentCharacter.isRevive = false;
     }
+    
+    private void RevivePlayer()//calling from Kill Logic to set revive card
+    {
+        currentCharacter = ReviveCard;
+    }
+    #endregion
 
-    private void Kill()
+    #region Kill Logic
+    private void Kill()//Logic for die card
     {
         if (canReviveWithBuff)
         {
@@ -362,29 +392,25 @@ public class Data : MonoBehaviour
             canReviveWithBuff = false;
             return;
         }
-        if (canRevive)
+        if (TabData.instance.canRevive)
         {
             SetCardElements();
             RevivePlayer();
-            canRevive = false;
+            TabData.instance.canRevive = false;
             return;
         }
             SetCardElements();
             Gameover = true;
     }
 
-    public void RevivePlayer()
-    {
-        currentCharacter = ReviveCard;
-    }
-
-    public void KillPlayer(Choice choice)
+    public void KillPlayer(Choice choice)//calling from GameManager to set die card
     {
         currentCharacter = DieCard;
         currentChoice = choice;
         MiddleUI.DOColor(TopAndBottomUI.color, 1f);
     }
-    public Choice FindChoiceInDieCard(int DieCardIndex)
+
+    public Choice FindChoiceInDieCard(int DieCardIndex)//calling from GameManager to find correct choice in die card list
     {
         foreach (Choice choice in DieCard.choices)
         {
@@ -395,19 +421,21 @@ public class Data : MonoBehaviour
         }
         return null;
     }
+    #endregion
 
-    private void CreateBuff(Choice Buff)
+    #region Buff Logic
+    private void CreateBuff(Choice Buff)//Create buff object in buff Parent, +1 to amount of buff
     {
-        if (GameManager.Instance.amountOfBuff >= 5) return;
+        if (amountOfBuff >= 5) return;
 
-        GameManager.Instance.AddBuff();
+        AddBuff();
 
         GameObject newBuff = Instantiate(buffObject, buffParent);
         //SetBuffSprite(Buff.buffType,newBuff);
         SetBuffColor(Buff.buffType, newBuff);
     }
 
-    private void SetBuffSprite(BuffType buffType,GameObject Buff)
+    private void SetBuffSprite(BuffType buffType,GameObject Buff)//Set up sprite for buff object
     {
         switch (buffType)
         {
@@ -442,7 +470,7 @@ public class Data : MonoBehaviour
         }
     }
 
-    private void SetBuffColor(BuffType buffType, GameObject Buff)
+    private void SetBuffColor(BuffType buffType, GameObject Buff)//Set up color for buff object
     {
         switch (buffType)
         {
@@ -478,41 +506,34 @@ public class Data : MonoBehaviour
         }
     }
 
-    private void ShowBuffDescription()
-    {
-        SetCardElements();
-        currentChoice.isDescriptionBuff = false;
-    }
-
-    private void LoadBuffDescription(int i)
-    {
-        currentCharacter = BuffDescription;
-        currentChoice = currentCharacter.choices[i];
-    }
-
-    public void CheckAndCreateBuff()
+    public void CheckAndCreateBuff()//Calling from Card Script to check and create buff if agree
     {
         if (BuffChoice != null)
         {
+            Debug.Log("Create buff");
             CreateBuff(BuffChoice);
             BuffChoice = null;
         }
+        else
+        {
+            Debug.Log("No buff to create");
+        }
     }
 
-    public void SetUpBuff(int Buff,BuffType buffTypeData)
+    public void SetUpBuff(int Buff,BuffType buffTypeData)//Set up before revive with buff card
     {
         buffIndex = Buff;
         buffType = buffTypeData;
         canReviveWithBuff = true;
     }
 
-    public void ReviveWithBuffPlayer(int buffIndex)
+    public void ReviveWithBuffPlayer(int buffIndex)//Calling from Kill Logic to set revive with buff card
     {
         currentCharacter = ReviveWithBuffCard;
         currentChoice = currentCharacter.choices[buffIndex];
     }
 
-    private void ReviveWithBuff()
+    private void ReviveWithBuff()//Logic for revive with buff card
     {
         SetCardElements();
         MiddleUI.DOColor(DefaultColor, 1f);
@@ -521,9 +542,23 @@ public class Data : MonoBehaviour
         currentCharacter.isReviveWithBuff = false;
     }
 
-    private void RemoveBuffObject(BuffType buffType)
+    private bool CheckBuffType(BuffType buffType)//Check if buff type already exists in buff Parent
+    {
+        foreach (BuffType existingBuff in BuffTypes)
+        {
+            if (existingBuff == buffType)
+            {
+                Debug.Log("Buff already have");
+                return true; // BuffType already exists
+            }
+        }
+        return false; // BuffType does not exist
+    }
+
+    private void RemoveBuffObject(BuffType buffType)//Remove buff object from the buff Parent, -1 to amount of buff
     {
         Debug.Log("Remove buff object");
+        RemoveBuff();
         // Duyệt qua tất cả các buffObject con trong buffParent
         foreach (Transform child in buffParent)
         {
@@ -566,14 +601,26 @@ public class Data : MonoBehaviour
             }
         }
     }
+    #endregion
 
-    public Choice CurrentChoice
+    #region Logic for Buff Description
+    private void ShowBuffDescription()//Logic for buff description card
+    {
+        SetCardElements();
+        currentChoice.isDescriptionBuff = false;
+    }
+
+    private void LoadBuffDescription(int i)//Calling from SetBuffSprite to load buff description card
+    {
+        currentCharacter = BuffDescription;
+        currentChoice = currentCharacter.choices[i];
+    }
+    #endregion
+
+    #region Return Character And Choice
+    public Choice CurrentChoice//Return current Choice for Card Script to use
     {
         get { return currentChoice; }
     }
-
-    public Character CurrentCharacter
-    {
-        get { return currentCharacter; }
-    }
+    #endregion
 }

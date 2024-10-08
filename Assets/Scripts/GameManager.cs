@@ -7,13 +7,6 @@ using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
-    [Header("Buff")]
-
-    public int amountOfBuff;
-    public bool seeTheFuture;
-    public void AddBuff() => amountOfBuff++;
-
-    public void RemoveBuff() => amountOfBuff--;
 
     [Header("Time")]
 
@@ -41,9 +34,6 @@ public class GameManager : Singleton<GameManager>
         isChecked = false;
         currentYears = PlayerPrefs.GetInt(PlayerPrefsYearKey);
         currentDays = PlayerPrefs.GetInt(PlayerPrefsDayKey);
-
-        // Khôi phục thông tin buff từ PlayerPrefs
-        seeTheFuture = PlayerPrefs.GetInt(ShopSystem.instance.prophecyEffect, 0) == 1;
 
         rulingDays = Random.Range(1, 51);
         rulingYears = 0;
@@ -114,7 +104,7 @@ public class GameManager : Singleton<GameManager>
                     {
                         case 0:
                             militaryPower = 50;
-                            Data.instance.SetUpBuff(i,BuffType.military);
+                            Data.instance.SetUpBuff(i, BuffType.military);
                             break;
                         case 1:
                             publicEsteem = 50;
@@ -130,30 +120,30 @@ public class GameManager : Singleton<GameManager>
                             break;
                     }
                 }
-                    if (statValue == maxStat)
-                    {
-                        DieCardIndex += 4;
-                    }
+                if (statValue == maxStat)
+                {
+                    DieCardIndex += 4;
+                }
 
-                    currentDays = currentDays + rulingDays - (rulingYears * 365);
-                    currentYears += rulingYears;
+                currentDays = currentDays + rulingDays - (rulingYears * 365);
+                currentYears += rulingYears;
 
-                    // Lưu ngày và năm trước khi reset
-                    PlayerPrefs.SetInt(PlayerPrefsDayKey, currentDays);
-                    PlayerPrefs.SetInt(PlayerPrefsYearKey, currentYears);
-                    PlayerPrefs.Save();
+                // Lưu ngày và năm trước khi reset
+                PlayerPrefs.SetInt(PlayerPrefsDayKey, currentDays);
+                PlayerPrefs.SetInt(PlayerPrefsYearKey, currentYears);
+                PlayerPrefs.Save();
 
-                    Debug.Log("Game Over!!");
+                Debug.Log("Game Over!!");
 
-                    // Tìm và giết nhân vật dựa trên DieCardIndex
-                    Choice dieCharacter = Data.instance.FindChoiceInDieCard(DieCardIndex);
-                    Data.instance.KillPlayer(dieCharacter);
+                // Tìm và giết nhân vật dựa trên DieCardIndex
+                Choice dieCharacter = Data.instance.FindChoiceInDieCard(DieCardIndex);
+                Data.instance.KillPlayer(dieCharacter);
 
-                    isChecked = true;
+                isChecked = true;
 
-                    // Thoát khỏi vòng lặp khi phát hiện giá trị game over
-                    break;
-                
+                // Thoát khỏi vòng lặp khi phát hiện giá trị game over
+                break;
+
             }
             DieCardIndex++;
         }
@@ -172,7 +162,7 @@ public class GameManager : Singleton<GameManager>
     public void AddDaysAfterDecision(int day)
     {
         rulingDays += day;
-        int Days=currentDays + rulingDays;
+        int Days = currentDays + rulingDays;
 
         // Nếu rulingDays vượt quá 365
         if (Days >= 365)
