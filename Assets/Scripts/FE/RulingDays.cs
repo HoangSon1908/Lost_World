@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -10,34 +10,38 @@ public class RulingDays : MonoBehaviour
     [SerializeField] private TextMeshProUGUI rulingDayText;
     [SerializeField] private TextMeshProUGUI currentYearText;
 
-    private int previousRulingDays = 0; 
-    void Start() {
-        UpdateDaysUI(); 
+    public static RulingDays instance;
+
+    private int previousRulingDays = 0;
+
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(gameObject);
     }
 
-    public void UpdateDaysUI()
+    public void UpdateYearsAndDaysUI(int targetDays)
     {
-        int currentYear = GameManager.Instance.currentYear;
-        int rulingDays = GameManager.Instance.rulingDays;
+        int currentYears =GameManager.Instance.currentYears;
+        int rulingYears = GameManager.Instance.rulingYears;
 
-        DOTween.To(() => previousRulingDays, x => previousRulingDays = x, rulingDays, 1f) 
+        DOTween.To(() => previousRulingDays, x => previousRulingDays = x, targetDays, 1f)
             .OnUpdate(() =>
             {
-                int years = previousRulingDays / 365;
-                int days = previousRulingDays % 365;
+                // Update year text
+                currentYearText.text = $"Năm {currentYears+rulingYears}";
 
-                int playedYear = GameManager.Instance.lastCurrentDay / 365;
-
-                currentYearText.text = $"Year of {currentYear + playedYear}";
-
-                if (years != 0)
-                    rulingDayText.text = $"{years} years and {days} days";
+                // Calculate the ruling years and display ruling days incrementally
+                if (previousRulingDays > 365)
+                    rulingDayText.text = $"{previousRulingDays / 365} năm và {previousRulingDays%365} ngày";
                 else
-                    rulingDayText.text = $"{days} days";
+                    rulingDayText.text = $"{previousRulingDays} ngày";
             })
             .OnComplete(() =>
             {
-                previousRulingDays = rulingDays;
+                previousRulingDays = targetDays; // Finalize the value
             });
     }
 }

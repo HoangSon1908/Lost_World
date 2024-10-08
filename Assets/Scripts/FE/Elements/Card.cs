@@ -4,14 +4,11 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHandler
 {
-    #region Test
-    [Header("Test")]
-    [SerializeField] private Transform buffParent;
-    #endregion
 
     [Header("Elements")]
     [SerializeField] private TextMeshProUGUI topAnswer;
@@ -32,6 +29,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     private bool isDraggingUp = false;
     private bool isDraggingDown = false;
     private bool isLocked = false;
+
     private void Awake()
     {
         rect = GetComponent<RectTransform>();
@@ -44,7 +42,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
 
     private void AnimationCardIn()
     {
-        ResetCard();
         // Di chuyển từng thẻ bài vào màn hình với delay
         for (int i = 0; i < cardList.Count; i++)
         {
@@ -100,12 +97,29 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         
         if (yPos > 0 && !isDraggingUp) 
         {
-                isDraggingUp = true;
-                isDraggingDown = false;
-                isLocked = true;
-                Invoke(nameof(UnlockPreview), 0.5f);
+            isDraggingUp = true;
+            isDraggingDown = false;
+            isLocked = true;
+            Invoke(nameof(UnlockPreview), 0.25f);
+            
+            Choice choice = Data.instance.CurrentChoice;
 
-                Choice choice = Data.instance.CurrentChoice;
+            if (GameManager.Instance.seeTheFuture) {
+                StatManager.instance.ClearBuffSeeTheFuture(
+                    choice.militaryEffect2,
+                    choice.publicEsteem2,
+                    choice.economy2,
+                    choice.spiritualityEffect2
+                );
+                StatManager.instance.ApplyBuffSeeTheFuture(
+                    choice.militaryEffect1,
+                    choice.publicEsteem1,
+                    choice.economy1,
+                    choice.spiritualityEffect1
+                );
+            }
+            else
+            {
                 StatManager.instance.ClearPreviewStatChange(
                     choice.militaryEffect2,
                     choice.publicEsteem2,
@@ -118,31 +132,35 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                     choice.economy1,
                     choice.spiritualityEffect1
                 );
-
-                if (GameManager.Instance.seeTheFuture) {
-                    StatManager.instance.ClearBuffSeeTheFuture(
-                        choice.militaryEffect2,
-                        choice.publicEsteem2,
-                        choice.economy2,
-                        choice.spiritualityEffect2
-                    );
-                    StatManager.instance.ApplyBuffSeeTheFuture(
-                        choice.militaryEffect1,
-                        choice.publicEsteem1,
-                        choice.economy1,
-                        choice.spiritualityEffect1
-                    );
-                }
+            }
         }
         else if (yPos < 0 && !isDraggingDown) 
         {
-            
-                isDraggingUp = false;
-                isDraggingDown = true;
-                isLocked = true;
-                Invoke(nameof(UnlockPreview), 0.5f);
 
-                Choice choice = Data.instance.CurrentChoice;
+            isDraggingUp = false;
+            isDraggingDown = true;
+            isLocked = true;
+            Invoke(nameof(UnlockPreview), 0.25f);
+
+            Choice choice = Data.instance.CurrentChoice;
+
+            if (GameManager.Instance.seeTheFuture)
+            {
+                StatManager.instance.ClearBuffSeeTheFuture(
+                    choice.militaryEffect1,
+                    choice.publicEsteem1,
+                    choice.economy1,
+                    choice.spiritualityEffect1
+                );
+                StatManager.instance.ApplyBuffSeeTheFuture(
+                    choice.militaryEffect2,
+                    choice.publicEsteem2,
+                    choice.economy2,
+                    choice.spiritualityEffect2
+                );
+            }
+            else
+                {
                 StatManager.instance.ClearPreviewStatChange(
                     choice.militaryEffect1,
                     choice.publicEsteem1,
@@ -155,21 +173,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                     choice.economy2,
                     choice.spiritualityEffect2
                 );
-
-                if (GameManager.Instance.seeTheFuture) {
-                    StatManager.instance.ClearBuffSeeTheFuture(
-                        choice.militaryEffect1,
-                        choice.publicEsteem1,
-                        choice.economy1,
-                        choice.spiritualityEffect1
-                    );
-                    StatManager.instance.ApplyBuffSeeTheFuture(
-                        choice.militaryEffect2,
-                        choice.publicEsteem2,
-                        choice.economy2,
-                        choice.spiritualityEffect2
-                    );
-                }
+            }
         }
             
     }
@@ -178,11 +182,15 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     {
         if (yPos > 150)
         {
+            if (Data.instance.Gameover)
+            {
+                rect.DOAnchorPosY(900, .5f);
+                SceneTransition.instance.FadeOutAndLoadScene(SceneManager.GetActiveScene().name);
+                return;
+            }
         rect.DOAnchorPosY(900, .5f).OnComplete(() => 
         {
-            if (!Data.instance.CurrentCharacter.isIntro) 
-            {
-                Choice choice = Data.instance.CurrentChoice;
+            Choice choice = Data.instance.CurrentChoice;
                 GameManager.Instance.ApplySingleEffect(
                     choice.militaryEffect1,
                     choice.publicEsteem1,
@@ -191,23 +199,25 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                 );
                 StatManager.instance.ApplyStatChanges();
                 GameManager.Instance.AddDaysAfterDecision(choice.rulingDays1);
-                rulingDays.UpdateDaysUI();
-            }
             //Set rect to the bottom of the screen
             rect.anchoredPosition = new Vector2(0, -Screen.height);
 
-            if (GameManager.Instance.seeTheFuture)
-                StatManager.instance.HideAllTriangle();
             ResetCard();
+            GameManager.Instance.CheckGameOver();
+            Data.instance.CheckAndCreateBuff();
             Data.instance.MakeDecision();
         });
         }
         else if (yPos < -150)
         {
+            if (Data.instance.Gameover)
+            {
+                rect.DOAnchorPosY(-800, .5f);
+                SceneTransition.instance.FadeOutAndLoadScene(SceneManager.GetActiveScene().name);
+                return;
+            }
             rect.DOAnchorPosY(-800, .5f).OnComplete(() => 
             {
-                if (!Data.instance.CurrentCharacter.isIntro) 
-                {
                     Choice choice = Data.instance.CurrentChoice;
                     GameManager.Instance.ApplySingleEffect(
                         choice.militaryEffect2,
@@ -217,20 +227,15 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                     );
                     StatManager.instance.ApplyStatChanges();
                     GameManager.Instance.AddDaysAfterDecision(choice.rulingDays2);
-                    rulingDays.UpdateDaysUI();
-                }
                 rect.anchoredPosition = new Vector2(0, Screen.height);
 
-                if (GameManager.Instance.seeTheFuture)
-                    StatManager.instance.HideAllTriangle();
                 ResetCard();
+                GameManager.Instance.CheckGameOver();
                 Data.instance.MakeDecision();
             });
         }
         else
         {
-            if (GameManager.Instance.seeTheFuture)
-                StatManager.instance.HideAllTriangle();
             ResetCard();
         }
         isDraggingUp = false;
@@ -251,16 +256,19 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         
     }
 
-    //Dua card ve cac gia gia tri ban dau
+    //Dua card ve cac gia tri ban dau
     private void ResetCard()
     {
         // Tạo chuỗi hoạt ảnh
         Sequence sequence = DOTween.Sequence();
 
-        // Sau đó di chuyển thẻ bài về vị trí X = 0
-        sequence.Append(rect.DOAnchorPosY(0, 0.5f).SetEase(Ease.OutBack, 1.2f)).OnComplete(() => StatManager.instance.HideAllDots());
+        sequence.Append(rect.DOAnchorPosY(0, 0.5f).SetEase(Ease.OutBack, 1f)).OnComplete(() =>
+        {
+            if (GameManager.Instance.seeTheFuture)
+                StatManager.instance.HideAllTriangle();
 
-        GameManager.Instance.CheckisGameOver();
+            StatManager.instance.HideAllDots();
+        });
         FadeAnswerText(topAnswer, 0);
         FadeAnswerText(bottomAnswer, 0);
     }
@@ -271,21 +279,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         Color currentColor = topAnswer.color;
         text.color = new Color(currentColor.r, currentColor.g, currentColor.b, alpha);
     }
-
-    #region Test
-    private void CreateBuff()
-    {
-        if (GameManager.Instance.amountOfBuff >= 5) return;
-
-        GameManager.Instance.AddBuff();
-
-        GameObject buffSpawn = Resources.Load<GameObject>($"Prefabs/Buff/Buff");
-        GameObject newBuff = Instantiate(buffSpawn, buffParent);
-
-        Color randomColor = Random.ColorHSV();
-        newBuff.GetComponentInChildren<Image>().color = randomColor;
-    }
-    #endregion
 
     private void UnlockPreview() {
         isLocked = false;
