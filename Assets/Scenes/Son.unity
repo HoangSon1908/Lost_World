@@ -4792,8 +4792,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dontDestroyOnLoad: 0
-  amountOfBuff: 0
-  seeTheFuture: 0
   rulingYears: 0
   rulingDays: 0
   currentYears: 0
@@ -5514,19 +5512,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 668740977}
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: intro.isDie
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: BottomAnswer
       value: 
       objectReference: {fileID: 454306875}
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: DieCard.isDie
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: intro.isIntro
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
@@ -5542,25 +5532,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 19190859}
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: economyStatBar
-      value: 
-      objectReference: {fileID: 1254098295}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: Character_Image
       value: 
       objectReference: {fileID: 1015864716}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: previewStatChange
-      value: 
-      objectReference: {fileID: 97085941}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.size
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: ReviveCard.isIntro
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: ReviveCard.isRevive
       value: 1
@@ -5570,21 +5544,9 @@ PrefabInstance:
       value: Vinci
       objectReference: {fileID: 0}
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: publicEsteemStatBar
-      value: 
-      objectReference: {fileID: 1366560362}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: spiritualityStatBar
-      value: 
-      objectReference: {fileID: 1529861002}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: BuffTypes.Array.size
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: militaryPowerStatBar
-      value: 
-      objectReference: {fileID: 557163158}
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: DieCard.characterName
       value: "Th\u1EA7n linh"
@@ -5610,38 +5572,6 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[0].isDie
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[1].isDie
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[2].isDie
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[3].isDie
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[4].isDie
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[5].isDie
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[6].isDie
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[7].isDie
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: ReviveCard.characterColor.a
       value: 1
       objectReference: {fileID: 0}
@@ -5652,10 +5582,6 @@ PrefabInstance:
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: ReviveCard.characterColor.g
       value: 0.49019608
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: ReviveCard.characterColor.r
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: TestLockedChoice.Array.size
@@ -5690,38 +5616,6 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[0].characterName
-      value: Unknown God
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[1].characterName
-      value: Unknown God
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[2].characterName
-      value: Unknown God
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[3].characterName
-      value: Unknown God
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[4].characterName
-      value: Unknown God
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[5].characterName
-      value: Unknown God
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[6].characterName
-      value: Unknown God
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[7].characterName
-      value: Unknown God
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: ReviveWithBuffCard.characterColor.a
       value: 1
       objectReference: {fileID: 0}
@@ -5742,23 +5636,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: intro.choices.Array.data[0].economy1
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: intro.choices.Array.data[0].economy2
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: intro.choices.Array.data[1].buffType
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: intro.choices.Array.data[2].buffType
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: intro.choices.Array.data[3].buffType
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
@@ -5768,22 +5646,6 @@ PrefabInstance:
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: characters.Array.data[0].characterName
       value: "H\u1EA7u G\xE1i"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: characters.Array.data[1].characterName
-      value: "C\xF4ng ch\xFAa"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: characters.Array.data[2].characterName
-      value: "Th\u1EA7y"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: characters.Array.data[3].characterName
-      value: Nathan
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: characters.Array.data[4].characterName
-      value: Vua cha
       objectReference: {fileID: 0}
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: DieCard.choices.Array.data[0].decision1
@@ -5850,54 +5712,6 @@ PrefabInstance:
       value: "H\u1EA3"
       objectReference: {fileID: 0}
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: intro.choices.Array.data[0].rulingDays1
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: intro.choices.Array.data[0].rulingDays2
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: intro.choices.Array.data[1].rulingDays1
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: intro.choices.Array.data[2].rulingDays1
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[0].choices.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[1].choices.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[2].choices.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[3].choices.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[4].choices.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[5].choices.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[6].choices.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[7].choices.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: DieCard.choices.Array.data[0].description
       value: "qu\xE2n \u0111\u1ED9i ng\u01B0\u01A1i qu\xE1 y\u1EBFu"
       objectReference: {fileID: 0}
@@ -5930,14 +5744,6 @@ PrefabInstance:
       value: "\u0111\u1EE9c tin ng\u01B0\u01A1i qu\xE1 m\u1EA1nh"
       objectReference: {fileID: 0}
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: intro.choices.Array.data[0].publicEsteem1
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: intro.choices.Array.data[0].publicEsteem2
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: ReviveCard.choices.Array.data[0].decision1
       value: "C\u1EA3m \u01A1n"
       objectReference: {fileID: 0}
@@ -5950,12 +5756,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: intro.choices.Array.data[0].militaryEffect2
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: intro.choices.Array.data[1].militaryEffect1
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: ReviveCard.choices.Array.data[0].description
@@ -5966,6 +5768,14 @@ PrefabInstance:
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: TestLockedChoice.Array.data[0].characterName
       value: "H\u1EA7u G\xE1i"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
+      propertyPath: intro.choices.Array.data[0].isDescriptionBuff
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
+      propertyPath: intro.choices.Array.data[1].isDescriptionBuff
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: BuffDescription.choices.Array.data[0].decision1
@@ -6014,14 +5824,6 @@ PrefabInstance:
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: TestLockedChoice.Array.data[0].characterColor.r
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: intro.choices.Array.data[0].spiritualityEffect1
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: intro.choices.Array.data[0].spiritualityEffect2
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: BuffDescription.choices.Array.data[0].description
@@ -6100,70 +5902,6 @@ PrefabInstance:
         \u0111\u1EE9c tin"
       objectReference: {fileID: 0}
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[0].choices.Array.data[0].decision1
-      value: "Ta bi\u1EC3t"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[0].choices.Array.data[0].decision2
-      value: "h\u1EA3"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[1].choices.Array.data[0].decision1
-      value: "Ta bi\u1EC3t"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[1].choices.Array.data[0].decision2
-      value: "h\u1EA3"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[2].choices.Array.data[0].decision1
-      value: "Ta bi\u1EC3t"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[2].choices.Array.data[0].decision2
-      value: "h\u1EA3"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[3].choices.Array.data[0].decision1
-      value: "Ta bi\u1EC3t"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[3].choices.Array.data[0].decision2
-      value: "h\u1EA3"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[4].choices.Array.data[0].decision1
-      value: "Ta bi\u1EC3t"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[4].choices.Array.data[0].decision2
-      value: "h\u1EA3"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[5].choices.Array.data[0].decision1
-      value: "Ta bi\u1EC3t"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[5].choices.Array.data[0].decision2
-      value: "h\u1EA3"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[6].choices.Array.data[0].decision1
-      value: "Ta bi\u1EC3t"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[6].choices.Array.data[0].decision2
-      value: "h\u1EA3"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[7].choices.Array.data[0].decision1
-      value: "Ta bi\u1EC3t"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[7].choices.Array.data[0].decision2
-      value: "h\u1EA3"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: BuffDescription.choices.Array.data[0].isDescriptionBuff
       value: 1
       objectReference: {fileID: 0}
@@ -6178,38 +5916,6 @@ PrefabInstance:
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: BuffDescription.choices.Array.data[3].isDescriptionBuff
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[0].choices.Array.data[0].description
-      value: "\u0111i\u1EC3m qu\xE2n \u0111\u1ED9i ng\u01B0\u01A1i qu\xE1 th\u1EA5p"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[1].choices.Array.data[0].description
-      value: "\u0111i\u1EC3m t\xE0i ch\xEDnh ng\u01B0\u01A1i qu\xE1 th\u1EA5p"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[2].choices.Array.data[0].description
-      value: "\u0111i\u1EC3m qu\xE2n \u0111\u1ED9i ng\u01B0\u01A1i qu\xE1 th\u1EA5p"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[3].choices.Array.data[0].description
-      value: "\u0111i\u1EC3m qu\xE2n \u0111\u1ED9i ng\u01B0\u01A1i qu\xE1 th\u1EA5p"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[4].choices.Array.data[0].description
-      value: "\u0111i\u1EC3m qu\xE2n \u0111\u1ED9i ng\u01B0\u01A1i qu\xE1 th\u1EA5p"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[5].choices.Array.data[0].description
-      value: "\u0111i\u1EC3m qu\xE2n \u0111\u1ED9i ng\u01B0\u01A1i qu\xE1 th\u1EA5p"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[6].choices.Array.data[0].description
-      value: "\u0111i\u1EC3m qu\xE2n \u0111\u1ED9i ng\u01B0\u01A1i qu\xE1 th\u1EA5p"
-      objectReference: {fileID: 0}
-    - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
-      propertyPath: DieCard.Array.data[7].choices.Array.data[0].description
-      value: "\u0111i\u1EC3m qu\xE2n \u0111\u1ED9i ng\u01B0\u01A1i qu\xE1 th\u1EA5p"
       objectReference: {fileID: 0}
     - target: {fileID: 7965374183370995728, guid: d3f6517d8b13b3f4896d3ed761646406, type: 3}
       propertyPath: TestLockedChoice.Array.data[0].choices.Array.data[0].decision1

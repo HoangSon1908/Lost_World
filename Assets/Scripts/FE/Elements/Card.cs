@@ -104,7 +104,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
             
             Choice choice = Data.instance.CurrentChoice;
 
-            if (GameManager.Instance.seeTheFuture) {
+            if (TabData.instance.seeTheFuture) {
                 StatManager.instance.ClearBuffSeeTheFuture(
                     choice.militaryEffect2,
                     choice.publicEsteem2,
@@ -144,7 +144,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
 
             Choice choice = Data.instance.CurrentChoice;
 
-            if (GameManager.Instance.seeTheFuture)
+            if (TabData.instance.seeTheFuture)
             {
                 StatManager.instance.ClearBuffSeeTheFuture(
                     choice.militaryEffect1,
@@ -264,7 +264,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
 
         sequence.Append(rect.DOAnchorPosY(0, 0.5f).SetEase(Ease.OutBack, 1f)).OnComplete(() =>
         {
-            if (GameManager.Instance.seeTheFuture)
+            if (TabData.instance.seeTheFuture)
                 StatManager.instance.HideAllTriangle();
 
             StatManager.instance.HideAllDots();
