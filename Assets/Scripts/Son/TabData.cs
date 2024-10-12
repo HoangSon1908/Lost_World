@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -9,6 +9,16 @@ public class CharacterUIElement
 {
     public string name;
     public Color color;
+    public bool hasEncountered;
+}
+
+[System.Serializable]
+public class StoryUIElement
+{
+    public int StoryID;
+    public string name;
+    public string description;
+    public string hint;
     public bool hasEncountered;
 }
 
@@ -34,6 +44,14 @@ public class TabData : MonoBehaviour
     public CharacterUIElement[] characterUIElements;
     // Dictionary to map character names to their UI elements
     private Dictionary<string, CharacterUIElement> characterDictionary;
+
+    [Header("Story system")]
+    public GameObject[] StoryUIList;
+    public StoryUIElement[] storyUIElements;
+    private Dictionary<int, StoryUIElement> storyDictionary;
+    public Color currentTextColor;
+    public Color ChangeTextColor;
+    public Slider storyProgressSlider;
 
     private void Start()
     {
@@ -62,6 +80,18 @@ public class TabData : MonoBehaviour
             characterElement.hasEncountered = PlayerPrefs.GetInt(characterElement.name, 0) == 1;
         }
         LoadEncounteredCharacter();
+
+        //Logic for story system
+        storyDictionary = new Dictionary<int, StoryUIElement>();
+        foreach (var storyElement in storyUIElements)
+        {
+            storyDictionary[storyElement.StoryID] = storyElement;
+            // Load the saved "encountered" status for each character from PlayerPrefs
+            storyElement.hasEncountered = PlayerPrefs.GetInt(storyElement.name, 0) == 1;
+        }
+        LoadEncounteredStory();
+        Color currentTextColor = Color.white;
+        Color ChangeTextColor = Color.gray;
 
     }
 
@@ -120,6 +150,7 @@ public class TabData : MonoBehaviour
     }
     #endregion
 
+    #region Processing Logic
     // Function to assign name and color to each GameObject in CharacterUIList.
     public void LoadEncounteredCharacter()
     {
@@ -149,7 +180,6 @@ public class TabData : MonoBehaviour
         if (characterDictionary.ContainsKey(characterName))
         {
             CharacterUIElement characterElement = characterDictionary[characterName];
-            Debug.Log("Encountering character: " + characterName);
 
             // Only mark as encountered if not already encountered
             if (!characterElement.hasEncountered)
@@ -164,15 +194,75 @@ public class TabData : MonoBehaviour
                 // Update the UI with the new encounter status
                 LoadEncounteredCharacter();
             }
+        }
+    }
+    #endregion
+
+    #region Story Logic
+    // Function to assign name and description to each GameObject in StoryUIList.
+    public void LoadEncounteredStory()
+    {
+        for (int i = 0; i < StoryUIList.Length; i++)
+        {
+            TMP_Text[] textComponents = StoryUIList[i].GetComponentsInChildren<TMP_Text>();
+
+            TMP_Text nameText = textComponents[0];
+            TMP_Text descriptionText = textComponents[1];
+
+            if (storyUIElements[i].hasEncountered)
+            {
+                nameText.text = storyUIElements[i].name;
+                descriptionText.text = storyUIElements[i].description;
+
+                nameText.color = currentTextColor;
+                descriptionText.color = currentTextColor;
+            }
             else
             {
-                Debug.Log("Character already encountered: " + characterName);
+                nameText.text = storyUIElements[i].name;
+                descriptionText.text = "Lời khuyên : " + storyUIElements[i].hint;
+
+                nameText.color = ChangeTextColor;
+                descriptionText.color = ChangeTextColor;
             }
         }
-        else
+        UpdateStoryProgress();
+    }
+
+    public void EncounterStory(int storyID)
+    {
+        if (storyDictionary.ContainsKey(storyID))
         {
-            Debug.LogWarning("Character not found: " + characterName);
+            StoryUIElement storyElement = storyDictionary[storyID];
+
+            if (!storyElement.hasEncountered)
+            {
+                storyElement.hasEncountered = true;
+
+                PlayerPrefs.SetInt(storyElement.name, 1);
+                PlayerPrefs.Save();
+
+                LoadEncounteredStory();
+            }
         }
     }
 
+    public void UpdateStoryProgress()
+    {
+        int encounteredCount = 0;
+
+        // Đếm số lượng cốt truyện đã gặp
+        foreach (var storyElement in storyUIElements)
+        {
+            if (storyElement.hasEncountered)
+            {
+                encounteredCount++;
+            }
+        }
+
+        // Cập nhật slider giá trị dựa trên phần trăm
+        float progress = (float)encounteredCount / storyUIElements.Length;
+        storyProgressSlider.value = progress;
+    }
+    #endregion
 }

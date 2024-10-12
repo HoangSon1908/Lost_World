@@ -362,6 +362,7 @@ public class Data : MonoBehaviour
         DeleteUsingChoice(0);
         if (currentCharacter.choices.Count == 0)
         {
+            TabData.instance.EncounterStory(0);
             currentCharacter.isIntro = false;
             PlayerPrefs.SetInt(FirstTimeKey, 0);
             PlayerPrefs.Save();
@@ -378,6 +379,7 @@ public class Data : MonoBehaviour
         MiddleUI.DOColor(DefaultColor, 1f);
         GameManager.Instance.isChecked = false;
         currentCharacter.isRevive = false;
+        TabData.instance.EncounterStory(1);
     }
     
     private void RevivePlayer()//calling from Kill Logic to set revive card
@@ -542,6 +544,7 @@ public class Data : MonoBehaviour
         RemoveBuffObject(buffType);
         GameManager.Instance.isChecked = false;
         currentCharacter.isReviveWithBuff = false;
+        TabData.instance.EncounterStory(1);
     }
 
     private bool CheckBuffType(BuffType buffType)//Check if buff type already exists in buff Parent
