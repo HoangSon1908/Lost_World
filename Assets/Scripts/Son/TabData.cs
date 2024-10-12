@@ -130,6 +130,7 @@ public class TabData : MonoBehaviour
     // Function to handle purchasing the item
     void PurchaseItem(int itemIndex)
     {
+        SoundManager.Instance.PlaySFX(SoundManager.SFXType.SuccessBuy);
         // Mark the item as purchased in PlayerPrefs
         PlayerPrefs.SetInt(itemKeys[itemIndex], 1);
         PlayerPrefs.Save();
