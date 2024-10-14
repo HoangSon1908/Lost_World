@@ -13,6 +13,6 @@ public class ResetGame : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        RulingDays.instance.UpdateTopRulingDayText();
     }
 }

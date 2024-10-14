@@ -14,6 +14,7 @@ public class GameManager : Singleton<GameManager>
     public int rulingDays;
     public int currentYears;
     public int currentDays;
+    public List<int> topRulingDays = new List<int>();
 
     [Header("Stats")]
     public int publicEsteem;
@@ -28,16 +29,16 @@ public class GameManager : Singleton<GameManager>
 
     private const string PlayerPrefsDayKey = "CurrentDays";
     private const string PlayerPrefsYearKey = "CurrentYear";
-
     public void Start()
     {
         isChecked = false;
         currentYears = PlayerPrefs.GetInt(PlayerPrefsYearKey);
         currentDays = PlayerPrefs.GetInt(PlayerPrefsDayKey);
 
-        rulingDays = Random.Range(1, 51);
+        //rulingDays = Random.Range(1, 51);
         rulingYears = 0;
         RulingDays.instance.UpdateYearsAndDaysUI(rulingDays);
+        
     }
 
     public void ApplySingleEffect(int change1, int change2, int change3, int change4)
@@ -132,13 +133,12 @@ public class GameManager : Singleton<GameManager>
                 PlayerPrefs.SetInt(PlayerPrefsDayKey, currentDays);
                 PlayerPrefs.SetInt(PlayerPrefsYearKey, currentYears);
                 PlayerPrefs.Save();
-
                 Debug.Log("Game Over!!");
 
                 // Tìm và giết nhân vật dựa trên DieCardIndex
                 Choice dieCharacter = Data.instance.FindChoiceInDieCard(DieCardIndex);
                 Data.instance.KillPlayer(dieCharacter);
-
+            
                 isChecked = true;
 
                 // Thoát khỏi vòng lặp khi phát hiện giá trị game over

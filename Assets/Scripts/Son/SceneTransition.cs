@@ -29,6 +29,11 @@ public class SceneTransition : MonoBehaviour
         fadeImage.DOFade(0, fadeDuration);
     }
 
+    public void FadeOut() 
+    {
+        fadeImage.DOFade(1, fadeDuration);
+    }
+
     public void FadeOutAndLoadScene(string sceneName)
     {
         // Fade từ trong suốt (alpha 0) về đen (alpha 1) rồi chuyển scene

@@ -9,6 +9,9 @@ public class RulingDays : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI rulingDayText;
     [SerializeField] private TextMeshProUGUI currentYearText;
+    [SerializeField] private TextMeshProUGUI top1RulingDayText;
+    [SerializeField] private TextMeshProUGUI top2RulingDayText;
+    [SerializeField] private TextMeshProUGUI top3RulingDayText;
 
     public static RulingDays instance;
 
@@ -20,6 +23,66 @@ public class RulingDays : MonoBehaviour
             instance = this;
         else
             Destroy(gameObject);
+    }
+    public void GameOver() 
+    {
+        CheckAndUpdateTopRulingDays();
+        LoadTopRulingDays();
+    }
+
+    void CheckAndUpdateTopRulingDays() {
+        int currentRulingDays = GameManager.Instance.rulingDays;
+        GameManager.Instance.topRulingDays.Add(currentRulingDays);
+        GameManager.Instance.topRulingDays.Sort((a, b) => b.CompareTo(a));
+
+        if (GameManager.Instance.topRulingDays.Count > 3) 
+        {
+            GameManager.Instance.topRulingDays.RemoveRange(3, GameManager.Instance.topRulingDays.Count - 3);
+        }
+
+        SaveTopRulingDays();
+    }
+
+    void SaveTopRulingDays() 
+    {
+        for (int i = 0; i < GameManager.Instance.topRulingDays.Count; i++)
+        {
+            PlayerPrefs.SetInt($"TopRulingDay{i+1}", GameManager.Instance.topRulingDays[i]);
+        }
+        PlayerPrefs.Save();
+    }
+
+    void LoadTopRulingDays() 
+    {
+        GameManager.Instance.topRulingDays.Clear();
+
+        for (int i = 1; i <= 3; i++)
+        {
+            GameManager.Instance.topRulingDays.Add(PlayerPrefs.GetInt($"TopRulingDay{i}"));
+        }
+
+        UpdateTopRulingDayText();
+    }
+
+    public void UpdateTopRulingDayText() 
+    {
+        if (top1RulingDayText != null) 
+        {
+            top1RulingDayText.text = GameManager.Instance.topRulingDays.Count > 0 
+            ? $" Cầm quyền trong vòng\n {GameManager.Instance.topRulingDays[0]} ngày\n" : "N/A";
+        }
+
+        if (top2RulingDayText != null) 
+        {
+            top1RulingDayText.text = GameManager.Instance.topRulingDays.Count > 1 
+            ? $" Cầm quyền trong vòng\n {GameManager.Instance.topRulingDays[1]} ngày\n" : "N/A";
+        }
+
+        if (top3RulingDayText != null)
+        {
+            top1RulingDayText.text = GameManager.Instance.topRulingDays.Count > 2 
+            ? $" Cầm quyền trong vòng\n {GameManager.Instance.topRulingDays[2]} ngày\n" : "N/A";
+        }
     }
 
     public void UpdateYearsAndDaysUI(int targetDays)
