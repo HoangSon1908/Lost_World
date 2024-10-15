@@ -1831,6 +1831,7 @@ MonoBehaviour:
   hasEconomyBuffKey: HasEconomyBuff
   hasPublicEsteemBuffKey: HasPublicEsteemBuff
   hasSpiritualityBuffKey: HasSpiritualityBuff
+  amountOfBuff: 0
   UnlockedTestChoiceKey: UnlockedChoice
   hasMilitaryBuff: 0
   hasEconomyBuff: 0
@@ -1849,4 +1850,83 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 503376bfb5b41fc45b8bdae735bb45c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemButtons:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  reviveEffect: "Ch\xFAc Ph\xFAc Th\u1EA7n Linh"
+  prophecyEffect: "Nh\xE3n Gi\u1EDBi Th\u1EA5u Th\u1ECB"
+  NoAdsEffect: "\u0110o\u1EA1n Di\u1EC7t Huy\u1EC5n Quang "
   canRevive: 0
+  seeTheFuture: 0
+  CharacterUIList:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  characterUIElements:
+  - name: "H\u1EA7u G\xE1i"
+    color: {r: 1, g: 0.7137255, b: 0.7568628, a: 1}
+    hasEncountered: 0
+  - name: "C\xF4ng ch\xFAa"
+    color: {r: 1, g: 0.41176474, b: 0.7058824, a: 1}
+    hasEncountered: 0
+  - name: "Th\u1EA7y"
+    color: {r: 0.27450982, g: 0.50980395, b: 0.7058824, a: 1}
+    hasEncountered: 0
+  - name: Nathan
+    color: {r: 0.5411765, g: 0.16862746, b: 0.8862746, a: 1}
+    hasEncountered: 0
+  - name: Vua cha
+    color: {r: 1, g: 0.8431373, b: 0, a: 1}
+    hasEncountered: 0
+  - name: "Ng\u01B0\u1EDDi l\xE0m v\u01B0\u1EDDn"
+    color: {r: 0.13333334, g: 0.54509807, b: 0.13333334, a: 1}
+    hasEncountered: 0
+  - name: "S\u1EE9 gi\u1EA3"
+    color: {r: 0.19607845, g: 0.80392164, b: 0.19607845, a: 1}
+    hasEncountered: 0
+  - name: "C\xF4ng t\u01B0\u1EDBc"
+    color: {r: 1, g: 0.27058825, b: 0, a: 1}
+    hasEncountered: 0
+  - name: Vinci
+    color: {r: 0.11764707, g: 0.5647059, b: 1, a: 1}
+    hasEncountered: 0
+  - name: "Gi\xE1o ho\xE0ng"
+    color: {r: 1, g: 0.76470596, b: 0, a: 1}
+    hasEncountered: 0
+  - name: "Ho\xE0ng t\u1EED Havaa"
+    color: {r: 1, g: 0.54901963, b: 0, a: 1}
+    hasEncountered: 0
+  - name: "Qu\xE2n l\xEDnh"
+    color: {r: 0.54509807, g: 0.36078432, b: 0.14901961, a: 1}
+    hasEncountered: 0
+  - name: "Th\u1EA7n linh"
+    color: {r: 0, g: 0.80784315, b: 0.81960785, a: 1}
+    hasEncountered: 0
+  StoryUIList:
+  - {fileID: 0}
+  - {fileID: 0}
+  storyUIElements:
+  - StoryID: 0
+    name: "Cu\xF4c g\u1ECDi t\u1EEB t\u01B0\u01A1ng lai"
+    description: "L\u1EAFng nghe c\xE2u chuy\u1EC7n c\u1EE7a Vinci"
+    hint: "Ch\u01A1i h\u1EBFt ph\u1EA7n intro"
+    hasEncountered: 0
+  - StoryID: 1
+    name: "Th\u1EA7n linh ban ph\u01B0\u1EDBc"
+    description: "H\u1ED3i sinh b\u1EB1ng s\u1EE9c m\u1EA1nh th\u1EA7n th\xE1nh"
+    hint: "D\xF9ng buff ho\u1EB7c v\u1EADt ph\u1EA9m h\u1ED3i sinh "
+    hasEncountered: 0
+  currentTextColor: {r: 1, g: 1, b: 1, a: 1}
+  ChangeTextColor: {r: 0.7058824, g: 0.7058824, b: 0.7058824, a: 1}
+  storyProgressSlider: {fileID: 0}

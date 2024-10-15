@@ -53,11 +53,21 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
             // Tạo chuỗi hoạt ảnh
             Sequence sequence = DOTween.Sequence();
 
-            // Sau đó di chuyển thẻ bài về vị trí X = 0
-            sequence.Append(card.DOAnchorPosX(0, 0.5f).SetEase(Ease.OutBack,0.8f));
-
             // Đặt delay cho mỗi thẻ bài
             sequence.SetDelay(i * delayBetweenCards);
+
+            // Phát âm thanh cho mỗi thẻ sau khi delay tương ứng cho từng thẻ
+            sequence.AppendCallback(() =>
+            {
+                // Kiểm tra xem âm thanh có đang phát không
+                if (SoundManager.Instance != null)
+                {
+                    SoundManager.Instance.PlaySFX(SoundManager.SFXType.CardSwipe);
+                }
+            });
+
+            // Sau đó di chuyển thẻ bài về vị trí X = 0
+            sequence.Append(card.DOAnchorPosX(0, 0.5f).SetEase(Ease.OutBack, 0.8f));
 
             // Gọi ResetCard() sau khi hoạt ảnh của thẻ cuối cùng kết thúc
             if (i == cardList.Count - 1)
@@ -70,6 +80,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
             }
         }
     }
+
+
 
 
 
@@ -190,7 +202,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                 LoadingScreen.Instance.GameOver();
                 return;
             }
-        rect.DOAnchorPosY(900, .5f).OnComplete(() => 
+            SoundManager.Instance.PlaySFX(SoundManager.SFXType.CardSwipe);
+            rect.DOAnchorPosY(900, .5f).OnComplete(() => 
         {
             Choice choice = Data.instance.CurrentChoice;
                 GameManager.Instance.ApplySingleEffect(
@@ -220,6 +233,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                 LoadingScreen.Instance.GameOver();
                 return;
             }
+            SoundManager.Instance.PlaySFX(SoundManager.SFXType.CardSwipe);
             rect.DOAnchorPosY(-800, .5f).OnComplete(() => 
             {
                     Choice choice = Data.instance.CurrentChoice;
