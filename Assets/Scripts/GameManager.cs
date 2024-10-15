@@ -1,12 +1,13 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GameManager : Singleton<GameManager>
+public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
 
     [Header("Time")]
 
@@ -14,6 +15,7 @@ public class GameManager : Singleton<GameManager>
     public int rulingDays;
     public int currentYears;
     public int currentDays;
+    public List<int> topRulingDays = new List<int>();
 
     [Header("Stats")]
     public int publicEsteem;
@@ -28,16 +30,25 @@ public class GameManager : Singleton<GameManager>
 
     private const string PlayerPrefsDayKey = "CurrentDays";
     private const string PlayerPrefsYearKey = "CurrentYear";
-
-    public void Start()
+    private void Awake()
     {
+        if(Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         isChecked = false;
         currentYears = PlayerPrefs.GetInt(PlayerPrefsYearKey);
         currentDays = PlayerPrefs.GetInt(PlayerPrefsDayKey);
 
-        rulingDays = Random.Range(1, 51);
+        //rulingDays = Random.Range(1, 51);
         rulingYears = 0;
         RulingDays.instance.UpdateYearsAndDaysUI(rulingDays);
+        
     }
 
     public void ApplySingleEffect(int change1, int change2, int change3, int change4)
@@ -55,8 +66,10 @@ public class GameManager : Singleton<GameManager>
             return;
         }
 
-        // Preload stat, buffs, keys, and buff types
+        // Mảng chứa các chỉ số
         Stat = new int[] { militaryPower, publicEsteem, economy, spirituality };
+
+        // Mảng chứa trạng thái buff tương ứng
         bool[] buffs = new bool[]
         {
         Data.instance.hasMilitaryBuff,
@@ -64,6 +77,8 @@ public class GameManager : Singleton<GameManager>
         Data.instance.hasEconomyBuff,
         Data.instance.hasSpiritualityBuff
         };
+
+        // Mảng chứa key của các buff để xoá buff khi cần
         string[] buffKeys = new string[]
         {
         Data.instance.hasMilitaryBuffKey,
@@ -72,85 +87,76 @@ public class GameManager : Singleton<GameManager>
         Data.instance.hasSpiritualityBuffKey
         };
 
+        // Mảng chứa loại buff tương ứng với chỉ số
+        BuffType[] buffTypes = new BuffType[]
+        {
+        BuffType.military,
+        BuffType.publicEsteem,
+        BuffType.economy,
+        BuffType.spirituality
+        };
+
         int DieCardIndex = 0;
-        bool gameOverTriggered = false;
 
         for (int i = 0; i < Stat.Length; i++)
         {
             int statValue = Stat[i];
 
-            // Check if stat is at critical level
             if (statValue == maxStat || statValue == 0)
             {
-                // Handle buff removal if necessary
                 if (buffs[i])
                 {
-                    RemoveBuff(i, buffKeys[i]);
-                    ResetStat(i);
-                }
+                    // Xoá buff tương ứng
+                    buffs[i] = false;
+                    PlayerPrefs.SetInt(buffKeys[i], 0); // Xóa buff
+                    PlayerPrefs.Save();
 
-                // If stat is maxed out, increment DieCardIndex
+                    switch (i)
+                    {
+                        case 0:
+                            militaryPower = 50;
+                            Data.instance.SetUpBuff(i, BuffType.military);
+                            break;
+                        case 1:
+                            publicEsteem = 50;
+                            Data.instance.SetUpBuff(i, BuffType.publicEsteem);
+                            break;
+                        case 2:
+                            economy = 50;
+                            Data.instance.SetUpBuff(i, BuffType.economy);
+                            break;
+                        case 3:
+                            spirituality = 50;
+                            Data.instance.SetUpBuff(i, BuffType.spirituality);
+                            break;
+                    }
+                }
                 if (statValue == maxStat)
                 {
                     DieCardIndex += 4;
                 }
 
-                UpdateCurrentDaysAndYears();
+                currentDays = currentDays + rulingDays - (rulingYears * 365);
+                currentYears += rulingYears;
+
+                // Lưu ngày và năm trước khi reset
+                PlayerPrefs.SetInt(PlayerPrefsDayKey, currentDays);
+                PlayerPrefs.SetInt(PlayerPrefsYearKey, currentYears);
+                PlayerPrefs.Save();
                 Debug.Log("Game Over!!");
 
-                // Kill the character based on DieCardIndex
+                // Tìm và giết nhân vật dựa trên DieCardIndex
                 Choice dieCharacter = Data.instance.FindChoiceInDieCard(DieCardIndex);
                 Data.instance.KillPlayer(dieCharacter);
-
+            
                 isChecked = true;
-                gameOverTriggered = true;
-                break; // Exit early since game is over
+
+                // Thoát khỏi vòng lặp khi phát hiện giá trị game over
+                break;
+
             }
             DieCardIndex++;
         }
-
-        // Save progress only if game over was triggered
-        if (gameOverTriggered)
-        {
-            PlayerPrefs.SetInt(PlayerPrefsDayKey, currentDays);
-            PlayerPrefs.SetInt(PlayerPrefsYearKey, currentYears);
-            PlayerPrefs.Save();
-        }
-    }
-
-    private void RemoveBuff(int index, string buffKey)
-    {
-        PlayerPrefs.SetInt(buffKey, 0); // Remove buff
-        PlayerPrefs.Save();
-    }
-
-    private void ResetStat(int index)
-    {
-        switch (index)
-        {
-            case 0:
-                militaryPower = 50;
-                Data.instance.SetUpBuff(index, BuffType.military);
-                break;
-            case 1:
-                publicEsteem = 50;
-                Data.instance.SetUpBuff(index, BuffType.publicEsteem);
-                break;
-            case 2:
-                economy = 50;
-                Data.instance.SetUpBuff(index, BuffType.economy);
-                break;
-            case 3:
-                spirituality = 50;
-                Data.instance.SetUpBuff(index, BuffType.spirituality);
-                break;
-        }
-    }
-
-    private void UpdateCurrentDaysAndYears()
-    {
-        currentDays = currentDays + rulingDays - (rulingYears * 365);
-        currentYears += rulingYears;
     }
 
 
@@ -175,5 +181,6 @@ public class GameManager : Singleton<GameManager>
         }
 
         RulingDays.instance.UpdateYearsAndDaysUI(rulingDays);
+        RulingDays.instance.UpdateTopRulingDayText();
     }
 }

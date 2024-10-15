@@ -4,20 +4,19 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class LoadingScreen : MonoBehaviour
 {
     [SerializeField] private Image loadingImage;
-    [SerializeField] private GameObject gamePlay;
-    [SerializeField] private GameObject gamePlayUI;
     [SerializeField] private Button actionButton;
     [SerializeField] private TextMeshProUGUI currentYearText;
 
-    private bool isGameStarted;
-    private bool isGamePaused;
     public static LoadingScreen Instance;
 
-    void Awake() 
+    public int startingYear = 1000;
+
+    void Start()
     {
         if (Instance == null)
         {
@@ -28,68 +27,81 @@ public class LoadingScreen : MonoBehaviour
             Destroy(gameObject);
         }
 
-        ShowLoadingScreen();
+        DOTween.PauseAll();
+        AnimateYearText(startingYear, GameManager.Instance.currentYears);
         actionButton.onClick.AddListener(OnActionClick);
+    }
+
+    void AnimateYearText(int fromYear, int toYear)
+    {
+        DOTween.To(() => fromYear, x => {
+            fromYear = x;
+            currentYearText.text = $"Năm\n {fromYear} trước công nguyên";
+        }, toYear, 0.5f) 
+        .SetEase(Ease.Linear);
     }
 
     void OnActionClick()
     {
-        if (!isGameStarted) 
-        {
-            StartGame();
-        }
-        else if (isGamePaused)
-        {
-            ContinueGame();
-        }
+        StartGame();
     }
 
-    void StartGame() 
+    void StartGame()
     {
-        isGameStarted = true;
-        isGamePaused = false;
-
-        loadingImage.DOFade(0, 0.5f).OnComplete(() => 
-        {
-            loadingImage.gameObject.SetActive(false);
-            gamePlayUI.SetActive(true);
-            gamePlay.SetActive(true);
-        });
-
-        Time.timeScale = 1f;
+        FadeOutLoadingImage();
     }
 
-    public void GameOver() 
+    public void GameOver()
     {
-        isGameStarted = false;
-        isGamePaused = true;
-
         loadingImage.gameObject.SetActive(true);
-        gamePlayUI.SetActive(false);
-        gamePlay.SetActive(false);
-        loadingImage.DOFade(1, 3f).From(0);
-
-        Time.timeScale = 0f;
+        FadeInLoadingImage();
     }
 
-    void ContinueGame() 
+    void FadeOutLoadingImage()
     {
-        isGamePaused = false;
+        // Create a DOTween Sequence
+        Sequence fadeSequence = DOTween.Sequence();
 
-        loadingImage.DOFade(0, 0.5f).OnComplete(() => 
+        // Get all Graphic components (including Image, Text, TextMeshProUGUI) under the loadingImage
+        Graphic[] graphics = loadingImage.GetComponentsInChildren<Graphic>();
+
+        // Fade out each graphic component and add it to the sequence
+        foreach (Graphic graphic in graphics)
         {
+            fadeSequence.Join(graphic.DOFade(0, 0.5f).SetUpdate(true)); // Using Join to run all fades in parallel
+        }
+
+        // After all fade animations complete, run the following actions
+        fadeSequence.OnComplete(() =>
+        {
+            DOTween.PlayAll();
+            Card.Instance.AnimationCardIn();
             loadingImage.gameObject.SetActive(false);
-            gamePlayUI.SetActive(true);
-            gamePlay.SetActive(true);
         });
 
-        Time.timeScale = 1f;
+        // Play the sequence
+        fadeSequence.Play();
     }
 
-    public void ShowLoadingScreen()
+
+    void FadeInLoadingImage()
     {
-        loadingImage.DOFade(1, 3f).From(0);
-        gamePlayUI.SetActive(false);
-        currentYearText.text = $"Năm\n {GameManager.Instance.currentYears} trước công nguyên";
+        Sequence fadeInSequence = DOTween.Sequence();
+
+        // Get all Graphic components (including Image, Text, TextMeshProUGUI) under the loadingImage
+        Graphic[] graphics = loadingImage.GetComponentsInChildren<Graphic>();
+
+        // Fade in each graphic component
+        foreach (Graphic graphic in graphics)
+        {
+            fadeInSequence.Join(graphic.DOFade(1, 0.5f).SetUpdate(true));
+        }
+
+        fadeInSequence.OnComplete(() =>
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        });
+
+        fadeInSequence.Play();
     }
 }

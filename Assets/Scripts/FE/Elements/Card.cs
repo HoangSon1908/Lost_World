@@ -9,6 +9,7 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHandler
 {
+    public static Card Instance;
 
     [Header("Elements")]
     [SerializeField] private TextMeshProUGUI topAnswer;
@@ -33,14 +34,17 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     private void Awake()
     {
         rect = GetComponent<RectTransform>();
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    private void Start()
-    {
-        AnimationCardIn();
-    }
-
-    private void AnimationCardIn()
+    public void AnimationCardIn()
     {
         // Di chuyển từng thẻ bài vào màn hình với delay
         for (int i = 0; i < cardList.Count; i++)
@@ -194,15 +198,15 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     {
         if (yPos > 150)
         {
+            SoundManager.Instance.PlaySFX(SoundManager.SFXType.CardSwipe);
             if (Data.instance.Gameover)
             {
-                rect.DOAnchorPosY(900, .5f);
-                RulingDays.instance.GameOver();
-                //SceneTransition.instance.FadeOutAndLoadScene(SceneManager.GetActiveScene().name);
-                LoadingScreen.Instance.GameOver();
+                rect.DOAnchorPosY(900, .5f).OnComplete(() => {
+                    RulingDays.instance.GameOver();
+                    LoadingScreen.Instance.GameOver();
+                });
                 return;
             }
-            SoundManager.Instance.PlaySFX(SoundManager.SFXType.CardSwipe);
             rect.DOAnchorPosY(900, .5f).OnComplete(() => 
         {
             Choice choice = Data.instance.CurrentChoice;
@@ -225,6 +229,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         }
         else if (yPos < -150)
         {
+            SoundManager.Instance.PlaySFX(SoundManager.SFXType.CardSwipe);
             if (Data.instance.Gameover)
             {
                 rect.DOAnchorPosY(-800, .5f);
@@ -233,7 +238,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
                 LoadingScreen.Instance.GameOver();
                 return;
             }
-            SoundManager.Instance.PlaySFX(SoundManager.SFXType.CardSwipe);
             rect.DOAnchorPosY(-800, .5f).OnComplete(() => 
             {
                     Choice choice = Data.instance.CurrentChoice;
