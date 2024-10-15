@@ -197,7 +197,9 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
             if (Data.instance.Gameover)
             {
                 rect.DOAnchorPosY(900, .5f);
-                SceneTransition.instance.FadeOutAndLoadScene(SceneManager.GetActiveScene().name);
+                RulingDays.instance.GameOver();
+                //SceneTransition.instance.FadeOutAndLoadScene(SceneManager.GetActiveScene().name);
+                LoadingScreen.Instance.GameOver();
                 return;
             }
             SoundManager.Instance.PlaySFX(SoundManager.SFXType.CardSwipe);
@@ -226,7 +228,9 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
             if (Data.instance.Gameover)
             {
                 rect.DOAnchorPosY(-800, .5f);
-                SceneTransition.instance.FadeOutAndLoadScene(SceneManager.GetActiveScene().name);
+                RulingDays.instance.GameOver();
+                //SceneTransition.instance.FadeOutAndLoadScene(SceneManager.GetActiveScene().name);
+                LoadingScreen.Instance.GameOver();
                 return;
             }
             SoundManager.Instance.PlaySFX(SoundManager.SFXType.CardSwipe);
