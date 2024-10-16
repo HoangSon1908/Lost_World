@@ -234,7 +234,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
             {
                 rect.DOAnchorPosY(-800, .5f);
                 RulingDays.instance.GameOver();
-                //SceneTransition.instance.FadeOutAndLoadScene(SceneManager.GetActiveScene().name);
                 LoadingScreen.Instance.GameOver();
                 return;
             }

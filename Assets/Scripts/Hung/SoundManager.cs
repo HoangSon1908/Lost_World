@@ -83,12 +83,14 @@ public class SoundManager : MonoBehaviour
         if (backgroundMusicMuteToggle != null)
         {
             backgroundMusicMuteToggle.isOn = !isBackgroundMusicMuted;
-            backgroundMusicMuteToggle.onValueChanged.AddListener(ToggleBackgroundMusicMute);
+            backgroundMusicSource.mute = isBackgroundMusicMuted;
+            backgroundMusicMuteToggle.onValueChanged.AddListener((_) => ToggleBackgroundMusicMute());
         }
         if (sfxMuteToggle != null)
         {
             sfxMuteToggle.isOn = !isSfxMuted;
-            sfxMuteToggle.onValueChanged.AddListener(ToggleSFXMute);
+            sfxSource.mute = isSfxMuted;
+            sfxMuteToggle.onValueChanged.AddListener((_) => ToggleSFXMute());
         }
 
         lastBackgroundMusicVolume = backgroundMusicVolume;
@@ -159,22 +161,20 @@ public class SoundManager : MonoBehaviour
         Debug.Log("Saving volume settings");
         PlayerPrefs.SetInt(BG_MUSIC_VOLUME_KEY, Mathf.RoundToInt(backgroundMusicVolume * 10));
         PlayerPrefs.SetInt(SFX_VOLUME_KEY, Mathf.RoundToInt(sfxVolume * 10));
+        PlayerPrefs.SetInt(BG_MUSIC_MUTE_KEY, isBackgroundMusicMuted ? 1 : 0);
+        PlayerPrefs.SetInt(SFX_MUTE_KEY, isSfxMuted ? 1 : 0);
     }
 
-    public void ToggleBackgroundMusicMute(bool isMuted)
+    public void ToggleBackgroundMusicMute()
     {
-        isBackgroundMusicMuted = isMuted;
-        backgroundMusicSource.mute = isMuted;
-
-        PlayerPrefs.SetInt(BG_MUSIC_MUTE_KEY, isMuted ? 1 : 0);
+        isBackgroundMusicMuted = !isBackgroundMusicMuted;
+        backgroundMusicSource.mute = isBackgroundMusicMuted;
     }
 
-    public void ToggleSFXMute(bool isMuted)
+    public void ToggleSFXMute()
     {
-        isSfxMuted = isMuted;
-        sfxSource.mute = isMuted;
-
-        PlayerPrefs.SetInt(SFX_MUTE_KEY, isMuted ? 1 : 0);
+        isSfxMuted = !isSfxMuted;
+        sfxSource.mute = isSfxMuted;
     }
 
     private void LoadPreferences()

@@ -28,15 +28,14 @@ public class LoadingScreen : MonoBehaviour
         }
 
         DOTween.PauseAll();
-        AnimateYearText(startingYear, GameManager.Instance.currentYears);
         actionButton.onClick.AddListener(OnActionClick);
     }
 
-    void AnimateYearText(int fromYear, int toYear)
+    public void AnimateYearText(int toYear)
     {
-        DOTween.To(() => fromYear, x => {
-            fromYear = x;
-            currentYearText.text = $"Năm\n {fromYear} trước công nguyên";
+        DOTween.To(() => startingYear, x => {
+            startingYear = x;
+            currentYearText.text = $"Năm\n {startingYear} trước công nguyên";
         }, toYear, 0.5f) 
         .SetEase(Ease.Linear);
     }
@@ -76,6 +75,7 @@ public class LoadingScreen : MonoBehaviour
         {
             DOTween.PlayAll();
             Card.Instance.AnimationCardIn();
+            RulingDays.instance.UpdateYearsAndDaysUI(GameManager.Instance.rulingDays);
             loadingImage.gameObject.SetActive(false);
         });
 

@@ -13,6 +13,8 @@ public class RulingDays : MonoBehaviour
     [SerializeField] private TextMeshProUGUI top2RulingDayText;
     [SerializeField] private TextMeshProUGUI top3RulingDayText;
 
+    public List<int> topRulingDays = new List<int>();
+
     public static RulingDays instance;
 
     private int previousRulingDays = 0;
@@ -24,66 +26,85 @@ public class RulingDays : MonoBehaviour
         else
             Destroy(gameObject);
     }
-    public void GameOver() 
+
+    private void Start()
     {
-        CheckAndUpdateTopRulingDays();
         LoadTopRulingDays();
     }
 
-    void CheckAndUpdateTopRulingDays() {
-        int currentRulingDays = GameManager.Instance.rulingDays;
-        GameManager.Instance.topRulingDays.Add(currentRulingDays);
-        GameManager.Instance.topRulingDays.Sort((a, b) => b.CompareTo(a));
+    public void GameOver()
+    {
+        CheckAndUpdateTopRulingDays();
+    }
 
-        if (GameManager.Instance.topRulingDays.Count > 3) 
+    void CheckAndUpdateTopRulingDays()
+    {
+        int currentRulingDays = GameManager.Instance.rulingDays;
+        topRulingDays.Add(currentRulingDays);
+        topRulingDays.Sort((a, b) => b.CompareTo(a));
+
+        if (topRulingDays.Count > 3)
         {
-            GameManager.Instance.topRulingDays.RemoveRange(3, GameManager.Instance.topRulingDays.Count - 3);
+            topRulingDays.RemoveRange(3, topRulingDays.Count - 3);
         }
 
         SaveTopRulingDays();
     }
 
-    void SaveTopRulingDays() 
+    void SaveTopRulingDays()
     {
-        for (int i = 0; i < GameManager.Instance.topRulingDays.Count; i++)
+        for (int i = 0; i < topRulingDays.Count; i++)
         {
-            PlayerPrefs.SetInt($"TopRulingDay{i+1}", GameManager.Instance.topRulingDays[i]);
+            PlayerPrefs.SetInt($"TopRulingDay{i + 1}", topRulingDays[i]);
         }
         PlayerPrefs.Save();
     }
 
-    void LoadTopRulingDays() 
+    void LoadTopRulingDays()
     {
-        GameManager.Instance.topRulingDays.Clear();
+        topRulingDays.Clear();
 
         for (int i = 1; i <= 3; i++)
         {
-            GameManager.Instance.topRulingDays.Add(PlayerPrefs.GetInt($"TopRulingDay{i}"));
+            int rulingDay = PlayerPrefs.GetInt($"TopRulingDay{i}", 0); // Use default -1 for empty slots
+            if (rulingDay >0)
+            {
+                topRulingDays.Add(rulingDay);
+            }
         }
 
         UpdateTopRulingDayText();
     }
 
-    public void UpdateTopRulingDayText() 
+    public void UpdateTopRulingDayText()
     {
-        if (top1RulingDayText != null) 
-        {
-            top1RulingDayText.text = GameManager.Instance.topRulingDays.Count > 0 
-            ? $" Cầm quyền trong vòng\n {GameManager.Instance.topRulingDays[0]} ngày\n" : "N/A";
-        }
+        UpdateSingleTopText(top1RulingDayText, 0);
+        UpdateSingleTopText(top2RulingDayText, 1);
+        UpdateSingleTopText(top3RulingDayText, 2);
+    }
 
-        if (top2RulingDayText != null) 
+    private void UpdateSingleTopText(TextMeshProUGUI textUI, int index)
+    {
+        if (textUI != null && topRulingDays.Count > index)
         {
-            top1RulingDayText.text = GameManager.Instance.topRulingDays.Count > 1 
-            ? $" Cầm quyền trong vòng\n {GameManager.Instance.topRulingDays[1]} ngày\n" : "N/A";
-        }
+            int years = topRulingDays[index] / 365;
+            int days = topRulingDays[index] % 365;
 
-        if (top3RulingDayText != null)
+            if (years > 0)
+            {
+                textUI.text = $"Cầm quyền trong vòng\n{years} năm {days} ngày";
+            }
+            else
+            {
+                textUI.text = $"Cầm quyền trong vòng\n{days} ngày";
+            }
+        }
+        else
         {
-            top1RulingDayText.text = GameManager.Instance.topRulingDays.Count > 2 
-            ? $" Cầm quyền trong vòng\n {GameManager.Instance.topRulingDays[2]} ngày\n" : "N/A";
+            textUI.text = "N/A";
         }
     }
+
 
     public void UpdateYearsAndDaysUI(int targetDays)
     {
