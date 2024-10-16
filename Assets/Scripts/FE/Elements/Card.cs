@@ -9,6 +9,7 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHandler
 {
+    public static Card Instance;
 
     [Header("Elements")]
     [SerializeField] private TextMeshProUGUI topAnswer;
@@ -33,14 +34,17 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     private void Awake()
     {
         rect = GetComponent<RectTransform>();
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    private void Start()
-    {
-        AnimationCardIn();
-    }
-
-    private void AnimationCardIn()
+    public void AnimationCardIn()
     {
         // Di chuyển từng thẻ bài vào màn hình với delay
         for (int i = 0; i < cardList.Count; i++)
@@ -53,11 +57,21 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
             // Tạo chuỗi hoạt ảnh
             Sequence sequence = DOTween.Sequence();
 
-            // Sau đó di chuyển thẻ bài về vị trí X = 0
-            sequence.Append(card.DOAnchorPosX(0, 0.5f).SetEase(Ease.OutBack,0.8f));
-
             // Đặt delay cho mỗi thẻ bài
             sequence.SetDelay(i * delayBetweenCards);
+
+            // Phát âm thanh cho mỗi thẻ sau khi delay tương ứng cho từng thẻ
+            sequence.AppendCallback(() =>
+            {
+                // Kiểm tra xem âm thanh có đang phát không
+                if (SoundManager.Instance != null)
+                {
+                    SoundManager.Instance.PlaySFX(SoundManager.SFXType.CardSwipe);
+                }
+            });
+
+            // Sau đó di chuyển thẻ bài về vị trí X = 0
+            sequence.Append(card.DOAnchorPosX(0, 0.5f).SetEase(Ease.OutBack, 0.8f));
 
             // Gọi ResetCard() sau khi hoạt ảnh của thẻ cuối cùng kết thúc
             if (i == cardList.Count - 1)
@@ -70,6 +84,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
             }
         }
     }
+
+
 
 
 
@@ -182,13 +198,16 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
     {
         if (yPos > 150)
         {
+            SoundManager.Instance.PlaySFX(SoundManager.SFXType.CardSwipe);
             if (Data.instance.Gameover)
             {
-                rect.DOAnchorPosY(900, .5f);
-                SceneTransition.instance.FadeOutAndLoadScene(SceneManager.GetActiveScene().name);
+                rect.DOAnchorPosY(900, .5f).OnComplete(() => {
+                    RulingDays.instance.GameOver();
+                    LoadingScreen.Instance.GameOver();
+                });
                 return;
             }
-        rect.DOAnchorPosY(900, .5f).OnComplete(() => 
+            rect.DOAnchorPosY(900, .5f).OnComplete(() => 
         {
             Choice choice = Data.instance.CurrentChoice;
                 GameManager.Instance.ApplySingleEffect(
@@ -210,10 +229,12 @@ public class Card : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHa
         }
         else if (yPos < -150)
         {
+            SoundManager.Instance.PlaySFX(SoundManager.SFXType.CardSwipe);
             if (Data.instance.Gameover)
             {
                 rect.DOAnchorPosY(-800, .5f);
-                SceneTransition.instance.FadeOutAndLoadScene(SceneManager.GetActiveScene().name);
+                RulingDays.instance.GameOver();
+                LoadingScreen.Instance.GameOver();
                 return;
             }
             rect.DOAnchorPosY(-800, .5f).OnComplete(() => 

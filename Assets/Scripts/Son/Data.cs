@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using DG.Tweening;
 using System.Linq;
 
+
 [System.Serializable]
 public class Character
 {
@@ -326,6 +327,8 @@ public class Data : MonoBehaviour
         // Get a random choice from the character's choices list
         randomChoiceIndex = Random.Range(0, currentCharacter.choices.Count);
         currentChoice = currentCharacter.choices[randomChoiceIndex];
+
+        TabData.instance.EncounterCharacter(currentCharacter.characterName);
     }
     #endregion
 
@@ -353,11 +356,13 @@ public class Data : MonoBehaviour
     #region Intro Logic
     private void Intro()
     {
+        TabData.instance.EncounterCharacter(currentCharacter.characterName);
         currentChoice = currentCharacter.choices[0];
         SetCardElements();
         DeleteUsingChoice(0);
         if (currentCharacter.choices.Count == 0)
         {
+            TabData.instance.EncounterStory(0);
             currentCharacter.isIntro = false;
             PlayerPrefs.SetInt(FirstTimeKey, 0);
             PlayerPrefs.Save();
@@ -374,11 +379,13 @@ public class Data : MonoBehaviour
         MiddleUI.DOColor(DefaultColor, 1f);
         GameManager.Instance.isChecked = false;
         currentCharacter.isRevive = false;
+        TabData.instance.EncounterStory(1);
     }
     
     private void RevivePlayer()//calling from Kill Logic to set revive card
     {
         currentCharacter = ReviveCard;
+        TabData.instance.EncounterCharacter(currentCharacter.characterName);
     }
     #endregion
 
@@ -408,6 +415,7 @@ public class Data : MonoBehaviour
         currentCharacter = DieCard;
         currentChoice = choice;
         MiddleUI.DOColor(TopAndBottomUI.color, 1f);
+        TabData.instance.EncounterCharacter(currentCharacter.characterName);
     }
 
     public Choice FindChoiceInDieCard(int DieCardIndex)//calling from GameManager to find correct choice in die card list
@@ -510,13 +518,8 @@ public class Data : MonoBehaviour
     {
         if (BuffChoice != null)
         {
-            Debug.Log("Create buff");
             CreateBuff(BuffChoice);
             BuffChoice = null;
-        }
-        else
-        {
-            Debug.Log("No buff to create");
         }
     }
 
@@ -531,6 +534,7 @@ public class Data : MonoBehaviour
     {
         currentCharacter = ReviveWithBuffCard;
         currentChoice = currentCharacter.choices[buffIndex];
+        TabData.instance.EncounterCharacter(currentCharacter.characterName);
     }
 
     private void ReviveWithBuff()//Logic for revive with buff card
@@ -540,6 +544,7 @@ public class Data : MonoBehaviour
         RemoveBuffObject(buffType);
         GameManager.Instance.isChecked = false;
         currentCharacter.isReviveWithBuff = false;
+        TabData.instance.EncounterStory(1);
     }
 
     private bool CheckBuffType(BuffType buffType)//Check if buff type already exists in buff Parent
@@ -614,10 +619,16 @@ public class Data : MonoBehaviour
     {
         currentCharacter = BuffDescription;
         currentChoice = currentCharacter.choices[i];
+        TabData.instance.EncounterCharacter(currentCharacter.characterName);
     }
     #endregion
 
     #region Return Character And Choice
+    public Character CurrentCharacter//Return current Character for Progress system to use
+    {
+        get { return currentCharacter; }
+    }
+
     public Choice CurrentChoice//Return current Choice for Card Script to use
     {
         get { return currentChoice; }

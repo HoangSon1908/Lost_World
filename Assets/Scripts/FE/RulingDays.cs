@@ -9,6 +9,11 @@ public class RulingDays : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI rulingDayText;
     [SerializeField] private TextMeshProUGUI currentYearText;
+    [SerializeField] private TextMeshProUGUI top1RulingDayText;
+    [SerializeField] private TextMeshProUGUI top2RulingDayText;
+    [SerializeField] private TextMeshProUGUI top3RulingDayText;
+
+    public List<int> topRulingDays = new List<int>();
 
     public static RulingDays instance;
 
@@ -21,6 +26,85 @@ public class RulingDays : MonoBehaviour
         else
             Destroy(gameObject);
     }
+
+    private void Start()
+    {
+        LoadTopRulingDays();
+    }
+
+    public void GameOver()
+    {
+        CheckAndUpdateTopRulingDays();
+    }
+
+    void CheckAndUpdateTopRulingDays()
+    {
+        int currentRulingDays = GameManager.Instance.rulingDays;
+        topRulingDays.Add(currentRulingDays);
+        topRulingDays.Sort((a, b) => b.CompareTo(a));
+
+        if (topRulingDays.Count > 3)
+        {
+            topRulingDays.RemoveRange(3, topRulingDays.Count - 3);
+        }
+
+        SaveTopRulingDays();
+    }
+
+    void SaveTopRulingDays()
+    {
+        for (int i = 0; i < topRulingDays.Count; i++)
+        {
+            PlayerPrefs.SetInt($"TopRulingDay{i + 1}", topRulingDays[i]);
+        }
+        PlayerPrefs.Save();
+    }
+
+    void LoadTopRulingDays()
+    {
+        topRulingDays.Clear();
+
+        for (int i = 1; i <= 3; i++)
+        {
+            int rulingDay = PlayerPrefs.GetInt($"TopRulingDay{i}", 0); // Use default -1 for empty slots
+            if (rulingDay >0)
+            {
+                topRulingDays.Add(rulingDay);
+            }
+        }
+
+        UpdateTopRulingDayText();
+    }
+
+    public void UpdateTopRulingDayText()
+    {
+        UpdateSingleTopText(top1RulingDayText, 0);
+        UpdateSingleTopText(top2RulingDayText, 1);
+        UpdateSingleTopText(top3RulingDayText, 2);
+    }
+
+    private void UpdateSingleTopText(TextMeshProUGUI textUI, int index)
+    {
+        if (textUI != null && topRulingDays.Count > index)
+        {
+            int years = topRulingDays[index] / 365;
+            int days = topRulingDays[index] % 365;
+
+            if (years > 0)
+            {
+                textUI.text = $"Cầm quyền trong vòng\n{years} năm {days} ngày";
+            }
+            else
+            {
+                textUI.text = $"Cầm quyền trong vòng\n{days} ngày";
+            }
+        }
+        else
+        {
+            textUI.text = "N/A";
+        }
+    }
+
 
     public void UpdateYearsAndDaysUI(int targetDays)
     {
