@@ -35,11 +35,10 @@ public class SoundManager : MonoBehaviour
     private float lastBackgroundMusicVolume;
     private float lastSFXVolume;
 
-    [Header("UI Elements")]
-    [SerializeField] private Slider backgroundMusicSlider;
-    [SerializeField] private Slider sfxSlider;
-    [SerializeField] private Toggle backgroundMusicMuteToggle;
-    [SerializeField] private Toggle sfxMuteToggle;
+    public Slider backgroundMusicSlider;
+    public Slider sfxSlider;
+    public Toggle backgroundMusicMuteToggle;
+    public Toggle sfxMuteToggle;
 
     private bool isBackgroundMusicMuted = false;
     private bool isSfxMuted = false;
@@ -51,21 +50,20 @@ public class SoundManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (Instance == null)
         {
-            Destroy(gameObject);
+            Instance = this;
+            LoadPreferences();
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
+            Destroy(gameObject);
         }
     }
 
-    private void Start()
+    public void SetupSoundManager()
     {
-        LoadPreferences();
-
         backgroundMusicSource.volume = backgroundMusicVolume;
         sfxSource.volume = sfxVolume;
 
@@ -127,6 +125,8 @@ public class SoundManager : MonoBehaviour
 
     public void PlayBackgroundMusic()
     {
+        if(backgroundMusicSource.isPlaying) return;
+
         backgroundMusicSource.clip = backgroundMusicClip;
         backgroundMusicSource.loop = true;
         backgroundMusicSource.Play();
