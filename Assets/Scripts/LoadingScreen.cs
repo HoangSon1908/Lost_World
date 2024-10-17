@@ -16,6 +16,12 @@ public class LoadingScreen : MonoBehaviour
 
     public int startingYear = 1000;
 
+    [Header("UI Elements for Sound Manager")]
+    [SerializeField] private Slider BGSlider;
+    [SerializeField] private Slider SFXSlider;
+    [SerializeField] private Toggle BGMuteToggle;
+    [SerializeField] private Toggle SFXToggle;
+
     void Start()
     {
         if (Instance == null)
@@ -29,6 +35,18 @@ public class LoadingScreen : MonoBehaviour
 
         DOTween.PauseAll();
         actionButton.onClick.AddListener(OnActionClick);
+
+        UpdateSoundManager();
+    }
+
+    private void UpdateSoundManager()
+    {
+        SoundManager.Instance.backgroundMusicSlider = BGSlider;
+        SoundManager.Instance.sfxSlider = SFXSlider;
+        SoundManager.Instance.backgroundMusicMuteToggle = BGMuteToggle;
+        SoundManager.Instance.sfxMuteToggle = SFXToggle;
+
+        SoundManager.Instance.SetupSoundManager();
     }
 
     public void AnimateYearText(int toYear)
